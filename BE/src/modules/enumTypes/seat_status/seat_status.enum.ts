@@ -1,0 +1,5 @@
+export enum SEAT_STATUS {
+  AVAILABLE = 'AVAILABLE',
+  BOOKED = 'BOOKED',
+  PENDING = 'PENDING',
+}

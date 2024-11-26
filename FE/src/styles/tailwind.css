@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.transition-bg {
+  transition: background-color 0.4s ease-out;
+}
+
+.slick-slide {
+  margin: 0 10px;
+}
+
+/* .hover-bg-transition {
+  background: linear-gradient(to left, white, black);
+  background-size: 200% 100%;
+  background-position: right;
+  transition: background-position 1s ease-in-out;
+}
+
+li:hover .hover-bg-transition {
+  background-position: left;
+} */

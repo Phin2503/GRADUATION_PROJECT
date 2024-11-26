@@ -17,12 +17,6 @@ export class User {
   id: string;
 
   @Column({
-    length: 30,
-    unique: true,
-  })
-  username: string;
-
-  @Column({
     length: 155,
     update: true,
   })

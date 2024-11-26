@@ -16,11 +16,6 @@ export class RegisterDto extends SanitizeInput {
 
   @IsNotEmpty()
   @IsString()
-  @Length(3, 30)
-  username: string;
-
-  @IsNotEmpty()
-  @IsString()
   @IsStrongPassword()
   password: string;
 

@@ -7,6 +7,6 @@ export class LoginDto {
 
   @IsString()
   @IsNotEmpty()
-  @Length(8, 155, { message: 'password must be from 8 character or more' })
+  @Length(8, 155, { message: 'password must be from 8 to 155 character' })
   password: string;
 }

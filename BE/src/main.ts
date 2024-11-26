@@ -12,6 +12,11 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/api/v1');
+  app.enableCors({
+    origin: 'http://localhost:5173', // Cho phép truy cập từ nguồn này
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();

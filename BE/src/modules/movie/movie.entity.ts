@@ -20,7 +20,10 @@ export class Movie {
   })
   title: string;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 3000,
+  })
   description: string;
 
   @Column()
@@ -37,12 +40,6 @@ export class Movie {
     length: 50,
   })
   genre: string;
-
-  @Column({
-    nullable: false,
-    default: 0,
-  })
-  rating: number;
 
   @CreateDateColumn({
     nullable: false,

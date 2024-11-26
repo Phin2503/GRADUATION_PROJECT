@@ -33,13 +33,23 @@ export class MovieService {
       throw new BadRequestException('Name movie already exists !! try again !');
     }
 
-    const urlImg = await this.cloudinaryService.uploadImage(file);
+    try {
+      const urlImg = await this.cloudinaryService.uploadImage(file);
+      requestBody.background_image_url = urlImg.url;
+    } catch (err) {
+      console.log('Lỗi' + err);
+    }
 
-    requestBody.background_image_url = urlImg.url;
+    const durationValue = Number(requestBody.duration);
+
+    if (isNaN(durationValue)) {
+      throw new BadRequestException('Duration must be a valid number');
+    }
+
+    requestBody.duration = durationValue;
 
     const newMovie = await this.movieRepository.create(requestBody);
-
-    return this.movieRepository.save(newMovie);
+    return await this.movieRepository.save(newMovie);
   }
 
   async update(requestBody: UpdateMovieDto, id: number) {

@@ -18,10 +18,6 @@ export class CreateMovieDTO {
   @IsString()
   genre: string;
 
-  @IsNumber()
-  @IsOptional()
-  rating: number;
-
   @IsString()
   background_image_url: any;
 }

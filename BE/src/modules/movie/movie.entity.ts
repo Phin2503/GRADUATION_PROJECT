@@ -21,6 +21,12 @@ export class Movie {
   title: string;
 
   @Column({
+    type: 'boolean',
+    default: false,
+  })
+  showing: boolean;
+
+  @Column({
     type: 'varchar',
     length: 3000,
   })

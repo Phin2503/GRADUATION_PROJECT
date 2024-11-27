@@ -1,5 +1,5 @@
 import { IoTicket } from 'react-icons/io5'
-import ticketImage from '../../assets/2.png'
+import Logo from '../../assets/2.png'
 import avaUser from '../../assets/124599.jpeg'
 import { FaChevronDown } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
@@ -58,13 +58,13 @@ export default function Header() {
   }
 
   return (
-    <div className='w-full h-24 bg-[#021427] flex flex-col md:flex-row justify-between items-center p-4'>
-      <img src={ticketImage} alt='Ticket Logo' className='w-32 md:w-48' />
+    <div className='w-full px-44 h-24 bg-[#10172B] flex flex-col md:flex-row justify-between items-center p-4'>
+      <img src={Logo} alt='Ticket Logo' className='w-32 md:w-48' />
       <div className='w-full md:w-[35rem] text-sm md:text-base'>
         <ul className='flex flex-wrap justify-center md:justify-around text-white'>
           <li className='flex items-center mr-3 mb-2 md:mb-0 hover:text-blue-400'>
             <button className='h-10 px-4 py-2 bg-[#FF5400] flex items-center rounded-xl hover:text-black'>
-              <NavLink className='mr-2' to=''>
+              <NavLink className='mr-2' to='/booking'>
                 Buy ticket
               </NavLink>
               <IoTicket />

@@ -1,55 +1,97 @@
-import React from 'react'
-import Slider from 'react-slick'
-import banner1 from '../../assets/Banner/banner1.jpg'
-import banner2 from '../../assets/Banner/banner2.jpg'
-import banner3 from '../../assets/Banner/banner3.jpg'
-import banner4 from '../../assets/Banner/banner4.jpg'
-import banner5 from '../../assets/Banner/banner5.jpg'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
+import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs'
+import { RxDotFilled } from 'react-icons/rx'
+import 'animate.css'
 
-const images = [banner1, banner2, banner3, banner4, banner5]
+function Carousel() {
+  const slides = [
+    {
+      url: 'https://cdn.galaxycine.vn/media/2024/11/19/trieu-hoi-linh-mieu--ngan-deal-vi-dieu-4_1731987939982.jpg'
+    },
+    {
+      url: 'https://cdn.galaxycine.vn/media/2024/11/14/linh-mieu-1_1731569919178.jpg'
+    },
+    {
+      url: 'https://cdn.galaxycine.vn/media/2024/11/26/2048_1732605197913.jpg'
+    },
+    {
+      url: 'https://cdn.galaxycine.vn/media/2024/11/12/cuoi-xuyen-bien-gioi-2048_1731395977602.jpg'
+    },
+    {
+      url: 'https://cdn.galaxycine.vn/media/2024/10/23/wicked-2048_1729656644065.jpg'
+    }
+  ]
 
-const PrevArrow = (props: any) => {
-  const { onClick } = props
-  return (
-    <button className='slick-prev bg-white rounded-full p-2 mx-2' onClick={onClick} aria-label='Previous'>
-      Prev
-    </button>
-  )
-}
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [autoPlay, setAutoPlay] = useState(true)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-const NextArrow = (props: any) => {
-  const { onClick } = props
-  return (
-    <button className='slick-next bg-white rounded-full p-2 mx-2' onClick={onClick} aria-label='Next'>
-      Next
-    </button>
-  )
-}
+  const prevSlide = () => {
+    const isFirstSlide = currentIndex === 0
+    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1
+    setCurrentIndex(newIndex)
+  }
 
-const Carousel: React.FC = () => {
-  const settings = {
-    className: 'center',
-    centerMode: true,
-    infinite: true,
-    centerPadding: '60px',
-    slidesToShow: 1,
-    speed: 500,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />
+  const nextSlide = () => {
+    const isLastSlide = currentIndex === slides.length - 1
+    const newIndex = isLastSlide ? 0 : currentIndex + 1
+    setCurrentIndex(newIndex)
+  }
+
+  useEffect(() => {
+    if (autoPlay) {
+      timerRef.current = setTimeout(() => {
+        nextSlide()
+      }, 3000)
+    } else {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+    }
+  }, [autoPlay, currentIndex, nextSlide])
+
+  const goToSlide = (slideIndex: SetStateAction<number>) => {
+    setCurrentIndex(slideIndex)
   }
 
   return (
-    <div className='flex justify-center w-full py-1 overflow-hidden'>
-      <div className='w-[80%] md:w-[60%] lg:w-[100%] my-2'>
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index}>
-              <img src={image} alt={`Banner ${index + 1}`} className='w-full h-auto object-cover rounded-lg' />
-            </div>
-          ))}
-        </Slider>
+    <div
+      className='max-w-[1600px] h-[500px] w-full m-auto py-3 px-4 relative group'
+      onMouseEnter={() => setAutoPlay(false)}
+      onMouseLeave={() => setAutoPlay(true)}
+    >
+      <div
+        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+        className='w-full h-full rounded-2xl bg-center bg-cover duration-500 animate__animated animate__fadeIn object-contain'
+      ></div>
+
+      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-[-3] text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+        <BsChevronCompactLeft onClick={prevSlide} size={30} />
+      </div>
+
+      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
+        <BsChevronCompactRight onClick={nextSlide} size={30} />
+      </div>
+
+      <div className='flex top-4 justify-center py-2'>
+        {slides.map((_slide, slideIndex) => (
+          <div
+            key={slideIndex}
+            onClick={() => goToSlide(slideIndex)}
+            className='text-2xl cursor-pointer transition-all-2s'
+          >
+            <RxDotFilled
+              className={currentIndex === slideIndex ? 'animate__animated animate__pulse text-orange-600' : ''}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )

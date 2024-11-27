@@ -1,12 +1,13 @@
-import Carousel from '@/components/Carousel/Carousel'
-import React from 'react'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+import { Outlet } from 'react-router-dom'
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
-    <div className='bg-[#B3C8CF]'>
-      <Carousel />
-    </div>
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
   )
 }
-
-export default Home

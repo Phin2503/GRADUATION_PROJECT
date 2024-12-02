@@ -11,4 +11,8 @@ export class CreateShowtimeDto {
   @IsNotEmpty()
   @IsInt()
   theaterId: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  theater_complexId: number;
 }

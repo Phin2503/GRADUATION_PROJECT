@@ -21,6 +21,7 @@ import { RoleGuard } from './guards/role.guard';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { PaginationDTO } from 'src/generic/pagination.dto';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
+import { UpdatePasswordDto } from './dtos/updatePassword.dto';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -65,8 +66,27 @@ export class UserController {
     return this.userService.updateById(id, requestBody, currentUser);
   }
 
+  @Put('change-password/:id')
+  @UseGuards(AuthGuard)
+  async updatePassword(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Param('id') id: string,
+  ) {
+    return this.userService.updatePassword(id, updatePasswordDto);
+  }
+
   @Post('forgot-password')
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('refresh-token')
+  async refreshToken(@Body('refreshToken') refreshToken: string) {
+    return this.authService.refreshToken(refreshToken);
+  }
+
+  @Post('verify-token')
+  async verifyToken(@Body('token') token: string) {
+    return this.authService.verifyToken(token);
   }
 }

@@ -72,7 +72,11 @@ export class MovieService {
   }
 
   async findMovie(id: number): Promise<Movie> {
-    const findMovie = await this.movieRepository.findOneBy({ id });
+    const findMovie = await this.movieRepository.findOne({
+      where: {
+        id,
+      },
+    });
     if (!findMovie) {
       throw new NotFoundException({
         message: 'Not found the movie ! try again ...',

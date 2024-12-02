@@ -15,8 +15,7 @@ import { CreateShowtimeDto } from './dtos/create.dto';
 import { DEFAULT_PAGE_SIZE } from 'src/utils/constants';
 import { updateShowtimeDto } from './dtos/update.dto';
 import { Order } from '../order/order.entity';
-import { Seat } from '../seat/seat.entity';
-import { SEAT_STATUS } from '../enumTypes/seat_status/seat_status.enum';
+import { TheaterComplex } from '../theaterComplex/theaterComplex.entity';
 
 @Injectable()
 export class ShowtimeService {
@@ -29,48 +28,50 @@ export class ShowtimeService {
     private readonly theaterRepository: Repository<Theater>,
     @InjectRepository(Order)
     private readonly OrderRepository: Repository<Order>,
+    @InjectRepository(TheaterComplex)
+    private readonly theaterComplexRepository: Repository<TheaterComplex>,
   ) {}
 
   async createShowtime(requestBody: CreateShowtimeDto) {
-    const movie = await this.movieRepository.findOneBy({
-      id: requestBody.movieId,
-    });
-    const theater = await this.theaterRepository.findOneBy({
-      id: requestBody.theaterId,
-    });
+    const [movie, theater, theater_complex] = await Promise.all([
+      this.movieRepository.findOneBy({ id: requestBody.movieId }),
+      this.theaterRepository.findOneBy({ id: requestBody.theaterId }),
+      this.theaterComplexRepository.findOneBy({
+        id: requestBody.theater_complexId,
+      }),
+    ]);
 
     const showtimeStart = new Date(requestBody.showtime_start);
-
     if (isNaN(showtimeStart.getTime())) {
       throw new BadRequestException('Invalid date value for showtime_start.');
     }
 
-    if (showtimeStart.getDate < new Date().getDate)
+    if (showtimeStart < new Date()) {
       throw new BadRequestException('Cannot add showtimes to past dates');
-    if (!movie) throw new NotFoundException('Not found movie !');
-    if (!theater) throw new NotFoundException('Not found theater !');
+    }
 
-    const duration = movie.duration;
-    const bufferTime = 15;
+    if (!movie) throw new NotFoundException('Not found movie!');
+    if (!theater) throw new NotFoundException('Not found theater!');
+    if (!theater_complex)
+      throw new NotFoundException('Not found theater_complex!');
 
     const showtimeEnd = new Date(
-      showtimeStart.getTime() + (duration + bufferTime) * 60000,
+      showtimeStart.getTime() + (movie.duration + 15) * 60000,
     );
 
     const existingShowtime = await this.showtimeRepository.find({
       where: {
-        theater: {
-          id: theater.id,
-        },
+        theater: { id: theater.id },
         showtime_end: MoreThanOrEqual(this.convertUTCToHCM(showtimeStart)),
         showtime_start: LessThanOrEqual(this.convertUTCToHCM(showtimeEnd)),
       },
     });
 
-    if (existingShowtime.length > 0)
+    if (existingShowtime.length > 0) {
       throw new BadRequestException(
-        'Showtime overlaps with another schedule in this theater !',
+        'Showtime overlaps with another schedule in this theater!',
       );
+    }
 
     try {
       const newShowtime = this.showtimeRepository.create({
@@ -80,11 +81,9 @@ export class ShowtimeService {
         theater,
       });
 
-      const newShowtimeSaved = await this.showtimeRepository.save(newShowtime);
-
-      return newShowtimeSaved;
+      return await this.showtimeRepository.save(newShowtime);
     } catch (err) {
-      throw new BadRequestException('Something went wrong !' + err);
+      throw new BadRequestException('Something went wrong: ' + err.message);
     }
   }
 
@@ -116,6 +115,21 @@ export class ShowtimeService {
 
     if (!showtime) {
       throw new NotFoundException('Not found showtime !');
+    }
+
+    return showtime;
+  }
+
+  async getByMovieId(id) {
+    const showtime = await this.showtimeRepository.find({
+      where: {
+        movie: { id: id },
+      },
+      relations: ['theater', 'theater.theater_complex', 'movie'], // Đảm bảo truy cập qua theater
+    });
+
+    if (!showtime) {
+      throw new NotFoundException('Not found showtime!');
     }
 
     return showtime;

@@ -1,10 +1,14 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Theater } from '../theater/theater.entity';
+import { Showtime } from '../showtime/showtime.entity';
 
 @Entity()
 export class TheaterComplex {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  name: string;
 
   @Column({
     nullable: false,
@@ -28,4 +32,7 @@ export class TheaterComplex {
 
   @OneToMany(() => Theater, (theater) => theater.theater_complex)
   theaters: Theater[];
+
+  @OneToMany(() => Showtime, (showtime) => showtime.theater_complex)
+  showtimes: Showtime[];
 }

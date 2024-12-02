@@ -13,11 +13,6 @@ export class UpdateUserDto {
   @Length(1, 100)
   fullName: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @Length(3, 30)
-  username: string;
-
   @IsDateString()
   dateOfBirth: Date;
 

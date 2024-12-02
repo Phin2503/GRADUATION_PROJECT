@@ -20,7 +20,7 @@ export class VnpayService {
       vnp_OrderType: 190000,
       vnp_Amount: amount * 100,
       vnp_IpAddr: this.getIpAddr(),
-      vnp_ReturnUrl: 'http://localhost:5173/return',
+      vnp_ReturnUrl: 'http://localhost:5173/return-payment',
       vnp_CreateDate: this.getCurrentDate(),
       vnp_ExpireDate: this.getExpireDate(2),
     };

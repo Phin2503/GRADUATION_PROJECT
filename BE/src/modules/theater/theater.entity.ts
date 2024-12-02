@@ -38,15 +38,15 @@ export class Theater {
   })
   updated_at: Date;
 
-  @OneToMany(() => Showtime, (Showtime) => Showtime.theater)
-  showtime: Showtime[];
-
-  @ManyToOne(() => TheaterComplex, (TheaterComplex) => TheaterComplex.theaters)
+  @ManyToOne(() => TheaterComplex, (theaterComplex) => theaterComplex.theaters)
   theater_complex: TheaterComplex;
 
-  @OneToMany(() => Seat, (Seat) => Seat.theater)
+  @OneToMany(() => Showtime, (showtime) => showtime.theater)
+  showtime: Showtime[];
+
+  @OneToMany(() => Seat, (seat) => seat.theater)
   seats: Seat[];
 
-  @OneToMany(() => Order, (Order) => Order.theater)
+  @OneToMany(() => Order, (order) => order.theater)
   orders: Order[];
 }

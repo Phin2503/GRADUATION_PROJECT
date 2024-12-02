@@ -1,5 +1,6 @@
 import { Movie } from 'src/modules/movie/movie.entity';
 import { Theater } from 'src/modules/theater/theater.entity';
+import { TheaterComplex } from 'src/modules/theaterComplex/theaterComplex.entity'; // Import TheaterComplex
 import {
   Column,
   CreateDateColumn,
@@ -9,7 +10,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
 import { Order } from '../order/order.entity';
 import { STATUS_ORDER } from '../enumTypes/status_order/status_order.enum';
 
@@ -40,19 +40,15 @@ export class Showtime {
   })
   update_at: Date;
 
-  @Column({
-    type: 'enum',
-    enum: STATUS_ORDER,
-    default: STATUS_ORDER.PENDING,
-  })
-  order_status: STATUS_ORDER;
-
   @ManyToOne(() => Movie, (movie) => movie.showtime)
   movie: Movie;
 
   @ManyToOne(() => Theater, (theater) => theater.showtime)
   theater: Theater;
 
-  @OneToMany(() => Order, (Order) => Order.showtime)
+  @ManyToOne(() => TheaterComplex, (theaterComplex) => theaterComplex.showtimes)
+  theater_complex: TheaterComplex;
+
+  @OneToMany(() => Order, (order) => order.showtime)
   order: Order[];
 }

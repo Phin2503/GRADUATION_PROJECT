@@ -33,8 +33,10 @@ export class TheaterService {
   }
 
   async updateById(id: number, theaterRequest: UpdateTheaterDto) {
-    const oldTheater = this.theaterRepository.findOneBy({
-      id: id,
+    const oldTheater = this.theaterRepository.findOne({
+      where: {
+        id: id,
+      },
     });
 
     if (!oldTheater) throw new NotFoundException('Not found theater !');
@@ -60,8 +62,11 @@ export class TheaterService {
   }
 
   async findById(id: number) {
-    const theaterExists = await this.theaterRepository.findOneBy({
-      id: id,
+    const theaterExists = await this.theaterRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['theater_complex'],
     });
     console.log(theaterExists);
     if (!theaterExists) {

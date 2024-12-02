@@ -12,15 +12,18 @@ import { ShowtimeService } from './showtime.service';
 import { CreateShowtimeDto } from './dtos/create.dto';
 import { PaginationDTO } from 'src/generic/pagination.dto';
 import { updateShowtimeDto } from './dtos/update.dto';
+import { Showtime } from './showtime.entity';
 
 @Controller('showtime')
 export class ShowtimeController {
   constructor(private showtimeService: ShowtimeService) {}
 
-  // @Post('/create')
-  // async createShowtime(@Body() requestBody: CreateShowtimeDto) {
-  //   return await this.showtimeService.createShowtime(requestBody);
-  // }
+  @Post('/create')
+  async createShowtime(
+    @Body() requestBody: CreateShowtimeDto,
+  ): Promise<Showtime> {
+    return await this.showtimeService.createShowtime(requestBody);
+  }
 
   @Get('')
   async getAllShowtime(pagination: PaginationDTO) {
@@ -35,6 +38,11 @@ export class ShowtimeController {
   @Delete('/:id')
   async deleleShowtimeById(@Param('id') id: number): Promise<string> {
     return await this.showtimeService.deleteById(id);
+  }
+
+  @Get('/movie/:id')
+  async getByMovieID(@Param('id') id: number) {
+    return await this.showtimeService.getByMovieId(id);
   }
 
   @Put('/update/:id')

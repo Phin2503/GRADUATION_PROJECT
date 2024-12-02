@@ -117,21 +117,19 @@ export class AuthService {
       expiresIn: '30m',
     });
 
-    // Tạo refresh token
     const refresh_token = await this.jwtService.signAsync(
       { id: currentAccount.id, email: currentAccount.email },
-      { secret: process.env.JWT_SECRET, expiresIn: '7d' }, // Thời gian sống cho refresh token
+      { secret: process.env.JWT_SECRET, expiresIn: '7d' },
     );
 
-    // Cập nhật refresh token vào người dùng
-    currentAccount.refreshToken = refresh_token; // Giả sử bạn có trường này trong User entity
+    currentAccount.refreshToken = refresh_token;
     await this.userRepository.save(currentAccount);
 
     return {
       msg: 'Login Successfully!',
       payload,
       access_token,
-      refresh_token, // Trả refresh token
+      refresh_token,
     };
   }
 
@@ -190,5 +188,27 @@ export class AuthService {
     } catch (err) {
       throw new BadRequestException('Failed to send email with new password');
     }
+  }
+
+  async verifyToken(token: string) {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+      return decoded;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
+    }
+  }
+
+  async comparePasswords(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 10);
   }
 }

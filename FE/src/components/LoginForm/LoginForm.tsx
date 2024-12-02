@@ -13,23 +13,27 @@ interface Props {
 export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false) // Trạng thái yêu cầu đăng nhập
 
   const loginMutation = useMutation({
     mutationFn: (body: { email: string; password: string }) => loginRequest(body),
+    onMutate: () => {
+      setIsLoading(true) // Bắt đầu yêu cầu
+    },
     onSuccess(data) {
       toast.success('Login successful!')
-      setTimeout(() => {
-        localStorage.setItem('user', JSON.stringify(data.data))
+      localStorage.setItem('user', JSON.stringify(data.data))
 
-        // Lấy thông tin người dùng từ localStorage
-        const storedUser = localStorage.getItem('user')
-        if (storedUser) {
-          const nameUser = JSON.parse(storedUser).payload.fullName // Chắc chắn thuộc tính tồn tại
-          onLoginSuccess(nameUser || 'Guest') // Nếu nameUser không tồn tại, trả về 'Guest'
-        } else {
-          onLoginSuccess('Guest')
-        }
-      }, 1000)
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        const nameUser = JSON.parse(storedUser).payload.fullName
+        onLoginSuccess(nameUser || 'Guest')
+      } else {
+        onLoginSuccess('Guest')
+      }
+    },
+    onSettled: () => {
+      setIsLoading(false)
     },
     onError(error: any) {
       const errorMessage = error.response?.data?.message || 'Login failed. Please try again.'
@@ -76,8 +80,12 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
             required
             minLength={8}
           />
-          <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3 hover:bg-[#293855 '>
-            Login
+          <button
+            type='submit'
+            className='bg-orange-400 w-full h-10 rounded-md mb-3 hover:bg-[#293855]'
+            disabled={isLoading} // Vô hiệu hóa nút khi đang xử lý
+          >
+            {isLoading ? 'Logging in...' : 'Login'} {/* Hiển thị thông báo phù hợp */}
           </button>
         </form>
         <a href='#' className='block mb-4 hover:text-orange-300'>
@@ -85,7 +93,11 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
         </a>
         <hr className='bg-slate-500 h-[2px] mb-3' />
         <p className='mb-2'>You don't have an account?</p>
-        <button type='button' className='bg-white w-full h-10 rounded-md border border-orange-400 hover:bg-orange-400'>
+        <button
+          type='button'
+          className='bg-white w-full h-10 rounded-md border border-orange-400 hover:bg-orange-400'
+          onClick={() => {}}
+        >
           Register
         </button>
         <Toaster richColors position='top-right' />

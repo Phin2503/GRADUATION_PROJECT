@@ -4,7 +4,7 @@ import Carousel from '@/components/Carousel/Carousel'
 import SpanMain from '@/components/Span/SpanMain'
 import SubSpan from '@/components/Span/SubSpan'
 import { Movie } from '@/types/movie.type'
-
+import { MdOutlineNavigateNext } from 'react-icons/md'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { AiOutlineLike } from 'react-icons/ai'
@@ -42,7 +42,7 @@ export default function HomeContent() {
     <>
       <div className='bg-[#FAF7F0]'>
         <Carousel />
-        <div className='w-[80%] m-auto mt-9 flex-col items-center justify-center '>
+        <div className='w-[80%] m-auto mt-9 flex-col items-center justify-center text-center'>
           <div className='flex py-10 items-center'>
             <SpanMain name='phim' />
             <SubSpan name='Đang Chiếu' onClick={() => filterMovies(true)} />
@@ -53,6 +53,14 @@ export default function HomeContent() {
               <CardMovieHome key={movie.id} movie={movie} />
             ))}
           </div>
+
+          <NavLink
+            className='w-[8rem] h-[2.5rem] border-[1px] border-[#f37f1d] text-[#f37f1d] rounded-[0.2rem] mx-auto flex justify-center items-center hover:text-white hover:bg-[#f37f1d]'
+            to={''}
+          >
+            Xem Thêm
+            <MdOutlineNavigateNext className='ml-[0.2rem]' />
+          </NavLink>
         </div>
         <div className='w-[100%] h-2 bg-gray-300 my-6'></div>
         <div className='w-[80%] mx-auto my-9'>
@@ -61,7 +69,7 @@ export default function HomeContent() {
             <SubSpan name='Blog Điện Ảnh' />
           </div>
           <div className='grid grid-cols-2 gap-4 w-[90%]'>
-            <div className='w-full'>
+            <div className='w-full overflow-hidden'>
               <NavLink to=''>
                 <img
                   src='https://www.galaxycine.vn/media/2024/11/20/rv-linh-mieu-750_1732095988042.jpg'
@@ -124,7 +132,7 @@ export default function HomeContent() {
             <span className='border-l-[5px] border-[#FF5400] px-4 text-2xl uppercase'>Tin Khuyến mãi</span>
           </div>
           <div className=' grid grid-cols-4 gap-1'>
-            <div className='w-[90%]'>
+            <div className='w-[90%]  '>
               <img
                 src='https://cdn.galaxycine.vn/media/2024/7/3/vnpay-galaxy-2_1719990810325.jpg'
                 alt=''

@@ -9,12 +9,21 @@ import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import ButtonHeader from '../ButtonHeader/ButtonHeader'
 import RegisterForm from '../RegisterForm/RegisterForm'
-import ImageSmallCard from '../../assets/ImageSmallCard.jpg'
+import ListCardMenu from '../Card/ListCardMenu'
+import { useMutation } from '@tanstack/react-query'
+import { getAllMovie } from '@/apis/movie.api'
+import { Movie } from '@/types/movie.type'
+import { useNavigate } from 'react-router-dom'
 
 export default function Header() {
+  const navigate = useNavigate()
   const [showLoginForm, setShowLoginForm] = useState<boolean>(false)
   const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false)
   const [userName, setUserName] = useState<string | null>(null)
+
+  const [movies, setMovies] = useState<Movie[]>([])
+  const [showingMovies, setShowingMovies] = useState<Movie[]>([])
+  const [noneShowingMovies, setNoneShowingMovies] = useState<Movie[]>([])
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
@@ -47,6 +56,7 @@ export default function Header() {
   const handleLogout = () => {
     setUserName(null)
     localStorage.removeItem('user')
+    navigate('/')
   }
 
   const handleRegisterClick = () => {
@@ -57,9 +67,27 @@ export default function Header() {
     setShowLoginForm(false)
   }
 
+  const { mutate } = useMutation({
+    mutationFn: getAllMovie,
+    onSuccess(response) {
+      const moviesData = response.data
+      setMovies(moviesData)
+      setShowingMovies(moviesData.filter((movie) => movie.showing == 1))
+      setNoneShowingMovies(moviesData.filter((movie) => movie.showing == 0))
+    }
+  })
+
+  useEffect(() => {
+    mutate()
+  }, [mutate])
+
   return (
-    <div className='w-full px-44 h-24 bg-[#10172B] flex flex-col md:flex-row justify-between items-center p-4'>
-      <img src={Logo} alt='Ticket Logo' className='w-32 md:w-48' />
+    <div className='w-full px-44 h-24 bg-[#10172B] flex flex-col md:flex-row justify-between items-center p-4 nunito-sans'>
+      <NavLink to={'/'}>
+        {' '}
+        <img src={Logo} alt='Ticket Logo' className='w-32 md:w-48' />
+      </NavLink>
+
       <div className='w-full md:w-[35rem] text-sm md:text-base'>
         <ul className='flex flex-wrap justify-center md:justify-around text-white'>
           <li className='flex items-center mr-3 mb-2 md:mb-0 hover:text-blue-400'>
@@ -74,95 +102,8 @@ export default function Header() {
             <span className='hover:text-[#FF5400]'>Movie</span>
             <FaChevronDown className='ml-1' />
             <div className='absolute w-[50rem] hidden h-auto bg-[#E5E1DA] grid top-14 right-[-24rem] group-hover:block rounded-xl text-black z-50'>
-              <div className='grid grid-cols-4 gap-4 text-center w-[95%] p-3'>
-                <span className='row-span-1 col-span-4 text-left pl-1 border-l-4 border-[#FF5400]'>
-                  Phim Đang Chiếu
-                </span>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-              </div>
-
-              <div className='grid grid-cols-4 gap-4 text-center w-[95%] p-3'>
-                <span className='row-span-1 col-span-4 text-left pl-1 border-l-4 border-[#FF5400]'>Phim Sắp Chiếu</span>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-                <div className='w-[100%] rounded break-words'>
-                  <div className='relative w-[100%] rounded-xl bg-black group/items'>
-                    <img src={ImageSmallCard} className='w-[100%] rounded-xl mb-2' />
-                    <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
-                    <div className='absolute hidden right-8 top-16 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-                      <NavLink to={''}>Buy Ticket</NavLink>
-                    </div>
-                  </div>
-                  <span>Cáo và Thỏ</span>
-                </div>
-              </div>
+              <ListCardMenu movies={showingMovies} name='Phim Đang Chiếu' />
+              <ListCardMenu movies={noneShowingMovies} name='Phim Sắp Chiếu' />
             </div>
           </li>
           <li className='flex relative items-center mr-3 mb-2 md:mb-0 group z-50'>
@@ -189,7 +130,9 @@ export default function Header() {
               <AvatarImage src={avaUser} className='rounded-full w-10 h-10' />
               <AvatarFallback>{userName.charAt(0)}</AvatarFallback>
             </Avatar>
-            <span className='text-white ml-2 mr-2'>{userName}</span>
+            <span className='text-white ml-2 mr-2'>
+              <NavLink to={'/user'}>{userName}</NavLink>
+            </span>
             <button
               onClick={handleLogout}
               className='group h-10 px-4 py-1 bg-slate-900 text-white transition-all text-center font-light border-[2px] border-[#FF8000] rounded-[10px] hover:bg-[#FF8000]'

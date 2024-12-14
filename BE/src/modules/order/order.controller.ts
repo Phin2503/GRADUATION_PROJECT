@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Theater } from '../theater/theater.entity';
 import { CreatOrderDTO } from './dtos/createOrder.dto';
-import { Order } from './order.entity';
+
 import { updateOrderDTO } from './dtos/updateOrder.dto';
 
 @Controller('order')
@@ -15,6 +15,11 @@ export class SeatReservationController {
     @Param('showtimeId') showtimeId: number,
   ) {
     return this.orderService.getSeatOrdered(theaterId, showtimeId);
+  }
+
+  @Get('/:id')
+  async getOrder(@Param('id') orderId: number) {
+    return await this.orderService.getOrderByID(orderId);
   }
 
   @Post('/:theaterId/:showtimeId')

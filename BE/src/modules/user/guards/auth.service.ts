@@ -15,8 +15,6 @@ import { Repository } from 'typeorm';
 import { RegisterDto } from '../dtos/register.dto';
 import { LoginDto } from '../dtos/login.dto';
 import * as bcrypt from 'bcrypt';
-import { identity } from 'rxjs';
-import { access } from 'fs';
 
 @Injectable()
 export class AuthService {
@@ -54,12 +52,12 @@ export class AuthService {
     const payload = { id: newUser.id };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '30m', // Thời gian sống của accessToken
+      expiresIn: '2d',
     });
 
     const verifyToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '30m',
+      expiresIn: '2d',
     });
 
     try {
@@ -91,6 +89,7 @@ export class AuthService {
     const currentAccount = await this.userRepository.findOneBy({
       email: requestBody.email,
     });
+
     if (!currentAccount) {
       throw new NotFoundException('Invalid Credentials!');
     }
@@ -114,7 +113,7 @@ export class AuthService {
 
     const access_token = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: '30m',
+      expiresIn: '2d',
     });
 
     const refresh_token = await this.jwtService.signAsync(
@@ -134,7 +133,7 @@ export class AuthService {
   }
 
   async refreshToken(refreshToken: string) {
-    const user = await this.userRepository.findOne({ where: { refreshToken } });
+    const user = await this.userRepository.findOneBy({ refreshToken });
     if (!user) {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -146,7 +145,7 @@ export class AuthService {
 
       const newAccessToken = await this.jwtService.signAsync(
         { id: user.id, email: user.email },
-        { secret: process.env.JWT_SECRET, expiresIn: '15m' },
+        { secret: process.env.JWT_SECRET, expiresIn: '2d' },
       );
 
       const newRefreshToken = await this.jwtService.signAsync(
@@ -170,11 +169,12 @@ export class AuthService {
     const user = await this.userRepository.findOneBy({
       email: requestBody.email,
     });
+
     if (!user) {
       throw new NotFoundException('Email không tồn tại!');
     }
 
-    const randomPassword = randomBytes(4).toString('hex'); // Tạo mật khẩu 8 ký tự
+    const randomPassword = randomBytes(4).toString('hex');
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
     user.password = hashedPassword;
 
@@ -195,7 +195,11 @@ export class AuthService {
       const decoded = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      return decoded;
+      if (decoded) {
+        return true;
+      }
+
+      return false;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }

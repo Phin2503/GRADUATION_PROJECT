@@ -22,6 +22,7 @@ import { UpdateUserDto } from './dtos/updateUser.dto';
 import { PaginationDTO } from 'src/generic/pagination.dto';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
+import { Headers } from '@nestjs/common';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -41,7 +42,7 @@ export class UserController {
     return this.authService.login(requestBody);
   }
 
-  @Get()
+  @Get('/')
   @UseGuards(new RoleGuard(['admin']))
   @UseGuards(AuthGuard)
   findAll(@Query() pagination: PaginationDTO) {
@@ -85,8 +86,9 @@ export class UserController {
     return this.authService.refreshToken(refreshToken);
   }
 
-  @Post('verify-token')
-  async verifyToken(@Body('token') token: string) {
+  @Get('verify-token')
+  async verifyToken(@Headers('Authorization') authHeader: string) {
+    const token = authHeader.split(' ')[1];
     return this.authService.verifyToken(token);
   }
 }

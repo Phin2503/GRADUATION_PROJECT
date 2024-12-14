@@ -79,6 +79,7 @@ export class ShowtimeService {
         showtime_end: this.convertUTCToHCM(showtimeEnd),
         movie,
         theater,
+        theater_complex,
       });
 
       return await this.showtimeRepository.save(newShowtime);
@@ -101,7 +102,8 @@ export class ShowtimeService {
   async getAll(pagination) {
     return await this.showtimeRepository.find({
       skip: pagination?.skip || 0,
-      take: pagination?.limit ?? DEFAULT_PAGE_SIZE,
+      // take: pagination?.limit ?? DEFAULT_PAGE_SIZE,
+      relations: ['theater', 'theater_complex', 'movie'],
     });
   }
 

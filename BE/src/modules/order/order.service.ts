@@ -1,25 +1,18 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './order.entity';
-import { ConnectionPoolMonitoringEvent, In, Or, Repository } from 'typeorm';
-
-// import { SEAT_STATUS } from '../enumTypes/seat_status/seat_status.enum';
+import { In, Repository } from 'typeorm';
 import { Seat } from '../seat/seat.entity';
 import { Showtime } from '../showtime/showtime.entity';
 import { Theater } from '../theater/theater.entity';
-
 import { User } from '../user/user.entity';
-import { SEAT_STATUS } from '../enumTypes/seat_status/seat_status.enum';
 import { CreatOrderDTO } from './dtos/createOrder.dto';
-import { Cron } from '@nestjs/schedule';
 import { STATUS_ORDER } from '../enumTypes/status_order/status_order.enum';
 import { updateOrderDTO } from './dtos/updateOrder.dto';
-import { CLIENT_RENEG_WINDOW } from 'tls';
 
 @Injectable()
 export class OrderService {
@@ -51,9 +44,6 @@ export class OrderService {
     );
 
     const existingOrders = await this.orderRepo.findBy({
-      theater: {
-        id: theaterId,
-      },
       showtime: {
         id: showtimeId,
       },
@@ -71,7 +61,7 @@ export class OrderService {
         `Seat ${alreadyBookedSeats.join(', ')} already ordered!`,
       );
     }
-    const order = this.orderRepo.create(requestBody);
+    const order = await this.orderRepo.create(requestBody);
 
     order.user = (await validateOrder).user;
     order.theater = (await validateOrder).theater;
@@ -86,21 +76,44 @@ export class OrderService {
     return newOrder;
   }
 
-  @Cron('0 4 * * *')
-  async deteleOrders() {
-    try {
-      await this.orderRepo.clear();
-    } catch (e) {
-      throw new BadRequestException('Something went wrong !');
+  // @Cron('0 4 * * *')
+  // async deteleOrders() {
+  //   try {
+  //     await this.orderRepo.clear();
+  //   } catch (e) {
+  //     throw new BadRequestException('Something went wrong !');
+  //   }
+  // }
+
+  async getOrderByID(orderId: number) {
+    const existingOrder = await this.orderRepo.findOne({
+      where: {
+        id: orderId,
+      },
+      relations: ['theater', 'user', 'showtime'],
+    });
+
+    console.log(existingOrder);
+
+    const showtimeOfOrder = await this.showtimeRepo.findOne({
+      where: {
+        id: existingOrder.showtime.id,
+      },
+      relations: ['theater_complex', 'movie'],
+    });
+
+    console.log(showtimeOfOrder);
+
+    if (!existingOrder) {
+      throw new NotFoundException('Not found Order ! try again');
     }
+
+    return { existingOrder, showtimeOfOrder };
   }
 
   async getSeatOrdered(theaterId: number, showtimeId: number) {
     const ordered = await this.orderRepo.find({
       where: {
-        theater: {
-          id: theaterId,
-        },
         showtime: {
           id: showtimeId,
         },
@@ -150,17 +163,18 @@ export class OrderService {
   }
 
   async autoDeleteOrderCancelled(id: number) {
-    const delay = 7 * 60 * 1000;
-    setTimeout(async () => {
-      await this.orderRepo
-        .createQueryBuilder()
-        .delete()
-        .where('id = :id AND status IN (:...statuses)', {
-          id: id,
-          statuses: [STATUS_ORDER.PENDING, STATUS_ORDER.CANCELED],
-        })
-        .execute();
-    }, delay);
+    const delay = 7 * 60 * 1000; // 1 phút
+
+    await new Promise((resolve) => setTimeout(resolve, delay));
+
+    const result = await this.orderRepo
+      .createQueryBuilder()
+      .delete()
+      .where('id = :id AND status IN (:...statuses)', {
+        id: id,
+        statuses: [STATUS_ORDER.PENDING, STATUS_ORDER.CANCELED],
+      })
+      .execute();
   }
 
   async updateOrder(orderId: number, requestBody: updateOrderDTO) {

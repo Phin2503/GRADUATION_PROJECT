@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -16,6 +17,8 @@ import { Seat } from '../seat/seat.entity';
 import { Theater } from '../theater/theater.entity';
 import { Food } from '../food/food.entity';
 import { STATUS_ORDER } from '../enumTypes/status_order/status_order.enum';
+import { Payment } from '../payment/payment.entity';
+import { Coupon } from '../coupon/coupon.entity';
 
 @Entity()
 export class Order {
@@ -49,4 +52,10 @@ export class Order {
 
   @ManyToOne(() => Theater, (Theater) => Theater.orders)
   theater: Theater;
+
+  @ManyToOne(() => Coupon, (coupon) => coupon.order_Id, { nullable: true })
+  coupon: Coupon;
+
+  @OneToMany(() => Payment, (payment) => payment.order)
+  payments: Payment[];
 }

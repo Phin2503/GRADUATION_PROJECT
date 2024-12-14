@@ -1,27 +1,24 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Req } from '@nestjs/common';
 import { VnpayService } from './vnpay.service';
+import { PaymentService } from '../payment/payment.service';
 
 @Controller('vnpay')
 export class VnpayController {
-  constructor(private readonly vnpayService: VnpayService) {}
+  constructor(
+    private readonly vnpayService: VnpayService,
+    private readonly PaymentService: PaymentService,
+  ) {}
 
   @Post('payment')
-  createPayment(
-    @Body() paymentDto: { amount: number; orderId: string; orderInfo: string },
+  async createPayment(
+    @Req() req: Request,
+    @Body() paymentDto: { amount: number; orderId: string },
   ) {
-    const paymentUrl = this.vnpayService.createPayment(
+    const paymentUrl = await this.vnpayService.createPayment(
+      req,
       paymentDto.amount,
       paymentDto.orderId,
-      paymentDto.orderInfo,
     );
     return { paymentUrl };
-  }
-
-  @Get('return')
-  handleReturn(@Body() req) {
-    // Xử lý thông tin trả về từ VNPay
-    console.log(req);
-    // Xử lý logic tại đây
-    return 'Return from VNPay';
   }
 }

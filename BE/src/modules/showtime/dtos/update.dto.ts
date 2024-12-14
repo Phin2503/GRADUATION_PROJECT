@@ -15,6 +15,9 @@ export class updateShowtimeDto {
   @IsOptional()
   movie_id: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   theater_id: number;
+
+  @IsNotEmpty()
+  theater_complexId: number;
 }

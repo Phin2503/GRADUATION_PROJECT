@@ -25,6 +25,7 @@ import { TheaterComplexService } from './modules/theaterComplex/theaterComplex.s
 import { FoodModule } from './modules/food/food.module';
 import { MomoTransactionModule } from './modules/momo-transaction/momo-transaction.module';
 import { VnpayModule } from './modules/vnpay/vnpay.module';
+import { CouponModule } from './modules/coupon/coupon.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { VnpayModule } from './modules/vnpay/vnpay.module';
     TheaterComplexModule,
     MomoTransactionModule,
     VnpayModule,
+    CouponModule,
   ],
   controllers: [AppController, UploadController, TheaterComplexController],
   providers: [AppService, CloudinaryService, TheaterComplexService],

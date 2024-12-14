@@ -9,7 +9,7 @@ import { toast, Toaster } from 'sonner'
 
 export default function UserDetail() {
   const [userDetail, setUserDetail] = useState<User | null>(null)
-  const [token, setToken] = useState<string>('')
+  const [token, setToken] = useState<string>()
   const [formValues, setFormValues] = useState({
     fullName: '',
     email: '',
@@ -23,17 +23,22 @@ export default function UserDetail() {
 
   useEffect(() => {
     const userDataString = localStorage.getItem('user')
+
     if (userDataString) {
-      const userData = JSON.parse(userDataString)
-      setToken(userData.access_token)
-      const { fullName, email, dateOfBirth, phoneNumber } = userData.payload
-      setUserDetail(userData.payload)
-      setFormValues({
-        fullName,
-        email,
-        dateOfBirth: new Date(dateOfBirth).toISOString().split('T')[0],
-        phoneNumber
-      })
+      try {
+        const userData = JSON.parse(userDataString)
+        const { fullName, email, dateOfBirth, phoneNumber } = userData
+        setUserDetail(userData)
+        setFormValues({
+          fullName,
+          email,
+          dateOfBirth: new Date(dateOfBirth).toISOString().split('T')[0],
+          phoneNumber
+        })
+      } catch (error) {
+        console.error('Error parsing user data:', error)
+        toast.error('Failed to load user data.')
+      }
     } else {
       console.log('No user data found.')
     }
@@ -48,65 +53,82 @@ export default function UserDetail() {
   }
 
   const handleSave = async () => {
-    try {
-      const response = await fetch(`http://localhost:3000/api/v1/user/update/${userDetail?.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          fullName: formValues.fullName,
-          email: formValues.email,
-          dateOfBirth: formValues.dateOfBirth,
-          phoneNumber: formValues.phoneNumber
-        })
-      })
+    const getAccessToken = localStorage.getItem('access_token')
+    if (getAccessToken) {
+      let token = JSON.parse(getAccessToken)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(`Failed to update user: ${errorData.message || 'Unknown error'}`)
+      if (!token) {
+        toast.error('Authorization token is missing.')
+        return
       }
 
-      const updatedUser = await response.json()
-      toast.success('User updated successfully!!')
-      setUserDetail(updatedUser)
-      localStorage.setItem('user', JSON.stringify({ payload: updatedUser }))
-    } catch (error) {
-      console.error('Error updating user:', error)
+      try {
+        const response = await fetch(`http://localhost:3000/api/v1/user/update/${userDetail?.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(formValues)
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Error response:', errorData)
+          throw new Error(`Failed to update user: ${errorData || 'Unknown error'}`)
+        }
+
+        const updatedUser = await response.json()
+        toast.success('User updated successfully!')
+        setUserDetail(updatedUser)
+        localStorage.setItem('user', JSON.stringify(updatedUser))
+      } catch (error) {
+        console.error('Error updating user:', error)
+        toast.error(`Error updating user: ${error || 'Unknown error'}`)
+      }
     }
   }
 
   const handlePasswordChange = async () => {
-    if (newPassword !== confirmPassword) {
-      toast.error('New passwords do not match!')
-      return
-    }
+    const getAccessToken = localStorage.getItem('access_token')
+    if (getAccessToken) {
+      let token = JSON.parse(getAccessToken)
 
-    try {
-      const response = await fetch(`http://localhost:3000/api/v1/user/change-password/${userDetail?.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword
-        })
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(`Failed to change password: ${errorData.message || 'Unknown error'}`)
+      console.log(token)
+      if (!token) {
+        toast.error('Authorization token is missing.')
+        return
       }
 
-      toast.success('Password changed successfully!')
-      setCurrentPassword('')
-      setNewPassword('')
-      setConfirmPassword('')
-    } catch (error) {
-      toast.error(`${error}.Please try again.`)
+      if (newPassword !== confirmPassword) {
+        toast.error('New passwords do not match!')
+        return
+      }
+
+      try {
+        const response = await fetch(`http://localhost:3000/api/v1/user/change-password/${userDetail?.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('Error response:', errorData)
+          throw new Error(`Failed to change password: ${errorData.message || 'Unknown error'}`)
+        }
+
+        toast.success('Password changed successfully!')
+        setCurrentPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+      } catch (error) {
+        console.error('Error changing password:', error)
+        toast.error(`Error changing password: ${error || 'Unknown error'}`)
+      }
     }
   }
 
@@ -124,22 +146,18 @@ export default function UserDetail() {
               <CardDescription>Make changes to your account here. Click save when you're done.</CardDescription>
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='space-y-1'>
-                <Label htmlFor='fullName'>Full Name</Label>
-                <Input id='fullName' name='fullName' value={formValues.fullName} onChange={handleChange} />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='email'>Email</Label>
-                <Input id='email' name='email' value={formValues.email} onChange={handleChange} />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='dob'>Date of Birth</Label>
-                <Input id='dob' name='dateOfBirth' value={formValues.dateOfBirth} type='date' onChange={handleChange} />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='phone'>Phone Number</Label>
-                <Input id='phone' name='phoneNumber' value={formValues.phoneNumber} onChange={handleChange} />
-              </div>
+              {Object.entries(formValues).map(([key, value]) => (
+                <div key={key} className='space-y-1'>
+                  <Label htmlFor={key}>{key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}</Label>
+                  <Input
+                    id={key}
+                    name={key}
+                    value={value}
+                    onChange={handleChange}
+                    type={key === 'dateOfBirth' ? 'date' : 'text'}
+                  />
+                </div>
+              ))}
             </CardContent>
             <CardFooter>
               <Button onClick={handleSave}>Save changes</Button>
@@ -153,28 +171,29 @@ export default function UserDetail() {
               <CardDescription>Change your password here. After saving, you'll be logged out.</CardDescription>
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='space-y-1'>
-                <Label htmlFor='current'>Current password</Label>
-                <Input
-                  id='current'
-                  type='password'
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='new'>New password</Label>
-                <Input id='new' type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-              </div>
-              <div className='space-y-1'>
-                <Label htmlFor='confirm'>Confirm new password</Label>
-                <Input
-                  id='confirm'
-                  type='password'
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
+              {['currentPassword', 'newPassword', 'confirmPassword'].map((field) => (
+                <div key={field} className='space-y-1'>
+                  <Label htmlFor={field}>
+                    {field.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                  </Label>
+                  <Input
+                    id={field}
+                    type='password'
+                    value={
+                      field === 'currentPassword'
+                        ? currentPassword
+                        : field === 'newPassword'
+                          ? newPassword
+                          : confirmPassword
+                    }
+                    onChange={(e) => {
+                      if (field === 'currentPassword') setCurrentPassword(e.target.value)
+                      if (field === 'newPassword') setNewPassword(e.target.value)
+                      if (field === 'confirmPassword') setConfirmPassword(e.target.value)
+                    }}
+                  />
+                </div>
+              ))}
             </CardContent>
             <CardFooter>
               <Button onClick={handlePasswordChange}>Save password</Button>

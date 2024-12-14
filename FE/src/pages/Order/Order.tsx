@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom'
 import CardMovieOrderPage from '@/components/Card/CardMovieOrderPage'
 import SpanMain from '@/components/Span/SpanMain'
 import { Movie } from '@/types/movie.type'
-import { useMutation } from '@tanstack/react-query'
-import { getAllMovie, getMovieById } from '@/apis/movie.api'
-import { getShowtimeByMovieId } from '@/apis/showtime.api'
+import axiosInstance from '../../axios/axiosConfig' // Import Axios instance
 import Showtime from '@/types/showtime.type'
 import InfoMovie from '@/components/InfoMovie/InfoMovie'
 import DateButtons from '@/components/OrderPage/ButtonOrderPage/DateButtons.OrderPage'
@@ -21,29 +19,33 @@ export default function Order() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date())
   const { id } = useParams()
 
-  const { mutate: fetchMovies } = useMutation({
-    mutationFn: getAllMovie,
-    onSuccess(response) {
+  const fetchMovies = async () => {
+    try {
+      const response = await axiosInstance.get('/movie')
       const moviesData = response.data || []
-
-      setShowingMovies(moviesData.filter((movie) => movie.showing == 1))
-      console.log(showingMovies)
+      setShowingMovies(moviesData.filter((movie: { showing: number }) => movie.showing == 1))
+    } catch (error) {
+      console.error('Error fetching movies:', error)
     }
-  })
+  }
 
-  const { mutate: fetchShowtime } = useMutation({
-    mutationFn: getShowtimeByMovieId,
-    onSuccess(response) {
-      setShowtimes(response.data || [])
-    }
-  })
-
-  const { mutate: fetchMovie } = useMutation({
-    mutationFn: getMovieById,
-    onSuccess(response) {
+  const fetchMovie = async (movieId: string) => {
+    try {
+      const response = await axiosInstance.get(`/movie/${movieId}`)
       setMovie(response.data || null)
+    } catch (error) {
+      console.error('Error fetching movie:', error)
     }
-  })
+  }
+
+  const fetchShowtime = async (movieId: string) => {
+    try {
+      const response = await axiosInstance.get(`/showtime/movie/${movieId}`)
+      setShowtimes(response.data || [])
+    } catch (error) {
+      console.error('Error fetching showtimes:', error)
+    }
+  }
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date)
@@ -51,13 +53,14 @@ export default function Order() {
 
   useEffect(() => {
     fetchMovies()
+  }, [])
+
+  useEffect(() => {
     if (id) {
       fetchShowtime(id)
       fetchMovie(id)
     }
-  }, [fetchMovies, fetchShowtime, fetchMovie, id])
-
-  // console.log(showingMovies)
+  }, [id])
 
   return (
     <div className='w-full bg-[#FAF7F0] h-full text-center'>

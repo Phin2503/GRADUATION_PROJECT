@@ -5,6 +5,8 @@ interface Props {
   movie: Movie
 }
 
+
+
 export default function CardMovieMenu({ movie }: Props) {
   return (
     <div>
@@ -13,10 +15,10 @@ export default function CardMovieMenu({ movie }: Props) {
           <img src={movie.background_image_url} className='w-[100%] rounded-xl mb-2' />
           <div className='absolute inset-0 rounded-xl bg-black opacity-0 transition-opacity duration-300 group-hover/items:opacity-50 ' />
           <div className='absolute hidden right-8 top-24 bg-[#FF5400] w-[7rem] rounded-xl p-2 group-hover/items:block hover:text-white'>
-            <NavLink to={`/order/${movie.id}`}>Buy Ticket</NavLink>
+            <NavLink to={`order/${movie.id}`}>Buy Ticket</NavLink>
           </div>
         </div>
-        <span>Cáo và Thỏ</span>
+        <span>{movie.title}</span>
       </div>
     </div>
   )

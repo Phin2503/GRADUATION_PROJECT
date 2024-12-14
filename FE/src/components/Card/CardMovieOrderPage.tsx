@@ -13,7 +13,7 @@ export default function CardMovieOrderPage({ movie }: Props) {
         <div className='bg-black w-[100%] h-[100%] absolute rounded-[1rem] top-0 left-0 opacity-0 group-hover:opacity-40 transition-opacity duration-300'></div>
         <NavLink
           className='text-center flex items-center justify-center h-[2.5rem] w-[7rem] text-md rounded-[0.2rem] bg-[#FF5400] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hover:text-white hover:bg-[#FF8225]'
-          to={``}
+          to={`${movie.id}`}
         >
           Mua vé
         </NavLink>

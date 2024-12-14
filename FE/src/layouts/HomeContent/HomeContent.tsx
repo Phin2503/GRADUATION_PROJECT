@@ -27,6 +27,8 @@ export default function HomeContent() {
   })
 
   useEffect(() => {
+    localStorage.removeItem('bookingInfo')
+    localStorage.removeItem('orderId')
     mutate()
   }, [mutate])
 

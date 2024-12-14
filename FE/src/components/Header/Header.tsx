@@ -19,7 +19,7 @@ export default function Header() {
   const navigate = useNavigate()
   const [showLoginForm, setShowLoginForm] = useState<boolean>(false)
   const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false)
-  const [userName, setUserName] = useState<string | null>(null)
+  const [userName, setUserName] = useState<string>('')
 
   const [movies, setMovies] = useState<Movie[]>([])
   const [showingMovies, setShowingMovies] = useState<Movie[]>([])
@@ -29,7 +29,7 @@ export default function Header() {
     const storedUser = localStorage.getItem('user')
     if (storedUser) {
       const user = JSON.parse(storedUser)
-      setUserName(user.payload.fullName)
+      setUserName(user.fullName)
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -54,8 +54,12 @@ export default function Header() {
   }
 
   const handleLogout = () => {
-    setUserName(null)
+    setUserName('')
     localStorage.removeItem('user')
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    localStorage.removeItem('bookingInfo')
+    localStorage.removeItem('orderId')
     navigate('/')
   }
 
@@ -83,8 +87,7 @@ export default function Header() {
 
   return (
     <div className='w-full px-44 h-24 bg-[#10172B] flex flex-col md:flex-row justify-between items-center p-4 nunito-sans'>
-      <NavLink to={'/'}>
-        {' '}
+      <NavLink to={''}>
         <img src={Logo} alt='Ticket Logo' className='w-32 md:w-48' />
       </NavLink>
 
@@ -128,7 +131,7 @@ export default function Header() {
           <div className='flex items-center'>
             <Avatar>
               <AvatarImage src={avaUser} className='rounded-full w-10 h-10' />
-              <AvatarFallback>{userName.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{userName}</AvatarFallback>
             </Avatar>
             <span className='text-white ml-2 mr-2'>
               <NavLink to={'/user'}>{userName}</NavLink>

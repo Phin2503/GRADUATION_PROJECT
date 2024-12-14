@@ -13,21 +13,22 @@ interface Props {
 export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false) // Trạng thái yêu cầu đăng nhập
+  const [isLoading, setIsLoading] = useState(false)
 
   const loginMutation = useMutation({
     mutationFn: (body: { email: string; password: string }) => loginRequest(body),
     onMutate: () => {
-      setIsLoading(true) // Bắt đầu yêu cầu
+      setIsLoading(true)
     },
     onSuccess(data) {
       toast.success('Login successful!')
-      localStorage.setItem('user', JSON.stringify(data.data))
-
+      localStorage.setItem('user', JSON.stringify(data.data.payload))
+      localStorage.setItem('access_token', JSON.stringify(data.data.access_token))
+      localStorage.setItem('refresh_token', JSON.stringify(data.data.refresh_token))
       const storedUser = localStorage.getItem('user')
       if (storedUser) {
-        const nameUser = JSON.parse(storedUser).payload.fullName
-        onLoginSuccess(nameUser || 'Guest')
+        const nameUser = JSON.parse(storedUser)
+        onLoginSuccess(nameUser.fullName || 'Guest')
       } else {
         onLoginSuccess('Guest')
       }

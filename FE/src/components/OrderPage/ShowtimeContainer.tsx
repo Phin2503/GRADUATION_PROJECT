@@ -1,6 +1,9 @@
 import React from 'react'
 import Showtime from '@/types/showtime.type'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Button } from '../ui/button'
+import { toast, Toaster } from 'sonner'
+import { Toast } from 'react-bootstrap'
 
 interface Props {
   showtimes: Showtime[]
@@ -15,6 +18,8 @@ interface GroupedShowtime {
 }
 
 const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selectedTheaterId, selectedDate }) => {
+  const navigate = useNavigate() // Khai báo useNavigate
+
   // Đặt lại thời gian của selectedDate về 00:00:00 để chỉ so sánh ngày
   const defaultDate = new Date(selectedDate)
   defaultDate.setHours(0, 0, 0, 0)
@@ -65,6 +70,43 @@ const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selec
     {} as { [key: number]: GroupedShowtime }
   )
 
+  const formatShowtime = (showtime: string | Date) => {
+    const date = new Date(showtime)
+    const hours = date.getUTCHours() // Lấy giờ theo giờ UTC
+    const minutes = date.getUTCMinutes() // Lấy phút theo giờ UTC
+
+    // Định dạng giờ và phút
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+  }
+
+  const handleBooking = (showtime: Showtime) => {
+    const accessToken = localStorage.getItem('access_token')
+    if (!accessToken) {
+      toast.error('Vui lòng đăng nhặp !')
+      return false
+    }
+
+    const bookingInfo = {
+      titleMovie: showtime.movie.title,
+      theaterComplex: showtime.theater.theater_complex,
+      showtime: formatShowtime(showtime.showtime_start),
+      date: selectedDate.toISOString().split('T')[0],
+      totalPrice: 0,
+      theater: showtime.theater.name,
+      foods: [],
+      seats: []
+    }
+
+    console.log('Booking Info:', bookingInfo) // Kiểm tra giá trị trước khi lưu
+    localStorage.setItem('bookingInfo', JSON.stringify(bookingInfo))
+
+    // Kiểm tra xem localStorage đã được thiết lập không
+    const storedInfo = localStorage.getItem('bookingInfo')
+    console.log('Stored Booking Info:', storedInfo) // Kiểm tra giá trị đã lưu
+
+    navigate(`/booking/${showtime.movie.title}`)
+  }
+
   return (
     <div className='showtime-container'>
       {Object.values(groupedShowtimes).length > 0 ? (
@@ -74,12 +116,14 @@ const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selec
             <div className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8'>
               {showtimes.map((showtime) => {
                 const adjustedStartTime = adjustShowtime(showtime.showtime_start)
-
                 return (
                   <div key={showtime.id} className='col-span-1'>
-                    <NavLink className='border-[1px] text-sm px-8 py-2 border-gray-400' to={''}>
+                    <Button
+                      className='border-[1px] text-sm px-8 py-2 border-gray-400'
+                      onClick={() => handleBooking(showtime)}
+                    >
                       {adjustedStartTime.toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                    </NavLink>
+                    </Button>
                   </div>
                 )
               })}

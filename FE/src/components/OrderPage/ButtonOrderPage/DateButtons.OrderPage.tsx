@@ -6,37 +6,42 @@ interface DateButtonsProps {
 
 const DateButtons: React.FC<DateButtonsProps> = ({ onDateSelect }) => {
   const [selectedDateIndex, setSelectedDateIndex] = useState<number>(0)
+  const [dates, setDates] = useState<Date[]>([])
 
   const generateDates = () => {
     const today = new Date()
-    const dates = []
+    const generatedDates = []
 
     for (let i = 0; i < 4; i++) {
       const date = new Date(today)
       date.setDate(today.getDate() + i)
-      dates.push(date)
+      generatedDates.push(date)
     }
 
-    return dates
+    return generatedDates
   }
 
-  const dates = generateDates()
-  const dayNames = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy']
+  useEffect(() => {
+    setDates(generateDates())
+  }, [])
 
+  // Chỉ gọi onDateSelect khi selectedDateIndex thay đổi
   useEffect(() => {
     onDateSelect(dates[selectedDateIndex])
-  }, [dates, selectedDateIndex, onDateSelect])
+  }, [selectedDateIndex, dates, onDateSelect])
 
   const handleDateClick = (index: number) => {
-    setSelectedDateIndex(index)
-    onDateSelect(dates[index])
+    if (selectedDateIndex !== index) {
+      // Kiểm tra xem có thực sự thay đổi không
+      setSelectedDateIndex(index)
+    }
   }
 
   return (
     <div className='ml-5 mb-3 col-span-1 grid grid-cols-2 md:grid-cols-2 xs:gap-2 xs:grid-cols-1 xl:grid-cols-4'>
       {dates.map((date, index) => {
         const isToday = date.toDateString() === new Date().toDateString()
-        const dayName = dayNames[date.getDay()]
+        const dayName = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'][date.getDay()]
         const isSelected = selectedDateIndex === index
 
         return (

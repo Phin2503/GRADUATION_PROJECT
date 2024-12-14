@@ -47,7 +47,7 @@ export default function SelectButton({ showtimes, onSelectProvince, onSelectThea
         </SelectContent>
       </Select>
 
-      {selectedProvince && (
+      {/* {selectedProvince && (
         <Select onValueChange={handleTheaterChange}>
           <SelectTrigger className='w-[180px]'>
             <SelectValue placeholder='Chọn rạp chiếu phim' />
@@ -67,7 +67,7 @@ export default function SelectButton({ showtimes, onSelectProvince, onSelectThea
             </SelectGroup>
           </SelectContent>
         </Select>
-      )}
+      )} */}
     </div>
   )
 }

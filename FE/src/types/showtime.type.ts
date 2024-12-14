@@ -1,5 +1,6 @@
 import { Movie } from './movie.type'
 import Theater from './Theater.type'
+import TheaterComplex from './TheaterComplex.type'
 
 export default interface Showtime {
   id: number
@@ -9,5 +10,6 @@ export default interface Showtime {
   update_at: string | Date
   theater: Theater
   movie: Movie
+  theater_complex: TheaterComplex
   times: string[]
 }

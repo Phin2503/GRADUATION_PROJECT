@@ -1,6 +1,6 @@
 export interface Movie {
   id: number
-  title: 'Elio Cậu Bé Đến Từ Trái Đất'
+  title: string
   description: string
   duration: number
   release_date: string

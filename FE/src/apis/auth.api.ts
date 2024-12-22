@@ -4,7 +4,7 @@ import http from '@/utils/http'
 
 export const loginRequest = (body: { email: string; password: string }) => http.post<AuthResponse>('/user/login', body)
 export const registerRequest = (body: RegisterRequest) => http.post<AuthResponse>('user/register', body)
-
+export const sendPasswordRequest = (body: { email: string }) => http.post('user/forgot-password', body)
 // Hàm kiểm tra access token
 export const checkAccessToken = async (accessToken: string): Promise<boolean> => {
   try {

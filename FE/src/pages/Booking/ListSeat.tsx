@@ -1,6 +1,5 @@
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import Button from './Button'
-import { Toast } from 'react-bootstrap'
 
 type ListItemProps = {
   label: string
@@ -19,6 +18,10 @@ const ListSeat = ({ label, buttons, reservedSeats, selectedSeats, onSelectSeat }
     const leftSeat = `${label}${seatIndex - 1}`
     const rightSeat = `${label}${seatIndex + 1}`
 
+    // Ghế trên và dưới
+    const upperSeat = `${String.fromCharCode(label.charCodeAt(0) - 1)}${seatIndex}`
+    const lowerSeat = `${String.fromCharCode(label.charCodeAt(0) + 1)}${seatIndex}`
+
     // Kiểm tra xem ghế đã được chọn hay chưa
     const isSelected = selectedSeats.includes(seat)
 
@@ -31,8 +34,33 @@ const ListSeat = ({ label, buttons, reservedSeats, selectedSeats, onSelectSeat }
     // Kiểm tra xem việc chọn ghế này có để lại ghế trống bên cạnh không
     const leftSelected = selectedSeats.includes(leftSeat)
     const rightSelected = selectedSeats.includes(rightSeat)
+    const upperSelected = selectedSeats.includes(upperSeat)
+    const lowerSelected = selectedSeats.includes(lowerSeat)
 
-    const canSelect = !reservedSeats.includes(seat) && (leftSelected || rightSelected || selectedSeats.length === 0)
+    // Kiểm tra xem có ghế nào đã chọn không
+    const hasSelectedSeats = selectedSeats.length > 0
+
+    // Kiểm tra ghế trống giữa các ghế đã chọn
+    const hasEmptySeatsBetween = () => {
+      const allSeats = [...selectedSeats, seat]
+      allSeats.sort() // Sắp xếp các ghế đã chọn
+
+      for (let i = 0; i < allSeats.length - 1; i++) {
+        const currentSeatIndex = parseInt(allSeats[i].replace(label, ''))
+        const nextSeatIndex = parseInt(allSeats[i + 1].replace(label, ''))
+
+        // Nếu có ghế trống giữa các ghế đã chọn
+        if (nextSeatIndex - currentSeatIndex > 1) {
+          return true // Có ghế trống giữa
+        }
+      }
+      return false // Không có ghế trống giữa
+    }
+
+    const canSelect =
+      !reservedSeats.includes(seat) &&
+      (leftSelected || rightSelected || upperSelected || lowerSelected || !hasSelectedSeats) &&
+      !hasEmptySeatsBetween()
 
     // Nếu không thể chọn ghế, hiển thị thông báo lỗi
     if (!canSelect) {

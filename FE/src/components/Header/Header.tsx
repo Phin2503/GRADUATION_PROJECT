@@ -14,6 +14,7 @@ import { useMutation } from '@tanstack/react-query'
 import { getAllMovie } from '@/apis/movie.api'
 import { Movie } from '@/types/movie.type'
 import { useNavigate } from 'react-router-dom'
+import MenuItemDropDownUser from '../MenuItemDropDown/MenuItemDropDownUser'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -129,12 +130,20 @@ export default function Header() {
           </>
         ) : (
           <div className='flex items-center'>
-            <Avatar>
+            <Avatar className=' relative group'>
               <AvatarImage src={avaUser} className='rounded-full w-10 h-10' />
               <AvatarFallback>{userName}</AvatarFallback>
+              <MenuItemDropDownUser
+                ListMenuItem={[
+                  { name: 'Information User', redirect: '' },
+                  { name: 'History Orders', redirect: 'historyOrders' }
+                ]}
+                positionRight={-3}
+                index='z-50'
+              />
             </Avatar>
             <span className='text-white ml-2 mr-2'>
-              <NavLink to={'/user'}>{userName}</NavLink>
+              <span>{userName}</span>
             </span>
             <button
               onClick={handleLogout}

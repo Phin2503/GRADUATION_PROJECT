@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { TiDelete } from 'react-icons/ti'
 import { toast } from 'sonner'
-import { Toaster } from '../ui/sonner'
 import validator from 'validator'
 
 interface Props {
@@ -210,7 +209,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
           Log In
         </button>
       </div>
-      <Toaster richColors position='top-right' />
+      {/* <Toaster richColors position='top-right' /> */}
     </div>
   )
 }

@@ -31,3 +31,5 @@ export const getOrderById = (orderId: any) => http.get<any>(`${API_URL_ORDER}/${
 
 export const getSeatsOrdered = (theaterId: number, showtimeId: number) =>
   http.get<string[]>(`${API_URL_ORDER}/${theaterId}/${showtimeId}`)
+
+export const getOrdersByUserId = (userId: string) => http.get<string[]>(`${API_URL_ORDER}/user/${userId}`)

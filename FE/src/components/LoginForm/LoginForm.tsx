@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import loginImg from '../../assets/loginLogo.png'
-import { loginRequest } from '@/apis/auth.api'
+import { loginRequest, sendPasswordRequest } from '@/apis/auth.api'
 import { toast, Toaster } from 'sonner'
 import { TiDelete } from 'react-icons/ti'
 
@@ -14,6 +14,7 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
 
   const loginMutation = useMutation({
     mutationFn: (body: { email: string; password: string }) => loginRequest(body),
@@ -42,9 +43,36 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
     }
   })
 
+  const sendPasswordMutation = useMutation({
+    mutationFn: (email: string) => sendPasswordRequest({ email: email }),
+    onMutate: () => {
+      setIsLoading(true)
+    },
+    onSuccess() {
+      toast.success('Password sented to your email!')
+      setIsForgotPassword(false)
+    },
+    onSettled: () => {
+      setIsLoading(false)
+    },
+    onError(error: any) {
+      const errorMessage = error.response?.data?.message || 'Failed to send password. Please try again.'
+      toast.error(errorMessage)
+    }
+  })
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    loginMutation.mutate({ email, password })
+    if (isForgotPassword) {
+      sendPasswordMutation.mutate(email)
+    } else {
+      loginMutation.mutate({ email, password })
+    }
+  }
+
+  const handleForgotPassword = () => {
+    setIsForgotPassword(true)
+    setPassword('') // ẩn trường password
   }
 
   return (
@@ -54,7 +82,9 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
         <div className='flex justify-center'>
           <img src={loginImg} alt='Login Logo' className='w-[150px] h-[150px]' />
         </div>
-        <h5 className='font-medium mb-5 text-xl text-gray-600'>Login</h5>
+        <h5 className='font-medium mb-5 text-xl text-gray-600'>
+          {isForgotPassword ? 'Send Password to Email' : 'Login'}
+        </h5>
         <form onSubmit={handleSubmit}>
           <label htmlFor='email' className='block mb-1 text-left font-light'>
             Email
@@ -68,30 +98,42 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label htmlFor='password' className='block mb-1 text-left font-light'>
-            Password
-          </label>
-          <input
-            type='password'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
-            id='password'
-            placeholder='Input password here'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={8}
-          />
+          {!isForgotPassword && (
+            <>
+              <label htmlFor='password' className='block mb-1 text-left font-light'>
+                Password
+              </label>
+              <input
+                type='password'
+                className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+                id='password'
+                placeholder='Input password here'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+              />
+            </>
+          )}
           <button
             type='submit'
             className='bg-orange-400 w-full h-10 rounded-md mb-3 hover:bg-[#293855]'
-            disabled={isLoading} // Vô hiệu hóa nút khi đang xử lý
+            disabled={isLoading}
           >
-            {isLoading ? 'Logging in...' : 'Login'} {/* Hiển thị thông báo phù hợp */}
+            {isLoading
+              ? isForgotPassword
+                ? 'Sending...'
+                : 'Logging in...'
+              : isForgotPassword
+                ? 'Send Password'
+                : 'Login'}
           </button>
         </form>
-        <a href='#' className='block mb-4 hover:text-orange-300'>
-          Forgot password?
-        </a>
+        {!isForgotPassword && (
+          <a href='#' className='block mb-4 hover:text-orange-300' onClick={handleForgotPassword}>
+            Forgot password?
+          </a>
+        )}
         <hr className='bg-slate-500 h-[2px] mb-3' />
         <p className='mb-2'>You don't have an account?</p>
         <button
@@ -101,7 +143,7 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
         >
           Register
         </button>
-        <Toaster richColors position='top-right' />
+        {/* <Toaster richColors position='top-right' /> */}
       </div>
     </div>
   )

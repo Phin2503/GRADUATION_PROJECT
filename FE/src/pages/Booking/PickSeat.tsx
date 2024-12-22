@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ListSeat from './ListSeat'
 import InfoBooking from './InfoBooking'
-import { Toaster, toast } from 'sonner'
+import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import { createOrder, getSeatsOrdered, updateOrder } from '@/apis/order.ai'
@@ -70,6 +70,11 @@ const PickSeat = ({ onContinue }: Props) => {
   const toggleSeatSelection = (seat: string) => {
     if (reservedSeats.includes(seat)) {
       toast.error('Ghế này đã được đặt bởi người khác!')
+      return
+    }
+
+    if (selectedSeats.length >= 8 && !selectedSeats.includes(seat)) {
+      toast.error('Bạn chỉ có thể chọn tối đa 8 ghế!')
       return
     }
 

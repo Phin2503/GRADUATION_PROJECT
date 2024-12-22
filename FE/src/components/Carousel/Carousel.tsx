@@ -63,7 +63,7 @@ function Carousel() {
 
   return (
     <div
-      className='max-w-[1600px] h-[500px] w-full m-auto py-3 px-4 relative group'
+      className='max-w-[1700px] h-[500px] w-full m-auto py-2 px-4 relative group'
       onMouseEnter={() => setAutoPlay(false)}
       onMouseLeave={() => setAutoPlay(true)}
     >

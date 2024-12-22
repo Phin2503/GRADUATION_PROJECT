@@ -77,7 +77,8 @@ export default function InfoBooking({
         } else {
           clearInterval(intervalId)
           if (prev === 1) {
-            toast.error('Thời gian giữ ghế đã hết!') // Thông báo khi hết thời gian
+            toast.error('Thời gian giữ ghế đã hết!')
+            localStorage.removeItem('bookingInfo')
             navigate('/booking') // Điều hướng về trang booking khi đếm ngược hết
           }
           return 0

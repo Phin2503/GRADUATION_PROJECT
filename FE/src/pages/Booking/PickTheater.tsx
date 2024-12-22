@@ -13,6 +13,8 @@ import { getAllTheaters } from '@/apis/theater_complex.api'
 import TheaterComplex from '@/types/TheaterComplex.type'
 import InfoBooking from './InfoBooking'
 import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 interface ShowtimesByTheaterComplex {
   [theaterComplexName: string]: Showtime[]
@@ -31,6 +33,23 @@ type GroupedShowtimes = {
   [movieId: number]: GroupedShowtime
 }
 
+interface BookingData {
+  titleMovie?: string
+  showtime?: string
+  date?: string
+  theater?: string
+  theaterComplex?: TheaterComplex
+  seats?: string[]
+  foods?: Array<{
+    name: string
+    quantity: number
+    price: number
+    total: number
+  }>
+  totalPrice?: number
+  Showtime2: any
+}
+
 export default function PickTheater({ onContinue }: Props) {
   const [showtimes, setShowtimes] = useState<Showtime[]>([])
   const [provinces, setProvinces] = useState<Set<string>>(new Set())
@@ -43,6 +62,9 @@ export default function PickTheater({ onContinue }: Props) {
   const [selectedShowtimeId, setSelectedShowtimeId] = useState<number | null>(null)
   const [theaterComplexs, setTheaterComplexs] = useState<TheaterComplex[]>([])
   const [filteredTheaterComplexs, setFilteredTheaterComplexs] = useState<TheaterComplex[]>([])
+  const [bookingInfoExisting, setBookingInfoExisting] = useState<BookingData>()
+
+  const navigate = useNavigate()
 
   const { mutate: fetchTheaterComplex } = useMutation({
     mutationFn: getAllTheaters,
@@ -87,13 +109,21 @@ export default function PickTheater({ onContinue }: Props) {
   })
 
   useEffect(() => {
-    localStorage.removeItem('bookingInfo')
     localStorage.removeItem('orderId')
     localStorage.removeItem('countdown')
     fetchTheaterComplex()
     fetchShowtime()
     fetchMovies()
   }, [fetchShowtime, fetchMovies, fetchTheaterComplex])
+
+  useEffect(() => {
+    const getBookingInfo = localStorage.getItem('bookingInfo')
+    if (getBookingInfo) {
+      setBookingInfoExisting(JSON.parse(getBookingInfo))
+    }
+  }, [])
+
+  console.log(bookingInfoExisting)
 
   useEffect(() => {
     if (selectedProvince) {
@@ -183,11 +213,22 @@ export default function PickTheater({ onContinue }: Props) {
       })
     : 'Chưa chọn ngày'
 
+  const CancelOrder = () => {
+    localStorage.removeItem('bookingInfo')
+    setBookingInfoExisting(undefined)
+  }
+
+  const handleContinue2 = () => {
+    if (bookingInfoExisting) {
+      navigate(`${bookingInfoExisting.titleMovie}`)
+    }
+  }
+
   return (
     <div className='grid grid-cols-12 h-auto gap-2 w-[100%] m-auto'>
       <div className='col-span-9 grid grid-cols-1'>
         {/* Select Province */}
-        <div className='col-span-1 bg-[#FDF7F4] grid grid-cols-1 p-10 rounded-[0.3rem] mb-2 shadow-md'>
+        <div className='col-span-1 bg-[#FAF7F0] grid grid-cols-1 p-10 rounded-[0.3rem] mb-2 shadow-md'>
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Vị Trí'} text_size='text-lg' mb='mb-1' text_color='text-black' />
           </div>
@@ -205,7 +246,7 @@ export default function PickTheater({ onContinue }: Props) {
         </div>
 
         {/* Select Movie */}
-        <div className='col-span-1 bg-[#FDF7F4] grid grid-cols-1 p-10 rounded-[0.3rem] mb-2 shadow-md'>
+        <div className='col-span-1 bg-[#FAF7F0] grid grid-cols-1 p-10 rounded-[0.3rem] mb-2 shadow-md'>
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Phim'} text_size='text-lg' mb='mb-1' text_color='text-black' />
           </div>
@@ -231,7 +272,7 @@ export default function PickTheater({ onContinue }: Props) {
         </div>
 
         {/* Select Date and Showtimes */}
-        <div className='col-span-1 bg-[#FDF7F4] grid grid-cols-1 p-10 rounded-[0.3rem] shadow-md'>
+        <div className='col-span-1 bg-[#FAF7F0] grid grid-cols-1 p-10 rounded-[0.3rem] shadow-md'>
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Ngày'} text_size='text-lg' mb='mb-3' text_color='text-black' />
           </div>
@@ -290,17 +331,29 @@ export default function PickTheater({ onContinue }: Props) {
         </div>
       </div>
       <div className='col-span-3 flex-col justify-center items-center'>
-        <InfoBooking
-          movieTitle={selectedMovie?.title || 'Chưa chọn phim'}
-          theaterComplex={selectedShowtime?.theater_complex}
-          showtime={showtime}
-          Showtime2={selectedShowtime}
-          date={dateFormatted}
-          theater={selectedShowtime?.theater?.name || 'Chưa chọn cụm rạp'}
-          totalAmount={'0đ'}
-          onContinue={handleContinue} // Sử dụng handleContinue
-          linkNavigate={selectedShowtime?.movie?.title}
-        />
+        {bookingInfoExisting ? (
+          <div className='w-[90%] mx-auto'>
+            <div className='w-[100%] bg-[#FF8225] grid grid-cols-1 p-5'>
+              <span className='text-lg'>BẠN ĐANG CÓ MỘT ORDER TRƯỚC ĐÓ!</span>
+              <div className='flex justify-around'>
+                <Button onClick={handleContinue2}>Tiếp tục</Button>
+                <Button onClick={CancelOrder}>Huỷ đơn</Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <InfoBooking
+            movieTitle={selectedMovie?.title || 'Chưa chọn phim'}
+            theaterComplex={selectedShowtime?.theater_complex}
+            showtime={showtime}
+            Showtime2={selectedShowtime}
+            date={dateFormatted}
+            theater={selectedShowtime?.theater?.name || 'Chưa chọn cụm rạp'}
+            totalAmount={'0đ'}
+            onContinue={handleContinue} // Sử dụng handleContinue
+            linkNavigate={selectedShowtime?.movie?.title}
+          />
+        )}
       </div>
       {/* <Toaster position='top-right' /> Thêm Toaster */}
     </div>

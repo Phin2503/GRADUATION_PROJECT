@@ -111,7 +111,38 @@ export default function Payment({ onContinue, onBack }: Props) {
 
   const handleCheckCoupon = (event: React.FormEvent) => {
     event.preventDefault()
-    fetchCheckCoupon(couponCode)
+    fetchCheckCoupon(couponCode, {
+      onSuccess: (response) => {
+        const couponData = response.data
+        if (couponData) {
+          setCoupon(couponData) // Lưu thông tin coupon
+          toast.success('Áp dụng mã khuyến mãi thành công!')
+
+          // Cập nhật order với coupon
+          const getOrderId = localStorage.getItem('orderId')
+          if (getOrderId) {
+            const orderId = JSON.parse(getOrderId)
+            const updatedOrder = {
+              seats: dataBooking.seats,
+              coupon: couponCode // Gửi coupon để cập nhật order
+            }
+
+            // Gọi API cập nhật order
+            http
+              .put(`/update/${orderId}`, updatedOrder)
+              .then(() => {
+                toast.success('Cập nhật order thành công!')
+              })
+              .catch(() => {
+                toast.error('Lỗi khi cập nhật order!')
+              })
+          }
+        }
+      },
+      onError: () => {
+        toast.error('Mã khuyến mãi không hợp lệ hoặc đã hết hạn!')
+      }
+    })
   }
 
   const handleContinue = () => {
@@ -154,10 +185,17 @@ export default function Payment({ onContinue, onBack }: Props) {
               className='border-[1px] border-orange-300 pl-2'
             />
             <button className='border-[1px] rounded-[0.3rem] ml-4 p-1 bg-orange-300' type='submit'>
-              Check
+              Áp dụng
             </button>
           </form>
+          {coupon && (
+            <div className='mt-2 text-green-600'>
+              <p>Mã khuyến mãi hợp lệ: {coupon.code}</p>
+              <p>Giảm giá: {coupon.discount}%</p>
+            </div>
+          )}
         </div>
+
         <div className='bg-[#FDF7F4] mb-2 shadow-md col-span-1 p-2'>
           <SpanMain name='Phương Thức Thanh Toán' text_size='text-base' />
           <div className='flex mt-2'>

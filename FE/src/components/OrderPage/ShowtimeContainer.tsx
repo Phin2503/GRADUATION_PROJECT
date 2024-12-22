@@ -1,9 +1,8 @@
 import React from 'react'
 import Showtime from '@/types/showtime.type'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
-import { toast, Toaster } from 'sonner'
-import { Toast } from 'react-bootstrap'
+import { toast } from 'sonner'
 
 interface Props {
   showtimes: Showtime[]
@@ -94,7 +93,8 @@ const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selec
       totalPrice: 0,
       theater: showtime.theater.name,
       foods: [],
-      seats: []
+      seats: [],
+      Showtime2: showtime
     }
 
     console.log('Booking Info:', bookingInfo) // Kiểm tra giá trị trước khi lưu
@@ -115,6 +115,7 @@ const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selec
             <h3 className='text-xl font-medium mb-2'>{theater.theater_complex.name}</h3>
             <div className='grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8'>
               {showtimes.map((showtime) => {
+                console.log(showtime.id)
                 const adjustedStartTime = adjustShowtime(showtime.showtime_start)
                 return (
                   <div key={showtime.id} className='col-span-1'>

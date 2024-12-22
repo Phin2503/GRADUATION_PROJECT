@@ -115,7 +115,7 @@ export default function Order() {
             <SpanMain name={'Phim Đang Chiếu'} mb='mb-5' text_size='2xl' mt='mb-3' />
           </div>
           {showingMovies.slice(0, 4).map((movie) => (
-            <CardMovieOrderPage key={movie.id} movie={movie} />
+            <CardMovieOrderPage key={movie.id} movie={movie} orderId={movie.id} /> // Truyền orderId
           ))}
         </div>
       </div>

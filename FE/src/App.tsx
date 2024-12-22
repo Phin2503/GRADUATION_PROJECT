@@ -10,6 +10,8 @@ import PickTheater from './pages/Booking/PickTheater'
 import PickAfterLogin from './pages/Booking/PickAfterLogin'
 import { Toaster, toast } from 'sonner' // Nhập Toaster và toast
 import ConfirmOrder from './pages/Booking/ConfirmOrder'
+import HistoryOrders from './pages/User/HistoryOrders'
+import NotFound from './pages/PageNotFound/NotFound'
 
 const ProtectedRoute = () => {
   const navigate = useNavigate()
@@ -21,11 +23,8 @@ const ProtectedRoute = () => {
       const getRefreshToken = localStorage.getItem('refresh_token')
 
       if (!getAccessToken && !getRefreshToken) {
-        toast.error('Bạn chưa đăng nhập, đang chuyển hướng về trang chủ...')
-        setTimeout(() => {
-          navigate('/')
-        }, 3000)
         setLoading(false)
+        navigate('/')
         return false
       }
 
@@ -43,7 +42,7 @@ const ProtectedRoute = () => {
         toast.error('Bạn chưa đăng nhập, đang chuyển hướng về trang chủ...')
         setTimeout(() => {
           navigate('/')
-        }, 3000)
+        }, 1000)
       } else {
         const isValid = await checkAccessToken(accessToken)
         if (!isValid) {
@@ -61,7 +60,7 @@ const ProtectedRoute = () => {
             toast.error('Access token đã hết hạn. Vui lòng đăng nhập lại.')
             setTimeout(() => {
               navigate('/')
-            }, 3000)
+            }, 1000)
           }
         }
       }
@@ -97,8 +96,10 @@ function App() {
           <Route path='/order/:id' element={<Order />} />
           <Route element={<ProtectedRoute />}>
             <Route path='/user' element={<UserDetail />} />
+            <Route path='/user/historyOrders' element={<HistoryOrders />} />
           </Route>
         </Route>
+        <Route path='*' element={<NotFound />} /> Route cho trang 404
       </Routes>
       <Toaster /> {/* Đặt Toaster bên ngoài Routes */}
     </>

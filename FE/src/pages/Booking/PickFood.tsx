@@ -49,9 +49,6 @@ export default function PickFood({ onContinue, onBack }: Props) {
   const { mutate: fetchUpdateOrder } = useMutation({
     mutationFn: (variables: { orderId: any; userId: any; total_price: any; seats?: string[]; foods?: string[] }) => {
       return updateOrder(variables.orderId, variables.userId, variables.total_price, variables.seats, variables.foods)
-    },
-    onSuccess(response) {
-      // Xử lý sau khi cập nhật đơn hàng thành công nếu cần
     }
   })
 

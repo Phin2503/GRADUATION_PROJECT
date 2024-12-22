@@ -122,6 +122,32 @@ export class ShowtimeService {
     return showtime;
   }
 
+  async getShowtimesByTheaterAndDate(theaterId: number, date: string) {
+    // Chuyển đổi ngày từ chuỗi sang Date
+    const startOfDay = new Date(date);
+    startOfDay.setUTCHours(0, 0, 0, 0); // Đặt giờ UTC về 00:00:00
+
+    const endOfDay = new Date(date);
+    endOfDay.setUTCHours(23, 59, 59, 999); // Đặt giờ UTC về 23:59:59
+
+    const showtimes = await this.showtimeRepository.find({
+      where: {
+        theater: { id: theaterId },
+        showtime_start: MoreThanOrEqual(startOfDay),
+        showtime_end: LessThanOrEqual(endOfDay),
+      },
+      relations: ['theater', 'movie', 'theater_complex'], // Nếu cần thông tin chi tiết về theater và movie
+    });
+
+    if (!showtimes.length) {
+      throw new NotFoundException(
+        'No showtimes found for this theater on the selected date.',
+      );
+    }
+
+    return showtimes;
+  }
+
   async getByMovieId(id) {
     const showtime = await this.showtimeRepository.find({
       where: {

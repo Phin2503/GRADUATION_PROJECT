@@ -6,7 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class CreatOrderDTO {
+export class CreateOrderDTO {
   @IsNotEmpty()
   userId: string;
 
@@ -21,4 +21,8 @@ export class CreatOrderDTO {
   @IsNumber()
   @IsNotEmpty()
   total_price: number;
+
+  @IsOptional()
+  @IsNumber()
+  couponId: number;
 }

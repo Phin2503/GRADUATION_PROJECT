@@ -6,16 +6,11 @@ export class CreateTheaterDto {
   name: string;
 
   @IsNotEmpty()
-  @IsString()
-  location: string;
-
-  @IsNotEmpty()
   @IsNumber()
   @Min(40, { message: 'Number of seats must be at least 40' })
   @Max(150, { message: 'Number of seats must not exceed 150' })
   capacity: number;
 
   @IsNotEmpty()
-  @IsString()
-  address: string;
+  theater_complexId: number;
 }

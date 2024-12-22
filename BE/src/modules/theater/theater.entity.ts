@@ -11,6 +11,7 @@ import {
 import { TheaterComplex } from '../theaterComplex/theaterComplex.entity';
 import { Seat } from '../seat/seat.entity';
 import { Order } from '../order/order.entity';
+import { TypeTheater } from '../type-theater/typeTheater.entity';
 
 @Entity()
 export class Theater {
@@ -49,4 +50,7 @@ export class Theater {
 
   @OneToMany(() => Order, (order) => order.theater)
   orders: Order[];
+
+  @ManyToOne(() => TypeTheater, (TypeTheater) => TypeTheater.theater)
+  typeTheater: TypeTheater;
 }

@@ -1,12 +1,9 @@
-import { IsNumber } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,4 +39,7 @@ export class Food {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToMany(() => Order, (order) => order.foods)
+  orders: Order[];
 }

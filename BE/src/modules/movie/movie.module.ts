@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Movie } from './movie.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { Genre } from '../genre/genre.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Movie]), CloudinaryModule],
+  imports: [TypeOrmModule.forFeature([Movie, Genre]), CloudinaryModule],
   controllers: [MovieController],
   providers: [MovieService, CloudinaryService],
   exports: [TypeOrmModule],

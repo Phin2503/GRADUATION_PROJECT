@@ -17,8 +17,8 @@ export class UpdateMovieDto {
   @IsNotEmpty()
   release_date: Date;
 
-  @IsString()
-  genre: string;
+  @IsNumber()
+  genreId: number;
 
   @CreateDateColumn()
   created_at: Date;

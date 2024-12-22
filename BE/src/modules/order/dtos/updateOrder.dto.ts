@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class updateOrderDTO {
   @IsNotEmpty()
@@ -15,4 +15,8 @@ export class updateOrderDTO {
   @IsNumber()
   @IsNotEmpty()
   total_price: number;
+
+  @IsOptional()
+  @IsNumber()
+  couponId: number;
 }

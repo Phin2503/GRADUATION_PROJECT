@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 
 import { ShowtimeService } from './showtime.service';
@@ -25,7 +26,15 @@ export class ShowtimeController {
     return await this.showtimeService.createShowtime(requestBody);
   }
 
-  @Get('')
+  @Get('/:theaterId/:date')
+  async fetchShowtimesByTheaterIdAndDate(
+    @Param('theaterId') theaterId: number,
+    @Param('date') date: string,
+  ) {
+    return this.showtimeService.getShowtimesByTheaterAndDate(theaterId, date);
+  }
+
+  @Get('/')
   async getAllShowtime(pagination: PaginationDTO) {
     return await this.showtimeService.getAll(pagination);
   }

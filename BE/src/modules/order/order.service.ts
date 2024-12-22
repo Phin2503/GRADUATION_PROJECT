@@ -10,9 +10,10 @@ import { Seat } from '../seat/seat.entity';
 import { Showtime } from '../showtime/showtime.entity';
 import { Theater } from '../theater/theater.entity';
 import { User } from '../user/user.entity';
-import { CreatOrderDTO } from './dtos/createOrder.dto';
+import { CreateOrderDTO } from './dtos/createOrder.dto';
 import { STATUS_ORDER } from '../enumTypes/status_order/status_order.enum';
 import { updateOrderDTO } from './dtos/updateOrder.dto';
+import { Coupon } from '../coupon/coupon.entity';
 
 @Injectable()
 export class OrderService {
@@ -27,12 +28,14 @@ export class OrderService {
     private readonly theaterRepo: Repository<Theater>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @InjectRepository(Coupon)
+    private readonly couponRepo: Repository<Coupon>,
   ) {}
 
   async createOrder(
     theaterId: number,
     showtimeId: number,
-    requestBody: CreatOrderDTO,
+    requestBody: CreateOrderDTO,
   ) {
     if (requestBody.seats.length === 0)
       throw new BadRequestException("The 'seats' field cannot be empty!");
@@ -68,6 +71,17 @@ export class OrderService {
     order.showtime = (await validateOrder).showtime;
     order.seats = requestBody.seats;
     order.foods = requestBody.foods;
+    if (requestBody.couponId) {
+      const existingCoupon = await this.couponRepo.findOneBy({
+        id: requestBody.couponId,
+      });
+
+      if (!existingCoupon) {
+        throw new NotFoundException('Not found coupon or expired !!');
+      }
+
+      order.coupon = existingCoupon;
+    }
 
     const newOrder = await this.orderRepo.save(order);
 
@@ -219,6 +233,33 @@ export class OrderService {
     } catch (err) {
       throw new BadRequestException('Something went wrong !');
     }
+  }
+
+  async getOrdersByUserId(userId: string) {
+    const existingUser = await this.userRepo.findOneBy({
+      id: userId,
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException('Not found user !');
+    }
+
+    const Orders = await this.orderRepo.find({
+      where: {
+        user: {
+          id: existingUser.id,
+        },
+      },
+      relations: [
+        'theater',
+        'user',
+        'showtime',
+        'theater.theater_complex',
+        'showtime.movie',
+      ],
+    });
+
+    return Orders;
   }
 
   async validateOrder(userId: string, theaterId: number, showtimeId: number) {

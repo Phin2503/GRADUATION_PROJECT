@@ -14,6 +14,7 @@ import { MovieService } from './movie.service';
 import { Movie } from './movie.entity';
 import { PaginationDTO } from 'src/generic/pagination.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateMovieDto } from './dtos/update.dto';
 
 @Controller('/movie')
 export class MovieController {
@@ -29,7 +30,7 @@ export class MovieController {
   }
 
   @Put('/update/:id')
-  updateMovie(@Body() requestBody: Movie, @Param('id') id: number) {
+  updateMovie(@Body() requestBody: UpdateMovieDto, @Param('id') id: number) {
     return this.movieService.update(requestBody, id);
   }
 

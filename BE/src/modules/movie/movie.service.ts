@@ -10,14 +10,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMovieDTO } from './dtos/create.dto';
 import { UpdateMovieDto } from './dtos/update.dto';
 import { PaginationDTO } from 'src/generic/pagination.dto';
-import { DEFAULT_PAGE_SIZE } from 'src/utils/constants';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { TypeTheater } from '../type-theater/typeTheater.entity';
+import { Genre } from '../genre/genre.entity';
 
 @Injectable()
 export class MovieService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
+    @InjectRepository(Genre)
+    private readonly genreRepo: Repository<Genre>,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
@@ -31,6 +34,14 @@ export class MovieService {
 
     if (existingMovie) {
       throw new BadRequestException('Name movie already exists !! try again !');
+    }
+
+    const existingGenre = await this.genreRepo.findOneBy({
+      id: requestBody.genreId,
+    });
+
+    if (!existingGenre) {
+      throw new NotFoundException('Not found type theater !! try again !');
     }
 
     try {
@@ -48,7 +59,10 @@ export class MovieService {
 
     requestBody.duration = durationValue;
 
-    const newMovie = await this.movieRepository.create(requestBody);
+    const newMovie = await this.movieRepository.create({
+      ...requestBody,
+      genre: existingGenre,
+    });
     return await this.movieRepository.save(newMovie);
   }
 
@@ -88,7 +102,7 @@ export class MovieService {
   async findAll(pagination?: PaginationDTO) {
     return this.movieRepository.find({
       skip: pagination.skip || 1,
-      take: pagination.limit ?? DEFAULT_PAGE_SIZE,
+      take: pagination.limit ?? 100,
     });
   }
 }

@@ -3,10 +3,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Genre } from '../genre/genre.entity';
 
 @Entity()
 export class Movie {
@@ -41,12 +43,6 @@ export class Movie {
   })
   release_date: Date;
 
-  @Column({
-    nullable: false,
-    length: 50,
-  })
-  genre: string;
-
   @CreateDateColumn({
     nullable: false,
     type: 'datetime',
@@ -61,6 +57,9 @@ export class Movie {
 
   @OneToMany(() => Showtime, (Showtime) => Showtime.movie)
   showtime: Showtime[];
+
+  @ManyToOne(() => Genre, (Genre) => Genre.movie)
+  genre: Genre;
 
   @Column()
   background_image_url: string;

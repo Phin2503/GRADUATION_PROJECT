@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class CreateMovieDTO {
   @IsString()
@@ -16,8 +17,14 @@ export class CreateMovieDTO {
   release_date: string;
 
   @IsString()
-  genre: string;
-
-  @IsString()
   background_image_url: any;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @IsNumber()
+  genreId: number;
 }

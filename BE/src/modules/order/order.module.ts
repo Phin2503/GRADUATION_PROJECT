@@ -8,12 +8,20 @@ import { User } from '../user/user.entity';
 import { Showtime } from '../showtime/showtime.entity';
 import { Seat } from '../seat/seat.entity';
 import { ScheduleModule } from '@nestjs/schedule';
-import { Or } from 'typeorm';
 import { Food } from '../food/food.entity';
+import { Coupon } from '../coupon/coupon.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Theater, Order, User, Showtime, Seat, Food]),
+    TypeOrmModule.forFeature([
+      Theater,
+      Order,
+      User,
+      Showtime,
+      Seat,
+      Food,
+      Coupon,
+    ]),
     ScheduleModule.forRoot(),
   ],
   controllers: [SeatReservationController],

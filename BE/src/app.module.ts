@@ -26,6 +26,8 @@ import { FoodModule } from './modules/food/food.module';
 import { MomoTransactionModule } from './modules/momo-transaction/momo-transaction.module';
 import { VnpayModule } from './modules/vnpay/vnpay.module';
 import { CouponModule } from './modules/coupon/coupon.module';
+import { TypeTheaterModule } from './modules/type-theater/type-theater.module';
+import { GenreModule } from './modules/genre/genre.module';
 
 @Module({
   imports: [
@@ -57,6 +59,8 @@ import { CouponModule } from './modules/coupon/coupon.module';
     MomoTransactionModule,
     VnpayModule,
     CouponModule,
+    TypeTheaterModule,
+    GenreModule,
   ],
   controllers: [AppController, UploadController, TheaterComplexController],
   providers: [AppService, CloudinaryService, TheaterComplexService],

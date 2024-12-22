@@ -22,6 +22,11 @@ export class TheaterController {
     return this.theaterService.create(requestBody);
   }
 
+  @Put('/update/:id')
+  updateById(@Param('id') id: number, @Body() requestBody: UpdateTheaterDto) {
+    return this.theaterService.updateById(id, requestBody);
+  }
+
   @Get()
   getAllTheater(@Query() pagination: PaginationDTO) {
     return this.theaterService.getAll(pagination);
@@ -30,11 +35,6 @@ export class TheaterController {
   @Get('/:id')
   getById(@Param('id') id: number) {
     return this.theaterService.findById(id);
-  }
-
-  @Put('/update/:id')
-  updateById(@Param('id') id: number, @Body() requestBody: UpdateTheaterDto) {
-    return this.theaterService.updateById(id, requestBody);
   }
 
   @Delete('/delete/:id')

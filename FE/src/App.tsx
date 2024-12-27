@@ -12,6 +12,9 @@ import { Toaster, toast } from 'sonner' // Nhập Toaster và toast
 import ConfirmOrder from './pages/Booking/ConfirmOrder'
 import HistoryOrders from './pages/User/HistoryOrders'
 import NotFound from './pages/PageNotFound/NotFound'
+import Event from './pages/Event/Event'
+import EventMain from './pages/Event/EventMain'
+import Review from './pages/Review/Review'
 
 const ProtectedRoute = () => {
   const navigate = useNavigate()
@@ -93,6 +96,12 @@ function App() {
           <Route path='/payment/confirm/order/:orderId' element={<ProtectedRoute />}>
             <Route index element={<ConfirmOrder />} />
           </Route>
+
+          <Route path='/event'>
+            <Route index element={<EventMain />} />
+            <Route path='/event/:id' element={<Event />} />
+          </Route>
+          <Route path='review' element={<Review />} />
           <Route path='/order/:id' element={<Order />} />
           <Route element={<ProtectedRoute />}>
             <Route path='/user' element={<UserDetail />} />

@@ -10,6 +10,7 @@ import { checkCoupon } from '@/apis/checkCoupon.api'
 import { Coupon } from '@/types/coupon.type'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
+import Showtime from '@/types/showtime.type'
 
 const API_URL_CREATE_VNPAY_PAYMENT = `${import.meta.env.VITE_BASE_URL}/vnpay/payment`
 
@@ -34,13 +35,16 @@ interface BookingData {
     total: number
   }>
   totalPrice: number
+  Showtime2: Showtime
 }
 
-export default function Payment({ onContinue, onBack }: Props) {
+export default function Payment({ /*onContinue */ onBack }: Props) {
   const [selectedOption, setSelectedOption] = useState('')
   const [couponCode, setCouponCode] = useState('')
+  const [userId, setUserId] = useState('')
   const [coupon, setCoupon] = useState<Coupon>()
   const [dataBooking, setDataBooking] = useState<BookingData>({
+    Showtime2: {} as Showtime,
     titleMovie: '',
     showtime: '',
     date: '',
@@ -51,8 +55,26 @@ export default function Payment({ onContinue, onBack }: Props) {
     totalPrice: 0
   })
   const [countdown, setCountdown] = useState<number>(0)
+  const [, setIsCouponApplied] = useState(false) // Trạng thái theo dõi mã giảm giá
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const bookingInfo = localStorage.getItem('bookingInfo')
+    if (bookingInfo) {
+      setDataBooking(JSON.parse(bookingInfo))
+    }
+
+    const userInfo = localStorage.getItem('user')
+    if (userInfo) {
+      setUserId(JSON.parse(userInfo).id)
+    }
+
+    const storedCountdown = localStorage.getItem('countdown')
+    if (storedCountdown) {
+      setCountdown(Number(storedCountdown))
+    }
+  }, [])
 
   const handleChange = (event: any) => {
     setSelectedOption(event.target.value)
@@ -61,7 +83,33 @@ export default function Payment({ onContinue, onBack }: Props) {
   const { mutate: fetchCheckCoupon } = useMutation({
     mutationFn: checkCoupon,
     onSuccess(response) {
-      setCoupon(response.data)
+      const couponData = response.data
+
+      if (couponData) {
+        setCoupon(couponData)
+        toast.success('Mã khuyến mãi có thể áp dụng!')
+
+        // Tính toán lại totalPrice
+        const discountAmount = (dataBooking.totalPrice * couponData.discount) / 100
+        const newTotalPrice = Number((dataBooking.totalPrice - discountAmount).toFixed(2)) // Lưu số với 2 chữ số thập phân
+        // Cập nhật dataBooking với totalPrice mới
+        setDataBooking((prev) => ({
+          ...prev,
+          totalPrice: newTotalPrice
+        }))
+
+        // Lưu tổng giá trị mới vào localStorage
+        localStorage.setItem(
+          'bookingInfo',
+          JSON.stringify({
+            ...dataBooking,
+            totalPrice: newTotalPrice
+          })
+        )
+      }
+    },
+    onError() {
+      toast.error('Mã khuyến mãi không hợp lệ hoặc đã hết hạn!')
     }
   })
 
@@ -81,18 +129,6 @@ export default function Payment({ onContinue, onBack }: Props) {
   })
 
   useEffect(() => {
-    const bookingInfo = localStorage.getItem('bookingInfo')
-    if (bookingInfo) {
-      setDataBooking(JSON.parse(bookingInfo))
-    }
-
-    const storedCountdown = localStorage.getItem('countdown')
-    if (storedCountdown) {
-      setCountdown(Number(storedCountdown))
-    }
-  }, [])
-
-  useEffect(() => {
     const intervalId = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -109,40 +145,41 @@ export default function Payment({ onContinue, onBack }: Props) {
     return () => clearInterval(intervalId)
   }, [])
 
-  const handleCheckCoupon = (event: React.FormEvent) => {
+  const handleCheckCoupon = async (event: React.FormEvent) => {
     event.preventDefault()
-    fetchCheckCoupon(couponCode, {
-      onSuccess: (response) => {
-        const couponData = response.data
-        if (couponData) {
-          setCoupon(couponData) // Lưu thông tin coupon
-          toast.success('Áp dụng mã khuyến mãi thành công!')
+    fetchCheckCoupon(couponCode)
+  }
 
-          // Cập nhật order với coupon
-          const getOrderId = localStorage.getItem('orderId')
-          if (getOrderId) {
-            const orderId = JSON.parse(getOrderId)
-            const updatedOrder = {
-              seats: dataBooking.seats,
-              coupon: couponCode // Gửi coupon để cập nhật order
-            }
+  const handleApplyCoupon = async () => {
+    if (coupon) {
+      setIsCouponApplied(true) // Đánh dấu mã giảm giá đã được áp dụng
+      await updateOrderWithCoupon(coupon.id) // Cập nhật order với coupon
+      toast.success('Đã áp dụng mã khuyến mãi!')
+    }
+  }
 
-            // Gọi API cập nhật order
-            http
-              .put(`/update/${orderId}`, updatedOrder)
-              .then(() => {
-                toast.success('Cập nhật order thành công!')
-              })
-              .catch(() => {
-                toast.error('Lỗi khi cập nhật order!')
-              })
-          }
-        }
-      },
-      onError: () => {
-        toast.error('Mã khuyến mãi không hợp lệ hoặc đã hết hạn!')
+  const updateOrderWithCoupon = async (couponId: number) => {
+    const getOrderId = localStorage.getItem('orderId')
+    if (getOrderId) {
+      const orderId = JSON.parse(getOrderId)
+      const updatedOrder = {
+        userId: userId,
+        foods: dataBooking.foods,
+        seats: dataBooking.seats,
+        couponId: couponId,
+        total_price: Number(dataBooking.totalPrice)
       }
-    })
+
+      console.log('Updating order with data:', updatedOrder) // In ra dữ liệu
+
+      try {
+        await http.put(`http://localhost:3000/api/v1/order/update/${orderId}`, updatedOrder)
+        toast.success('Cập nhật order thành công!')
+      } catch (error: any) {
+        console.error('Error updating order:', error.response?.data || error.message)
+        toast.error('Lỗi khi cập nhật order!')
+      }
+    }
   }
 
   const handleContinue = () => {
@@ -151,15 +188,13 @@ export default function Payment({ onContinue, onBack }: Props) {
       const orderId = JSON.parse(getOrderId)
       if (selectedOption === 'vnpay') {
         const paymentData: PaymentType = {
-          amount: dataBooking.totalPrice,
+          amount: Number(dataBooking.totalPrice),
           orderId,
           orderInfo: `Thanh toán cho ${dataBooking.titleMovie}`
         }
 
         fetchPayment(paymentData)
-      }
-
-      if (selectedOption !== 'vnpay') {
+      } else {
         toast.error('Vui lòng chọn phương thức thanh toán')
       }
     }
@@ -170,6 +205,8 @@ export default function Payment({ onContinue, onBack }: Props) {
       onBack()
     }
   }
+
+  console.log(userId)
 
   return (
     <div className='grid grid-cols-12 gap-1'>
@@ -185,13 +222,16 @@ export default function Payment({ onContinue, onBack }: Props) {
               className='border-[1px] border-orange-300 pl-2'
             />
             <button className='border-[1px] rounded-[0.3rem] ml-4 p-1 bg-orange-300' type='submit'>
-              Áp dụng
+              Kiểm tra
             </button>
           </form>
           {coupon && (
             <div className='mt-2 text-green-600'>
               <p>Mã khuyến mãi hợp lệ: {coupon.code}</p>
               <p>Giảm giá: {coupon.discount}%</p>
+              <button className='mt-2 p-1 bg-blue-500 text-white rounded' onClick={handleApplyCoupon}>
+                Áp dụng
+              </button>
             </div>
           )}
         </div>
@@ -225,6 +265,7 @@ export default function Payment({ onContinue, onBack }: Props) {
       <div className='col-span-4'>
         <InfoBooking
           countdown={countdown}
+          Showtime2={dataBooking.Showtime2}
           movieTitle={dataBooking.titleMovie || 'Chưa có thông tin'}
           showtime={dataBooking.showtime || 'Chưa có thông tin'}
           date={dataBooking.date || 'Chưa có thông tin'}

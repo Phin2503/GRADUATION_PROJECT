@@ -16,10 +16,6 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 
-interface ShowtimesByTheaterComplex {
-  [theaterComplexName: string]: Showtime[]
-}
-
 interface Props {
   onContinue?: () => void
 }
@@ -123,11 +119,9 @@ export default function PickTheater({ onContinue }: Props) {
     }
   }, [])
 
-  console.log(bookingInfoExisting)
-
   useEffect(() => {
     if (selectedProvince) {
-      const filtered = theaterComplexs.filter((theater) => theater.province === selectedProvince)
+      const filtered = theaterComplexs.filter((theaterComplex) => theaterComplex.province === selectedProvince)
       setFilteredTheaterComplexs(filtered)
 
       const filteredMovies = movies.filter((movie) =>
@@ -224,6 +218,8 @@ export default function PickTheater({ onContinue }: Props) {
     }
   }
 
+  console.log(showtimes)
+  console.log(filteredTheaterComplexs)
   return (
     <div className='grid grid-cols-12 h-auto gap-2 w-[100%] m-auto'>
       <div className='col-span-9 grid grid-cols-1'>
@@ -298,16 +294,28 @@ export default function PickTheater({ onContinue }: Props) {
           {/* Hiển thị cụm rạp và suất chiếu */}
           <div className='col-span-1 grid grid-cols-1'>
             {selectedMovie && selectedProvince && filteredTheaterComplexs.length > 0 ? (
-              filteredTheaterComplexs.map((theater) => (
-                <div key={theater.id} className='mb-5'>
-                  <h3 className='font-medium text-lg mb-2 text-black'>{theater.name}</h3>
-                  <div className='grid grid-cols-4'>
-                    {Object.values(groupedShowtimes).length > 0 ? (
-                      Object.values(groupedShowtimes).map(({ movie, showtimes }) => (
-                        <div key={movie.id} className='col-span-4 mb-2'>
-                          <h4 className='font-medium text-black'>{movie.title}</h4>
+              filteredTheaterComplexs.map((theaterComplex) => (
+                <div key={theaterComplex.id} className='mb-5'>
+                  <h3 className='font-medium text-lg mb-2 text-black'>{theaterComplex.name}</h3>
+
+                  <div className='grid grid-cols-1'>
+                    {theaterComplex.theaters.map((theater) => {
+                      const showtimesForTheater = Object.values(groupedShowtimes).flatMap(({ showtimes }) =>
+                        showtimes.filter((showtime) => showtime.theater.id === theater.id)
+                      )
+
+                      // Only render the theater if it has showtimes
+                      if (showtimesForTheater.length === 0) {
+                        return null // Skip rendering this theater
+                      }
+
+                      return (
+                        <div key={theater.id} className='mb-5'>
+                          <h4 className='font-medium text-black'>
+                            {theater.name} - {theater.typeTheater.name}
+                          </h4>
                           <div className='grid grid-cols-8 gap-1'>
-                            {showtimes.map((showtime) => (
+                            {showtimesForTheater.map((showtime) => (
                               <ButtonShowtime
                                 key={showtime.id}
                                 time={`${new Date(showtime.showtime_start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
@@ -317,10 +325,8 @@ export default function PickTheater({ onContinue }: Props) {
                             ))}
                           </div>
                         </div>
-                      ))
-                    ) : (
-                      <p className='text-black'>Không có suất chiếu nào cho cụm rạp này vào ngày đã chọn.</p>
-                    )}
+                      )
+                    })}
                   </div>
                 </div>
               ))

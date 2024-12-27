@@ -9,7 +9,7 @@ import Theater from '@/types/Theater.type'
 
 interface Props {
   movieTitle: string
-  theaterComplex?: TheaterComplex | null | undefined
+  theaterComplex?: TheaterComplex | null
   showtime: string
   Showtime2?: Showtime
   Theater2?: Theater
@@ -23,7 +23,7 @@ interface Props {
   onBack?: () => void
   backPickTheater?: () => void
   coupon?: Coupon
-  countdown?: number | null // Thêm prop countdown
+  countdown?: number | null
 }
 
 export default function InfoBooking({
@@ -62,7 +62,6 @@ export default function InfoBooking({
     }
   }, [seats])
 
-  // Thiết lập thời gian đếm ngược nếu có
   useEffect(() => {
     if (countdown) {
       setTimeRemaining(countdown)
@@ -79,7 +78,7 @@ export default function InfoBooking({
           if (prev === 1) {
             toast.error('Thời gian giữ ghế đã hết!')
             localStorage.removeItem('bookingInfo')
-            navigate('/booking') // Điều hướng về trang booking khi đếm ngược hết
+            navigate('/booking')
           }
           return 0
         }
@@ -89,10 +88,23 @@ export default function InfoBooking({
   }, [])
 
   const totalSeats = seatsSelected.length
-  const ticketPrice = 70000
-  const totalSeatPrice = totalSeats * ticketPrice
+  const ticketPrice = 70000 // Giá vé cơ bản
+  const theaterType = Showtime2?.theater?.typeTheater?.id
+
+  // console.log(theaterType)
+  // Điều chỉnh giá vé theo loại rạp
+  let adjustedTicketPrice = ticketPrice
+  if (theaterType == 2) {
+    adjustedTicketPrice = 90000 // Giá cho loại rạp 2
+  }
+
+  // Tính toán giá vé cho hàng E, F, G
+  const priceIncreaseRows = ['E', 'F', 'G']
+  const hasIncreasedPrice = seatsSelected.some((seat) => priceIncreaseRows.includes(seat.charAt(0)))
+
+  const totalSeatPrice = (totalSeats * adjustedTicketPrice * (hasIncreasedPrice ? 1.1 : 1)).toFixed(2)
   const totalFoodPrice = foods?.reduce((total, food) => total + food.total, 0) || 0
-  const totalAmount = totalSeatPrice + totalFoodPrice
+  const totalAmountCalculated = parseFloat(totalSeatPrice) + totalFoodPrice
 
   const handleClickBack = () => {
     if (backPickTheater) backPickTheater()
@@ -105,16 +117,19 @@ export default function InfoBooking({
       return
     }
 
+    const discountAmount = coupon ? (parseFloat(totalAmountCalculated) * coupon.discount) / 100 : 0
+    const finalAmount = parseFloat(totalAmountCalculated) - discountAmount
+
     const bookingInfo = {
       titleMovie: movieTitle,
-      theaterComplex: theaterComplex,
-      showtime: showtime,
-      date: date,
-      totalPrice: totalAmount || 0,
+      theaterComplex,
+      showtime,
+      date,
+      totalPrice: finalAmount || 0,
       theater: theater || null,
       foods: foods || [],
       seats: seatsSelected,
-      Showtime2: Showtime2
+      Showtime2
     }
 
     localStorage.setItem('bookingInfo', JSON.stringify(bookingInfo))
@@ -123,7 +138,7 @@ export default function InfoBooking({
       const accessToken = localStorage.getItem('access_token')
       if (!accessToken) {
         toast.error('Vui lòng đăng nhập !!')
-        return false
+        return
       }
       navigate(linkNavigate)
     }
@@ -133,10 +148,9 @@ export default function InfoBooking({
     }
   }
 
-  // Tính toán tổng tiền sau khi áp dụng giảm giá
-  const discountAmount = coupon ? (totalAmount * coupon.discount) / 100 : 0 // Tổng số tiền giảm
-  const finalAmount = totalAmount - discountAmount // Tổng tiền sau khi giảm giá
-
+  const discountAmount = coupon ? (totalAmountCalculated * coupon.discount) / 100 : 0
+  const finalAmount = totalAmountCalculated - discountAmount
+  // console.log(dataBooking)
   return (
     <div>
       <div className='col-span-1 xl:pl-4 xl:order-none order-first'>
@@ -171,7 +185,7 @@ export default function InfoBooking({
                 <div className='xl:mt-2 text-sm xl:text-base'>
                   <span>{totalSeats} ghế đơn</span>
                   <span> - </span>
-                  <span>{totalSeatPrice.toLocaleString('vi-VN')} VNĐ</span>
+                  <span>{Number(totalSeatPrice).toLocaleString('vi-VN')} VNĐ</span>
                 </div>
                 <div className='xl:mt-2 text-sm xl:text-base'>
                   <span>Ghế: {seatsSelected.join(', ')}</span>
@@ -179,25 +193,27 @@ export default function InfoBooking({
               </div>
               <div className='xl:mt-2 text-sm xl:text-base'>
                 <div className='col-span-3 my-4 border-t border-[#ccc] border-dashed xl:block hidden'></div>
-                {foods?.map((food, index) => (
-                  <div key={index} className='flex justify-between'>
-                    <p>
-                      x{food.quantity} {food.name}
-                    </p>
-                    <p>{food.total?.toLocaleString('vi-VN') || '0 VNĐ'}</p>
-                  </div>
-                )) || <p>Không có món ăn nào được chọn.</p>}
+                {foods && foods.length > 0 ? (
+                  foods.map((food, index) => (
+                    <div key={index} className='flex justify-between'>
+                      <p>
+                        x{food.quantity} {food.name}
+                      </p>
+                      <p>{food.total?.toLocaleString('vi-VN') || '0 VNĐ'}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>Không có món ăn nào được chọn.</p>
+                )}
               </div>
 
-              {coupon ? (
+              {coupon && (
                 <div className='xl:mt-2 text-sm xl:text-base'>
                   <div className='col-span-3 my-4 border-t border-[#ccc] border-dashed xl:block hidden'></div>
                   Giảm giá : {discountAmount.toLocaleString(
                     'vi-VN'
                   )} VNĐ
                 </div>
-              ) : (
-                ' '
               )}
             </div>
 
@@ -209,7 +225,6 @@ export default function InfoBooking({
             </div>
           </div>
 
-          {/* Hiển thị thời gian đếm ngược chỉ khi countdown có giá trị hợp lệ */}
           {timeRemaining != null && timeRemaining > 0 && (
             <div className='text-center mb-4'>
               <h4 className='font-bold'>

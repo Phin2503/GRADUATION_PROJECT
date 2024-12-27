@@ -98,7 +98,7 @@ export default function ConfirmOrder() {
                   <label htmlFor='' className='mr-2'>
                     Foods :
                   </label>
-                  <strong>{orderRes.existingOrder.foods.join(', ')}</strong>
+                  <strong> {orderRes.existingOrder.foods.map((food: any) => food.name).join(', ')}</strong>
                 </div>
                 <div className='col-span-1'>
                   <label htmlFor='' className='mr-2'>

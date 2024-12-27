@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import loginImg from '../../assets/loginLogo.png'
 import { loginRequest, sendPasswordRequest } from '@/apis/auth.api'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { TiDelete } from 'react-icons/ti'
 
 interface Props {

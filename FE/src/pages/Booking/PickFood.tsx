@@ -49,6 +49,9 @@ export default function PickFood({ onContinue, onBack }: Props) {
   const { mutate: fetchUpdateOrder } = useMutation({
     mutationFn: (variables: { orderId: any; userId: any; total_price: any; seats?: string[]; foods?: string[] }) => {
       return updateOrder(variables.orderId, variables.userId, variables.total_price, variables.seats, variables.foods)
+    },
+    onSuccess(response) {
+      console.log(response)
     }
   })
 
@@ -73,6 +76,7 @@ export default function PickFood({ onContinue, onBack }: Props) {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(intervalId)
+          localStorage.removeItem('bookingInfo')
           navigate('/booking')
         }
         const newCountdown = prev - 1
@@ -107,9 +111,17 @@ export default function PickFood({ onContinue, onBack }: Props) {
         })
         .filter((food) => food.quantity > 0)
 
+      // Lấy totalPrice hiện tại từ localStorage
+      const currentBookingInfo = localStorage.getItem('bookingInfo')
+      const currentTotalPrice = currentBookingInfo ? JSON.parse(currentBookingInfo).totalPrice : 0
+
+      // Tính toán totalPrice mới
+      const newTotalPrice = currentTotalPrice + updatedFoods.reduce((acc, food) => acc + food.total, 0)
+
       const updatedBooking = {
         ...dataBooking,
-        foods: updatedFoods
+        foods: updatedFoods,
+        totalPrice: newTotalPrice // Cập nhật totalPrice
       }
 
       localStorage.setItem('bookingInfo', JSON.stringify(updatedBooking))
@@ -140,7 +152,7 @@ export default function PickFood({ onContinue, onBack }: Props) {
     }
   }
 
-  console.log(dataBooking)
+  // console.log(dataBooking)
 
   return (
     <div className='md:container w-[1390px] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>

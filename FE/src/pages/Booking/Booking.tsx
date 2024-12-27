@@ -1,4 +1,3 @@
-import ProcessBar from './ProcessBar'
 import { Outlet } from 'react-router-dom'
 
 export default function Booking() {

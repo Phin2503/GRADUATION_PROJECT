@@ -58,7 +58,9 @@ export default function HistoryOrders() {
                   <TableCell>{new Date(order.showtime.showtime_start).toLocaleString()}</TableCell>
                   <TableCell>{order.theater.theater_complex.name}</TableCell>
                   <TableCell>{order.seats.join(', ')}</TableCell>
-                  <TableCell>{order.foods.length > 0 ? order.foods.join(', ') : 'None'}</TableCell>
+                  <TableCell>
+                    {order.foods.length > 0 ? order.foods.map((food: any) => food.name).join(', ') : 'None'}
+                  </TableCell>
                   <TableCell className='text-right'>
                     {new Intl.NumberFormat('vi-VN', {
                       style: 'currency',

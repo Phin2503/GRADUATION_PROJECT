@@ -22,7 +22,7 @@ export default function Header() {
   const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false)
   const [userName, setUserName] = useState<string>('')
 
-  const [movies, setMovies] = useState<Movie[]>([])
+  const [, setMovies] = useState<Movie[]>([])
   const [showingMovies, setShowingMovies] = useState<Movie[]>([])
   const [noneShowingMovies, setNoneShowingMovies] = useState<Movie[]>([])
 
@@ -113,7 +113,7 @@ export default function Header() {
           <li className='flex relative items-center mr-3 mb-2 md:mb-0 group z-50'>
             <span className='group-hover:text-[#FF5400]'>Event</span>
             <FaChevronDown className='ml-1' />
-            <MenuItemDropDown ListMenuItem={['Endow 🎉', 'Movie Best Month']} positionRight={-3} />
+            <MenuItemDropDown ListMenuItem={['Endow']} positionRight={-3} />
           </li>
           <li className='flex relative items-center mr-3 mb-2 md:mb-0 group z-50'>
             <span className='group-hover:text-[#FF5400]'>Theater / Price</span>

@@ -18,7 +18,7 @@ export default function MenuItemDropDown({ ListMenuItem, positionRight, index }:
             key={index}
             className='py-2 hover:border-r-[3px] transition-bg transition-all duration-100 hover:border-r-[#FF8000] hover:bg-white hover:text-black text-white'
           >
-            <NavLink to={`/destination/${item}`}>{item}</NavLink>
+            <NavLink to={`/event`}>{item}</NavLink>
           </li>
         ))
       ) : (

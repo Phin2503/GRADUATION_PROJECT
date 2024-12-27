@@ -9,4 +9,5 @@ export interface Movie {
   updated_at: Date
   background_image_url: string
   showing: number
+  link_trailer: string
 }

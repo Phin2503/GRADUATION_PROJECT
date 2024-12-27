@@ -28,12 +28,10 @@ export default function PickAfterLogin() {
 
   return (
     <div>
-      {/* Pass currentComponent to ProcessBar */}
       <ProcessBar currentComponent={currentComponent} />
       {currentComponent === 'PickTheater' && <PickSeat onContinue={handlePickFood} />}
       {currentComponent === 'PickFood' && <PickFood onContinue={handlePickPayment} onBack={handlePickSeat} />}
       {currentComponent === 'Payment' && <Payment onContinue={handleConfirmOrder} onBack={handlePickFood} />}
-      {/* {currentComponent === 'ConfirmOrder' && <ConfirmOrder />} */}
     </div>
   )
 }

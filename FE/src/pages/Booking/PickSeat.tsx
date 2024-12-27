@@ -25,7 +25,7 @@ const PickSeat = ({ onContinue }: Props) => {
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
-    }, 2000)
+    }, 3000)
 
     const getDataBooking = localStorage.getItem('bookingInfo')
     const getUserInfo = localStorage.getItem('user')
@@ -39,8 +39,6 @@ const PickSeat = ({ onContinue }: Props) => {
       showtimeStart.setHours(showtimeStart.getHours() + 7)
 
       if (showtimeStart < new Date()) {
-        // Kiểm tra thời gian đã cộng thêm 7 giờ
-        console.log(showtimeStart.toISOString())
         navigate('/')
         return
       }
@@ -63,8 +61,7 @@ const PickSeat = ({ onContinue }: Props) => {
   const { mutate: fetchUpdateOrder } = useMutation({
     mutationFn: (variables: { orderId: any; userId: any; total_price: any; seats?: string[]; foods?: string[] }) => {
       return updateOrder(variables.orderId, variables.userId, variables.total_price, variables.seats, variables.foods)
-    },
-    onSuccess(response) {}
+    }
   })
 
   const toggleSeatSelection = (seat: string) => {
@@ -181,11 +178,12 @@ const PickSeat = ({ onContinue }: Props) => {
           return newCountdown
         } else {
           clearInterval(intervalId)
+          localStorage.removeItem('bookingInfo')
           // navigate('/booking')
           return 0
         }
       })
-    }, 1000)
+    }, 2000)
 
     return () => clearInterval(intervalId) // Dọn dẹp interval khi component unmount
   }, [navigate])

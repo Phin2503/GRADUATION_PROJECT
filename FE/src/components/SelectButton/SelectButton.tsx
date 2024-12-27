@@ -28,6 +28,8 @@ export default function SelectButton({ showtimes, onSelectProvince, onSelectThea
 
   const uniqueProvinces = Array.from(new Set(showtimes.map((showtime) => showtime.theater.theater_complex.province)))
 
+  console.log(showtimes)
+
   return (
     <div className='flex justify-around w-full mr-2'>
       <Select onValueChange={handleProvinceChange}>

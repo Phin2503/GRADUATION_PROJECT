@@ -65,14 +65,16 @@ export default function Order() {
   return (
     <div className='w-full bg-[#FAF7F0] h-full text-center'>
       <div className='relative bg-black flex justify-center w-full h-full'>
-        <iframe
-          width='1200'
-          height='430'
-          src='https://www.youtube.com/embed/8l4crgVt36Y?si=K24hGqwKVGJ9yoeM&amp;controls=0'
-          title='YouTube video player'
-          allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-          referrerPolicy='strict-origin-when-cross-origin'
-        ></iframe>
+        {movie && (
+          <iframe
+            width='1200'
+            height='430'
+            src={`${movie?.link_trailer}`}
+            title='YouTube video player'
+            allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+            referrerPolicy='strict-origin-when-cross-origin'
+          ></iframe>
+        )}
       </div>
       <div className='grid gap-4 h-full w-[80%] mx-auto my-5 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12'>
         <div className='col-span-8 p-4'>

@@ -1,5 +1,5 @@
 export interface PaymentType {
   amount: number
-  orderId: number
+  orderId: string
   orderInfo: string
 }

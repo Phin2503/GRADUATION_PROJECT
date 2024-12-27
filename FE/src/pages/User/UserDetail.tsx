@@ -9,7 +9,7 @@ import { toast, Toaster } from 'sonner'
 
 export default function UserDetail() {
   const [userDetail, setUserDetail] = useState<User | null>(null)
-  const [token, setToken] = useState<string>()
+
   const [formValues, setFormValues] = useState({
     fullName: '',
     email: '',

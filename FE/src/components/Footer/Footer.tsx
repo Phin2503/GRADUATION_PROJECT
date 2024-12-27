@@ -20,14 +20,21 @@ const currentYear = new Date().getFullYear()
 
 export default function Footer() {
   return (
-    <footer className='fixed relative w-full pt-20 bg-[#10172B] '>
+    <footer className='fixed w-full pt-20 bg-[#10172B] '>
       <div className='mx-auto w-full max-w-[85rem]  '>
         <div className='grid grid-cols-1 justify-between gap-10 md:grid-cols-2'>
           <img src={Logo} alt='Ticket Logo' className='w-32 md:w-48' />
           <div className='grid grid-cols-3 justify-between gap-4 lg:text-2xl xl:text-3xl md:text-base'>
             {LINKS.map(({ title, items }) => (
               <ul key={title}>
-                <Typography variant='small' color='yellow' className='mb-3 font-medium opacity-100'>
+                <Typography
+                  variant='small'
+                  color='yellow'
+                  className='mb-3 font-medium opacity-100'
+                  placeholder=''
+                  onPointerEnterCapture={() => {}}
+                  onPointerLeaveCapture={() => {}}
+                >
                   {title}
                 </Typography>
                 {items.map((link) => (
@@ -37,6 +44,9 @@ export default function Footer() {
                       href='#'
                       color='white'
                       className='py-1.5 font-normal transition-colors hover:text-blue-gray-900 opacity-50'
+                      placeholder=''
+                      onPointerEnterCapture={() => {}}
+                      onPointerLeaveCapture={() => {}}
                     >
                       {link}
                     </Typography>
@@ -47,11 +57,23 @@ export default function Footer() {
           </div>
         </div>
         <div className='mt-12 flex w-full flex-col items-center justify-center border-t border-blue-gray-50 py-4 md:flex-row md:justify-between'>
-          <Typography variant='small' className='mb-4 text-center font-normal text-blue-900 md:mb-0'>
+          <Typography
+            variant='small'
+            className='mb-4 text-center font-normal text-blue-900 md:mb-0'
+            placeholder=''
+            onPointerEnterCapture={() => {}}
+            onPointerLeaveCapture={() => {}}
+          >
             &copy; {currentYear} <a href='https://material-tailwind.com/'>Phin Cinema</a>. All Rights Reserved.
           </Typography>
           <div className='flex gap-4 text-blue-900 sm:justify-center'>
-            <Typography variant='small' className='mb-4 text-center font-normal text-blue-900 md:mb-0'>
+            <Typography
+              variant='small'
+              className='mb-4 text-center font-normal text-blue-900 md:mb-0'
+              placeholder=''
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            >
               <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path
                   fillRule='evenodd'
@@ -60,7 +82,14 @@ export default function Footer() {
                 />
               </svg>
             </Typography>
-            <Typography as='a' href='#' className='opacity-80 transition-opacity hover:opacity-100'>
+            <Typography
+              as='a'
+              href='#'
+              className='opacity-80 transition-opacity hover:opacity-100'
+              placeholder=''
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            >
               <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path
                   fillRule='evenodd'
@@ -69,12 +98,26 @@ export default function Footer() {
                 />
               </svg>
             </Typography>
-            <Typography as='a' href='#' className='opacity-80 transition-opacity hover:opacity-100'>
+            <Typography
+              as='a'
+              href='#'
+              className='opacity-80 transition-opacity hover:opacity-100'
+              placeholder=''
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            >
               <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path d='M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84' />
               </svg>
             </Typography>
-            <Typography as='a' href='#' className='opacity-80 transition-opacity hover:opacity-100'>
+            <Typography
+              as='a'
+              href='#'
+              className='opacity-80 transition-opacity hover:opacity-100'
+              placeholder=''
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            >
               <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path
                   clipRule='evenodd'
@@ -83,7 +126,14 @@ export default function Footer() {
                 />
               </svg>
             </Typography>
-            <Typography as='a' href='#' className='opacity-80 transition-opacity hover:opacity-100'>
+            <Typography
+              as='a'
+              href='#'
+              className='opacity-80 transition-opacity hover:opacity-100'
+              placeholder=''
+              onPointerEnterCapture={() => {}}
+              onPointerLeaveCapture={() => {}}
+            >
               <svg className='h-5 w-5' fill='currentColor' viewBox='0 0 24 24' aria-hidden='true'>
                 <path
                   fillRule='evenodd'

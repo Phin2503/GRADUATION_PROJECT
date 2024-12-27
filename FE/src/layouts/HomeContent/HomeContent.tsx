@@ -10,11 +10,22 @@ import { useEffect, useState } from 'react'
 import { AiOutlineLike } from 'react-icons/ai'
 import { FaEye } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
+import ChatBox from '@/components/Chatbox/Chatbox'
+
+interface Event {
+  id: number
+  title: string
+  description: string
+  main_img_url: string
+  sub_img_url: string
+  content: string
+}
 
 export default function HomeContent() {
   const [movies, setMovies] = useState<Movie[]>([])
   const [showingMovies, setShowingMovies] = useState<Movie[]>([])
   const [noneShowingMovies, setNoneShowingMovies] = useState<Movie[]>([])
+  const [events, setEvents] = useState<Event[]>([])
 
   const { mutate } = useMutation({
     mutationFn: getAllMovie,
@@ -25,6 +36,19 @@ export default function HomeContent() {
       setNoneShowingMovies(moviesData.filter((movie) => movie.showing == 0))
     }
   })
+
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const response = await fetch('http://localhost:3000/api/v1/event/')
+        const data: Event[] = await response.json()
+        setEvents(data)
+      } catch (error) {
+        console.error('Error fetching events:', error)
+      }
+    }
+    fetchEvents()
+  }, [])
 
   useEffect(() => {
     localStorage.removeItem('bookingInfo')
@@ -72,7 +96,7 @@ export default function HomeContent() {
           </div>
           <div className='grid grid-cols-2 gap-4 w-[90%]'>
             <div className='w-full overflow-hidden'>
-              <NavLink to=''>
+              <NavLink to='review'>
                 <img
                   src='https://www.galaxycine.vn/media/2024/11/20/rv-linh-mieu-750_1732095988042.jpg'
                   alt=''
@@ -97,7 +121,7 @@ export default function HomeContent() {
             <div className='grid grid-cols-1 gap-1 h-[90%]'>
               {[...Array(3)].map((_, index) => (
                 <div key={index} className='flex mb-2'>
-                  <NavLink className='w-1/3 h-auto mr-2 ' to=''>
+                  <NavLink className='w-1/3 h-auto mr-2 ' to='review'>
                     <img
                       src='https://www.galaxycine.vn/media/2024/11/20/750_1732088886220.jpg'
                       className='rounded-[0.3rem] transition-transform duration-700 hover:scale-105'
@@ -133,41 +157,20 @@ export default function HomeContent() {
           <div className='flex py-10 items-center'>
             <span className='border-l-[5px] border-[#FF5400] px-4 text-2xl uppercase'>Tin Khuyến mãi</span>
           </div>
-          <div className=' grid grid-cols-4 gap-1'>
-            <div className='w-[90%]  '>
-              <img
-                src='https://cdn.galaxycine.vn/media/2024/7/3/vnpay-galaxy-2_1719990810325.jpg'
-                alt=''
-                className='transition-transform duration-500 hover:scale-105 mb-2'
-              />
-              <NavLink to=''>Mưa quà tặng dành cho thành viên Phin cinema 2024</NavLink>
-            </div>
-            <div className='w-[90%]'>
-              <img
-                src='https://cdn.galaxycine.vn/media/2024/7/3/vnpay-galaxy-2_1719990810325.jpg'
-                alt=''
-                className='transition-transform duration-500 hover:scale-105 mb-2'
-              />
-              <NavLink to=''>Mưa quà tặng dành cho thành viên Phin cinema 2024</NavLink>
-            </div>
-            <div className='w-[90%]'>
-              <img
-                src='https://cdn.galaxycine.vn/media/2024/7/3/vnpay-galaxy-2_1719990810325.jpg'
-                alt=''
-                className='transition-transform duration-500 hover:scale-105 mb-2'
-              />
-              <NavLink to=''>Mưa quà tặng dành cho thành viên Phin cinema 2024</NavLink>
-            </div>
-            <div className='w-[90%]'>
-              <img
-                src='https://cdn.galaxycine.vn/media/2024/7/3/vnpay-galaxy-2_1719990810325.jpg'
-                alt=''
-                className='transition-transform duration-500 hover:scale-105 mb-2'
-              />
-              <NavLink to=''>Mưa quà tặng dành cho thành viên Phin cinema 2024</NavLink>
-            </div>
+          <div className='grid grid-cols-4 gap-1'>
+            {events.slice(0, 4).map((event) => (
+              <div key={event.id} className='w-[90%]'>
+                <img
+                  src={event.main_img_url}
+                  alt={event.title}
+                  className='transition-transform duration-500 hover:scale-105 mb-2'
+                />
+                <NavLink to={`/${event.id}`}>{event.title}</NavLink>
+              </div>
+            ))}
           </div>
         </div>
+        <ChatBox />
       </div>
     </>
   )

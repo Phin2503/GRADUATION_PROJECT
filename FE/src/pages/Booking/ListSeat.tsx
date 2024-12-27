@@ -74,7 +74,11 @@ const ListSeat = ({ label, buttons, reservedSeats, selectedSeats, onSelectSeat }
 
   return (
     <li className='flex items-center justify-between'>
-      <div className='text-sm text-gray-400 font-semibold w-5 flex-shrink-0 text-center'>{label}</div>
+      <div
+        className={`text-sm font-semibold w-5 flex-shrink-0 text-center ${['E', 'F', 'G'].includes(label) ? 'text-orange-500' : 'text-blue-400'}`}
+      >
+        {label}
+      </div>
       <div className='flex flex-1 justify-center gap-1 md:gap-2'>
         {buttons.map((btn, index) => {
           const seat = `${label}${btn}`
@@ -89,7 +93,11 @@ const ListSeat = ({ label, buttons, reservedSeats, selectedSeats, onSelectSeat }
           )
         })}
       </div>
-      <div className='text-sm text-gray-400 font-semibold w-5 flex-shrink-0 text-center'>{label}</div>
+      <div
+        className={`text-sm font-semibold w-5 flex-shrink-0 text-center ${['E', 'F', 'G'].includes(label) ? 'text-orange-500' : 'text-blue-400'}`}
+      >
+        {label}
+      </div>
     </li>
   )
 }

@@ -13,7 +13,9 @@ export class TheaterComplexService {
   ) {}
 
   async getAll() {
-    return await this.theaterComplexRepo.find({});
+    return await this.theaterComplexRepo.find({
+      relations: ['theaters', 'theaters.typeTheater'],
+    });
   }
 
   async update(id: number, updateDto: UpdateTheaterComplexDto) {

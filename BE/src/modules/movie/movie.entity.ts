@@ -63,4 +63,7 @@ export class Movie {
 
   @Column()
   background_image_url: string;
+
+  @Column()
+  link_trailer: string;
 }

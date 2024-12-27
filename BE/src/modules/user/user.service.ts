@@ -27,7 +27,7 @@ export class UserService {
   findAll(pagination: PaginationDTO) {
     return this.userRepository.find({
       skip: pagination.skip,
-      take: pagination.limit ?? DEFAULT_PAGE_SIZE,
+      take: pagination.limit ?? 100,
     });
   }
 

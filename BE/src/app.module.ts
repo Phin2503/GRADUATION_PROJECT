@@ -28,6 +28,9 @@ import { VnpayModule } from './modules/vnpay/vnpay.module';
 import { CouponModule } from './modules/coupon/coupon.module';
 import { TypeTheaterModule } from './modules/type-theater/type-theater.module';
 import { GenreModule } from './modules/genre/genre.module';
+import { EventModule } from './modules/event/event.module';
+import { GroqaiModule } from './modules/groqai/groqai.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
   imports: [
@@ -61,6 +64,9 @@ import { GenreModule } from './modules/genre/genre.module';
     CouponModule,
     TypeTheaterModule,
     GenreModule,
+    EventModule,
+    GroqaiModule,
+    EmailModule,
   ],
   controllers: [AppController, UploadController, TheaterComplexController],
   providers: [AppService, CloudinaryService, TheaterComplexService],

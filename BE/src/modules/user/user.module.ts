@@ -7,12 +7,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './guards/auth.service';
 import { EmailConsumers } from 'src/modules/consumer/email.consumer';
 import { BullModule } from '@nestjs/bull';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: 'send-mail',
-    }),
+    EmailModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       global: true,
@@ -20,7 +19,7 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, EmailConsumers],
+  providers: [UserService, AuthService],
   exports: [TypeOrmModule],
 })
 export class UserModule {}

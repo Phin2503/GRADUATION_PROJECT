@@ -49,7 +49,7 @@ export class MovieController {
     if (!pagination) {
       pagination = {
         skip: 1,
-        limit: 10,
+        limit: 100,
       };
     }
     return this.movieService.findAll(pagination);

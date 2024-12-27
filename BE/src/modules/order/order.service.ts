@@ -32,6 +32,10 @@ export class OrderService {
     private readonly couponRepo: Repository<Coupon>,
   ) {}
 
+  async getAllOrders() {
+    return await this.orderRepo.find();
+  }
+
   async createOrder(
     theaterId: number,
     showtimeId: number,

@@ -43,8 +43,8 @@ export class UserController {
   }
 
   @Get('/')
-  @UseGuards(new RoleGuard(['admin']))
-  @UseGuards(AuthGuard)
+  // @UseGuards(new RoleGuard(['admin']))
+  // @UseGuards(AuthGuard)
   findAll(@Query() pagination: PaginationDTO) {
     return this.userService.findAll(pagination);
   }

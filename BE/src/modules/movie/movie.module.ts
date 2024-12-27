@@ -11,6 +11,6 @@ import { Genre } from '../genre/genre.entity';
   imports: [TypeOrmModule.forFeature([Movie, Genre]), CloudinaryModule],
   controllers: [MovieController],
   providers: [MovieService, CloudinaryService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, MovieService],
 })
 export class MovieModule {}

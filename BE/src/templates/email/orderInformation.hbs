@@ -1,0 +1,37 @@
+<html lang='vi'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Xác Nhận Đặt Vé</title>
+    <style>
+      body { font-family: Arial, sans-serif; background-color: #eaeaea; margin:
+      0; padding: 20px; } .container { max-width: 600px; margin: auto;
+      background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px
+      20px rgba(0, 0, 0, 0.1); font-size: 16px; } h1 { text-align: center;
+      color: #2c3e50; margin-bottom: 20px; } .info { margin: 15px 0; padding:
+      15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9; }
+      .total { font-weight: bold; color: #e74c3c; font-size: 18px; } .status {
+      margin-top: 10px; padding: 5px; border-radius: 3px; background-color:
+      #dff0d8; color: #3c763d; display: inline-block; }
+    </style>
+  </head>
+  <body>
+
+    <div class='container'>
+      <h1>Xác Nhận Đặt Vé</h1>
+      <div class='info'>
+        <p><strong>Tên Khách Hàng:</strong> {{customerName}}</p>
+        <p><strong>Rạp Chiếu Phim:</strong> {{cinema}}</p>
+        <p><strong>Địa Chỉ:</strong> {{address}}</p>
+        <p><strong>Rạp:</strong> {{theater}}</p>
+        <p><strong>Giờ Chiếu:</strong> {{showtime}}</p>
+        <p><strong>Tên Phim:</strong> {{movieName}}</p>
+        <p><strong>Đồ Ăn:</strong> {{foods}}</p>
+        <p class='total'><strong>Tổng Giá:</strong> {{totalPrice}}</p>
+        <p><strong>Trạng Thái:</strong>
+          <span class='status'>{{status}}</span></p>
+      </div>
+    </div>
+
+  </body>
+</html>

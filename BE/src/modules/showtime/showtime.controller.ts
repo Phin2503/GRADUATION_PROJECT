@@ -26,6 +26,10 @@ export class ShowtimeController {
     return await this.showtimeService.createShowtime(requestBody);
   }
 
+  @Get('/movie/:id')
+  async getByMovieID(@Param('id') id: number) {
+    return await this.showtimeService.getByMovieId(id);
+  }
   @Get('/:theaterId/:date')
   async fetchShowtimesByTheaterIdAndDate(
     @Param('theaterId') theaterId: number,
@@ -47,11 +51,6 @@ export class ShowtimeController {
   @Delete('/:id')
   async deleleShowtimeById(@Param('id') id: number): Promise<string> {
     return await this.showtimeService.deleteById(id);
-  }
-
-  @Get('/movie/:id')
-  async getByMovieID(@Param('id') id: number) {
-    return await this.showtimeService.getByMovieId(id);
   }
 
   @Put('/update/:id')

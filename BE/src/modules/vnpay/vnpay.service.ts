@@ -2,10 +2,6 @@ import { Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as queryString from 'qs';
 import * as moment from 'moment';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Order } from '../order/order.entity';
-import { Payment } from '../payment/payment.entity';
 
 @Injectable()
 export class VnpayService {

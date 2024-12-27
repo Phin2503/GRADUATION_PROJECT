@@ -103,7 +103,7 @@ export class ShowtimeService {
     return await this.showtimeRepository.find({
       skip: pagination?.skip || 0,
       // take: pagination?.limit ?? DEFAULT_PAGE_SIZE,
-      relations: ['theater', 'theater_complex', 'movie'],
+      relations: ['theater', 'theater_complex', 'movie', 'theater.typeTheater'],
     });
   }
 
@@ -148,14 +148,13 @@ export class ShowtimeService {
     return showtimes;
   }
 
-  async getByMovieId(id) {
+  async getByMovieId(id: number) {
     const showtime = await this.showtimeRepository.find({
       where: {
         movie: { id: id },
       },
       relations: ['theater', 'theater.theater_complex', 'movie'], // Đảm bảo truy cập qua theater
     });
-
     if (!showtime) {
       throw new NotFoundException('Not found showtime!');
     }

@@ -4,10 +4,7 @@ import { PaymentService } from '../payment/payment.service';
 
 @Controller('vnpay')
 export class VnpayController {
-  constructor(
-    private readonly vnpayService: VnpayService,
-    private readonly PaymentService: PaymentService,
-  ) {}
+  constructor(private readonly vnpayService: VnpayService) {}
 
   @Post('payment')
   async createPayment(

@@ -2,21 +2,18 @@ import { IsArray, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class updateOrderDTO {
   @IsNotEmpty()
-  userId: string;
+  userId?: string;
 
   @IsArray()
-  @IsNotEmpty()
-  seats: string[];
+  seats?: string[];
 
   @IsArray()
-  @IsNotEmpty()
-  foods: string[];
+  foods?: string[];
 
   @IsNumber()
-  @IsNotEmpty()
-  total_price: number;
+  total_price?: number;
 
   @IsOptional()
   @IsNumber()
-  couponId: number;
+  couponId?: number;
 }

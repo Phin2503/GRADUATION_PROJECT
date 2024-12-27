@@ -21,6 +21,15 @@ export class SeatReservationController {
     return await this.orderService.getSeatOrdered(theaterId, showtimeId);
   }
 
+  @Put('/update/:orderId')
+  async updateOrder(
+    @Param('orderId') orderId: number,
+    @Body() requestBody: updateOrderDTO,
+  ) {
+    console.log(orderId);
+    return await this.orderService.updateOrder(orderId, requestBody);
+  }
+
   @Get(':id')
   async getOrder(@Param('id') orderId: number) {
     return await this.orderService.getOrderByID(orderId);
@@ -39,19 +48,16 @@ export class SeatReservationController {
     );
   }
 
-  @Put('/update/:orderId')
-  async updateOrder(
-    @Param('orderId') orderId: number,
-    @Body() requestBody: updateOrderDTO,
-  ) {
-    return await this.orderService.updateOrder(orderId, requestBody);
-  }
-
   @Get('/update/:showtimeId/:orderId')
   async getSeatsOfOrder(
     @Param('showtimeId') showtimeId: number,
     @Param('orderId') orderId: number,
   ) {
     return await this.orderService.getSeatOrderedByOrderId(showtimeId, orderId);
+  }
+
+  @Get('/')
+  async getAllOrders() {
+    return await this.orderService.getAllOrders();
   }
 }

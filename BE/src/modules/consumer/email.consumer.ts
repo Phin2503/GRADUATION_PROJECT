@@ -5,6 +5,7 @@ import { Job } from 'bull';
 @Processor('send-mail')
 export class EmailConsumers {
   constructor(private mailerService: MailerService) {}
+
   @Process('register')
   async sendMailRegister(job: Job<unknown>) {
     await this.mailerService.sendMail({
@@ -30,6 +31,26 @@ export class EmailConsumers {
         name: job.data['name'],
         code: 'New Password :',
         newPassword: job.data['newPassword'],
+      },
+    });
+  }
+
+  @Process('confirm-order')
+  async sendMailConfirmOrder(job: Job<unknown>) {
+    await this.mailerService.sendMail({
+      to: job.data['to'],
+      subject: 'Confirm Order from PhinCinema',
+      template: './orderInformation',
+      context: {
+        customerName: job.data['customerName'],
+        cinema: job.data['cinema'],
+        address: job.data['address'],
+        theater: job.data['theater'],
+        showtime: job.data['showtime'],
+        movieName: job.data['movieName'],
+        foods: job.data['foods'],
+        totalPrice: job.data['totalPrice'],
+        status: job.data['status'],
       },
     });
   }

@@ -33,7 +33,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
         }
       }, 1000)
     },
-    onError(error, variables, context) {
+    onError(error) {
       console.log(error)
       const errorMessage = (error as any).response?.data?.message || 'Registration failed. Please try again!'
       toast.error(errorMessage)

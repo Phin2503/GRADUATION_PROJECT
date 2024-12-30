@@ -181,9 +181,10 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='password'
             placeholder='Nhập mật khẩu'
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            autoComplete='new-password' // Thêm thuộc tính này
           />
 
           <label htmlFor='re-password' className='block mb-1 text-left font-light'>
@@ -194,9 +195,10 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='re-password'
             placeholder='Xác nhận mật khẩu'
+            required
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
-            required
+            autoComplete='new-password' // Thêm thuộc tính này
           />
 
           <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3'>

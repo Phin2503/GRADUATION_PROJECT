@@ -175,7 +175,7 @@ export default function Payment({ /*onContinue */ onBack }: Props) {
       console.log('Updating order with data:', updatedOrder) // In ra dữ liệu
 
       try {
-        await http.put(`http://localhost:3000/api/v1/order/update/${orderId}`, updatedOrder)
+        await http.put(`${import.meta.env.VITE_BASE_URL}/order/update/${orderId}`, updatedOrder)
         toast.success('Cập nhật order thành công!')
       } catch (error: any) {
         console.error('Error updating order:', error.response?.data || error.message)

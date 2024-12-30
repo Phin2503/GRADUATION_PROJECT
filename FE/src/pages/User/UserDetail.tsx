@@ -63,7 +63,7 @@ export default function UserDetail() {
       }
 
       try {
-        const response = await fetch(`http://localhost:3000/api/v1/user/update/${userDetail?.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/update/${userDetail?.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ export default function UserDetail() {
       }
 
       try {
-        const response = await fetch(`http://localhost:3000/api/v1/user/change-password/${userDetail?.id}`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/change-password/${userDetail?.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

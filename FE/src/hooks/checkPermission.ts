@@ -21,7 +21,7 @@ const useAuth = () => {
 
   // Xác thực access token
   const verifyAccessToken = async (token: string) => {
-    const response = await fetch('http://localhost:3000/api/v1/user/verify-token', {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/verify-token`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`
@@ -33,7 +33,7 @@ const useAuth = () => {
 
   // Làm mới access token
   const refreshAccessToken = async (refreshToken: string, userDataString: string) => {
-    const response = await fetch('http://localhost:3000/api/v1/user/refresh-token', {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/user/refresh-token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

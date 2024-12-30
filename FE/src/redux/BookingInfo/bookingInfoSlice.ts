@@ -9,8 +9,8 @@ interface bookingInfo {
   date: string | null
   seats?: string[] | null
   foods?: string[] | null
-  totalPrice: number | null,
-  activeTab?:string | null
+  totalPrice: number | null
+  activeTab?: string | null
 }
 
 const initialState: bookingInfo = {
@@ -22,7 +22,7 @@ const initialState: bookingInfo = {
   seats: null,
   foods: null,
   totalPrice: null,
-  activeTab:null
+  activeTab: null
 }
 
 const bookingInfoSlice = createSlice({
@@ -42,11 +42,11 @@ const bookingInfoSlice = createSlice({
       state.totalPrice = totalPrice
     },
 
-    setIsActive:(state,action)=>{
+    setIsActive: (state, action) => {
       state.activeTab = action.payload
     }
   }
 })
 
-export const { setBookingInfo ,setIsActive} = bookingInfoSlice.actions
+export const { setBookingInfo, setIsActive } = bookingInfoSlice.actions
 export default bookingInfoSlice.reducer

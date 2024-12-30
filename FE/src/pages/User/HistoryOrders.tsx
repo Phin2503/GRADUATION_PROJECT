@@ -9,7 +9,6 @@ export default function HistoryOrders() {
   const { mutate: fetchOrders } = useMutation({
     mutationFn: (userId: string) => getOrdersByUserId(userId),
     onSuccess(response) {
-      console.log('Fetched orders:', response)
       setOrders(response.data)
     },
     onError(error) {

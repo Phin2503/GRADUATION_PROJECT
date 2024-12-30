@@ -1,5 +1,4 @@
-import { registerRequest } from '@/apis/auth.api'
-import RegisterRequest from '@/types/registerRequest.type'
+import axios from 'axios'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { TiDelete } from 'react-icons/ti'
@@ -21,19 +20,28 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   const [rePassword, setRePassword] = useState('')
 
   const registerMutation = useMutation({
-    mutationFn: (body: RegisterRequest) => registerRequest(body),
+    mutationFn: async (data: any) => {
+      const response = await axios.post('https://52.77.252.207.nip.io/api/v1/user/register', data, {
+        timeout: 5000
+      })
+      return response.data
+    },
     onSuccess(data) {
       toast.success('Đăng ký thành công! Vui lòng đăng nhập 🐷')
       handleExitForm()
-      localStorage.setItem('accessToken', data.data.access_token)
-      if (data.data.refresh_token) {
-        localStorage.setItem('refreshToken', data.data.refresh_token)
+      localStorage.setItem('accessToken', data.access_token)
+      if (data.refresh_token) {
+        localStorage.setItem('refreshToken', data.refresh_token)
       }
     },
-    onError(error) {
-      console.log(error)
-      const errorMessage = (error as any).response?.data?.message || 'Đăng ký không thành công. Vui lòng thử lại!'
-      toast.error(errorMessage)
+    onError(error: any) {
+      console.error(error)
+      const errorMessage = error.response?.data?.message || 'Đăng ký không thành công. Vui lòng thử lại!'
+      if (error.code === 'ECONNABORTED') {
+        toast.error('Yêu cầu mất quá nhiều thời gian. Vui lòng thử lại.')
+      } else {
+        toast.error(errorMessage)
+      }
     }
   })
 
@@ -70,7 +78,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
     registerMutation.mutate({
       fullName: safeFullName,
       phoneNumber: safePhoneNumber,
-      dateOfBirth: convertedDate,
+      dateOfBirth: convertedDate.toISOString(),
       email,
       password,
       reTypePassword: rePassword
@@ -184,7 +192,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete='new-password' // Thêm thuộc tính này
+            autoComplete='new-password'
           />
 
           <label htmlFor='re-password' className='block mb-1 text-left font-light'>
@@ -198,7 +206,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             required
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
-            autoComplete='new-password' // Thêm thuộc tính này
+            autoComplete='new-password'
           />
 
           <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3'>

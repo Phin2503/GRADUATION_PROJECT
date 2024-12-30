@@ -13,7 +13,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/api/v1');
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:5175'],
+    origin: [
+      'https://graduation-project-eta.vercel.app',
+      'http://localhost:5175',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

@@ -8,17 +8,17 @@ export class TheaterComplexController {
   constructor(private readonly theaterComplexService: TheaterComplexService) {}
 
   @Get()
-  getAllTheater() {
+  async getAllTheater() {
     return this.theaterComplexService.getAll();
   }
 
   @Post()
-  createTheater(@Body() createDto: CreateTheaterComplexDto) {
+  async createTheater(@Body() createDto: CreateTheaterComplexDto) {
     return this.theaterComplexService.create(createDto);
   }
 
   @Put(':id')
-  updateTheater(
+  async updateTheater(
     @Param('id') id: number,
     @Body() updateDto: UpdateTheaterComplexDto,
   ) {

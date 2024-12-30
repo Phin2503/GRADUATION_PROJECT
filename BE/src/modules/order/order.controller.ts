@@ -26,7 +26,6 @@ export class SeatReservationController {
     @Param('orderId') orderId: number,
     @Body() requestBody: updateOrderDTO,
   ) {
-    console.log(orderId);
     return await this.orderService.updateOrder(orderId, requestBody);
   }
 

@@ -19,22 +19,21 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectQueue('send-mail')
-    private sendMail: Queue,
+    @InjectQueue('send-mail') private readonly sendMailQueue: Queue,
     private jwtService: JwtService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
   async register(requestBody: RegisterDto) {
-    const userByEmail = await this.userRepository.findOneBy({
-      email: requestBody.email,
+    const userByEmail = await this.userRepository.findOne({
+      where: { email: requestBody.email },
     });
     if (userByEmail) {
       throw new BadRequestException('Email already exists!');
     }
 
-    const userByPhone = await this.userRepository.findOneBy({
-      phoneNumber: requestBody.phoneNumber,
+    const userByPhone = await this.userRepository.findOne({
+      where: { phoneNumber: requestBody.phoneNumber },
     });
     if (userByPhone) {
       throw new BadRequestException('Phone number already exists!');
@@ -59,9 +58,8 @@ export class AuthService {
       secret: process.env.JWT_SECRET,
       expiresIn: '2d',
     });
-
     try {
-      await this.sendMail.add('register', {
+      await this.sendMailQueue.add('register', {
         to: requestBody.email,
         name: requestBody.fullName,
         verifyToken,
@@ -81,6 +79,7 @@ export class AuthService {
         },
       };
     } catch (error) {
+      console.error('Error sending verification email:', error); // In ra lỗi
       throw new BadRequestException('Failed to send verification email');
     }
   }
@@ -181,7 +180,7 @@ export class AuthService {
     await this.userRepository.save(user);
 
     try {
-      await this.sendMail.add('forgot-password', {
+      await this.sendMailQueue.add('forgot-password', {
         to: requestBody.email,
         newPassword: randomPassword,
       });

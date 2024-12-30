@@ -57,22 +57,34 @@ export class PaymentService {
         throw new BadRequestException('User email is not available.');
       }
 
+      // Định dạng showtime
+      const formatShowtime = (showtime: Date) => {
+        const date = new Date(showtime);
+        return `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} ${date.getUTCDate().toString().padStart(2, '0')}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCFullYear()}`;
+      };
+
+      // Định dạng totalPrice
+      const formattedTotalPrice = orderExisting.total_price
+        ? Math.floor(orderExisting.total_price).toLocaleString('vi-VN')
+        : '0';
+
       await this.sendMailQueue.add('confirm-order', {
         to: userEmail,
         customerName: orderExisting.user.fullName || 'null',
         cinema: orderExisting.theater.theater_complex.name || 'null',
         address: orderExisting.theater.theater_complex.address || 'null',
         theater: orderExisting.theater?.name || 'null',
-        showtime: orderExisting.showtime?.showtime_start || 'null',
+        showtime:
+          formatShowtime(orderExisting.showtime?.showtime_start) || 'null',
         movieName: orderExisting.showtime.movie.title || 'null',
         foods: orderExisting.foods || 'null',
-        totalPrice: orderExisting.total_price || 'null',
+        totalPrice: formattedTotalPrice + ' VNĐ',
         status: orderExisting.status || 'null',
       });
 
       return `http://localhost:5173/payment/confirm/order/${orderExisting.id}`;
     } catch (err) {
-      console.error(err); // Ghi log lỗi
+      console.error(err);
       throw new BadRequestException(
         'An error occurred, please try again later.',
       );
@@ -91,7 +103,7 @@ export class PaymentService {
     const newPayment = this.PaymentRepo.create({
       status: 'pending',
       method: 'vnpay',
-      order: existingOrder, // Liên kết payment với order
+      order: existingOrder,
     });
 
     await this.PaymentRepo.save(newPayment);

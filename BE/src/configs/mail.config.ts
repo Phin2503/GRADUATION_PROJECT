@@ -14,6 +14,7 @@ export const MailConfig = (): MailerOptions => ({
       pass: process.env.MAIL_PASSWORD,
     },
   },
+
   defaults: {
     from: process.env.MAIL_SENDER,
   },

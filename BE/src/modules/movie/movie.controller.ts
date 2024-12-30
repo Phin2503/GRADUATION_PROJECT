@@ -22,7 +22,7 @@ export class MovieController {
 
   @Post('/create')
   @UseInterceptors(FileInterceptor('file'))
-  createMovie(
+  async createMovie(
     @Body() requestBody: CreateMovieDTO,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -30,22 +30,25 @@ export class MovieController {
   }
 
   @Put('/update/:id')
-  updateMovie(@Body() requestBody: UpdateMovieDto, @Param('id') id: number) {
+  async updateMovie(
+    @Body() requestBody: UpdateMovieDto,
+    @Param('id') id: number,
+  ) {
     return this.movieService.update(requestBody, id);
   }
 
   @Delete('/delete/:id')
-  deleteMovie(@Param('id') id: number) {
+  async deleteMovie(@Param('id') id: number) {
     return this.movieService.delete(id);
   }
 
   @Get('/:id')
-  findMovieById(@Param('id') id: number) {
+  async findMovieById(@Param('id') id: number) {
     return this.movieService.findMovie(id);
   }
 
   @Get('')
-  findAllMovie(pagination?: PaginationDTO) {
+  async findAllMovie(pagination?: PaginationDTO) {
     if (!pagination) {
       pagination = {
         skip: 1,

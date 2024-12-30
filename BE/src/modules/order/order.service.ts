@@ -111,8 +111,6 @@ export class OrderService {
       relations: ['theater', 'user', 'showtime'],
     });
 
-    console.log(existingOrder);
-
     const showtimeOfOrder = await this.showtimeRepo.findOne({
       where: {
         id: existingOrder.showtime.id,
@@ -120,10 +118,12 @@ export class OrderService {
       relations: ['theater_complex', 'movie'],
     });
 
-    console.log(showtimeOfOrder);
-
     if (!existingOrder) {
       throw new NotFoundException('Not found Order ! try again');
+    }
+
+    if (!showtimeOfOrder) {
+      throw new NotFoundException('Not found showtime of Order ! try again');
     }
 
     return { existingOrder, showtimeOfOrder };

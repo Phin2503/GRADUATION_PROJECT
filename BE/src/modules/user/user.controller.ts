@@ -33,25 +33,25 @@ export class UserController {
   ) {}
 
   @Post('/register')
-  register(@Body() requestBody: RegisterDto) {
+  async register(@Body() requestBody: RegisterDto) {
     return this.authService.register(requestBody);
   }
 
   @Post('/login')
-  login(@Body() requestBody: LoginDto) {
+  async login(@Body() requestBody: LoginDto) {
     return this.authService.login(requestBody);
   }
 
   @Get('/')
   // @UseGuards(new RoleGuard(['admin']))
   // @UseGuards(AuthGuard)
-  findAll(@Query() pagination: PaginationDTO) {
+  async findAll(@Query() pagination: PaginationDTO) {
     return this.userService.findAll(pagination);
   }
 
   @Get('current-user')
   @UseGuards(AuthGuard)
-  getCurrentUser(@CurrentUser() currentUser: User) {
+  async getCurrentUser(@CurrentUser() currentUser: User) {
     console.log(currentUser);
     console.log('he');
     return currentUser;
@@ -59,7 +59,7 @@ export class UserController {
 
   @Put('update/:id')
   @UseGuards(AuthGuard)
-  updateById(
+  async updateById(
     @Body() requestBody: UpdateUserDto,
     @Param('id') id: string,
     @CurrentUser() currentUser: User,

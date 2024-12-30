@@ -19,18 +19,18 @@ export class FoodController {
   constructor(private readonly foodService: FoodService) {}
 
   @Get('')
-  getAllFood() {
+  async getAllFood() {
     return this.foodService.getAll();
   }
 
   @Delete('/delete/:id')
-  deteleById(@Param('id') id: number) {
+  async deteleById(@Param('id') id: number) {
     return this.foodService.deleteById(id);
   }
 
   @Put('/update/:id')
   @UseInterceptors(FileInterceptor('file'))
-  updateById(
+  async updateById(
     @Param('id') id: number,
     @Body() requestBody: updateFoodDto,
     @UploadedFile() file: Express.Multer.File,
@@ -40,7 +40,7 @@ export class FoodController {
 
   @Post('/create')
   @UseInterceptors(FileInterceptor('file'))
-  create(
+  async create(
     @Body() requestBody: createFoodDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
@@ -48,7 +48,7 @@ export class FoodController {
   }
 
   @Get('/:id')
-  getById(@Param('id') id: number) {
+  async getById(@Param('id') id: number) {
     return this.foodService.getById(id);
   }
 }

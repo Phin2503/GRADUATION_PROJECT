@@ -12,8 +12,8 @@ interface Props {
 }
 
 export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
-  const [fullName, setFullName] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
+  const [fullName, setFullname] = useState('')
+  const [phoneNumber, setPhonenumber] = useState('')
   const [gender, setGender] = useState('')
   const [dateOfBirth, setDob] = useState('')
   const [email, setEmail] = useState('')
@@ -23,6 +23,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   const registerMutation = useMutation({
     mutationFn: (body: RegisterRequest) => registerRequest(body),
     onSuccess(data) {
+      console.log(data)
       toast.success('Registration successful! Please log in 🐷')
       setTimeout(() => {
         handleExitForm()
@@ -30,22 +31,21 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
         if (data.data.refresh_token) {
           localStorage.setItem('refreshToken', data.data.refresh_token)
         }
-      }, 2000)
+      }, 1000)
     },
-    onError(error: any) {
-      const errorMessage = error.response?.data?.message || 'Registration failed. Please try again!'
+    onError(error, variables, context) {
+      console.log(error)
+      const errorMessage = (error as any).response?.data?.message || 'Registration failed. Please try again!'
       toast.error(errorMessage)
-    },
-    // Set a longer timeout if needed
-    retry: false
+    }
   })
 
   const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const convertedDate = new Date(dateOfBirth)
 
+    const convertedDate = new Date(dateOfBirth)
     if (convertedDate > new Date()) {
-      toast.error('Invalid date of birth! Please try again.')
+      toast.error('Date of birth invalid ! try again')
       return
     }
 
@@ -54,7 +54,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
     const safeFullName = validator.escape(validator.trim(fullName))
     const safePhoneNumber = validator.trim(phoneNumber)
-    const safePassword = validator.trim(password)
+    const safePassword = password
 
     if (!phoneNumberPattern.test(safePhoneNumber)) {
       toast.error('Invalid phone number format! Please enter a valid phone number.')
@@ -75,9 +75,9 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
       fullName: safeFullName,
       phoneNumber: safePhoneNumber,
       dateOfBirth: convertedDate,
-      email: validator.trim(email),
+      email,
       password: safePassword,
-      reTypePassword: validator.trim(rePassword)
+      reTypePassword: rePassword
     })
   }
 
@@ -87,15 +87,14 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   }
 
   return (
-    <div className='RegisterForm shadow-lg shadow-black m-auto w-full max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[90%] flex items-center justify-center'>
+    <div className='RegisterForm shadow-lg shadow-black m-auto w-[100%] max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[90%] flex items-center justify-center'>
       <div className='relative w-[90%] p-3'>
         <form onSubmit={handleRegister}>
           <TiDelete className='absolute right-3 top-3 text-gray-700 cursor-pointer text-2xl' onClick={handleExitForm} />
           <div className='flex justify-center'>
-            <img src='../src/assets/loginLogo.png' alt='Register Logo' className='w-[5rem] h-[5rem]' />
+            <img src='../src/assets/loginLogo.png' alt='Register Logo' className='w-[5rem] h-[5rem] ' />
           </div>
           <h5 className='font-medium mb-5 text-xl text-gray-600'>Register</h5>
-
           <label htmlFor='fullname' className='block mb-1 text-left font-light'>
             Full Name
           </label>
@@ -105,10 +104,9 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             id='fullname'
             placeholder='Enter your full name'
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) => setFullname(e.target.value)}
             required
           />
-
           <label htmlFor='phonenumber' className='block mb-1 text-left font-light'>
             Phone Number
           </label>
@@ -118,10 +116,9 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             id='phoneNumber'
             placeholder='Enter phone number'
             value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => setPhonenumber(e.target.value)}
             required
           />
-
           <label className='block mb-1 text-left font-light'>Gender</label>
           <div className='flex items-center mb-3'>
             <input
@@ -150,7 +147,6 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
               Female
             </label>
           </div>
-
           <label htmlFor='dob' className='block mb-1 text-left font-light'>
             Date of Birth
           </label>
@@ -162,7 +158,6 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setDob(e.target.value)}
             required
           />
-
           <label htmlFor='email' className='block mb-1 text-left font-light'>
             Email
           </label>
@@ -175,7 +170,6 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
           <label htmlFor='password' className='block mb-1 text-left font-light'>
             Password
           </label>
@@ -188,7 +182,6 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
           <label htmlFor='re-password' className='block mb-1 text-left font-light'>
             Confirm Password
           </label>
@@ -201,12 +194,10 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setRePassword(e.target.value)}
             required
           />
-
           <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3'>
             Register
           </button>
         </form>
-
         <a href='#' className='block mb-1 hover:text-orange-300'>
           Forgot password?
         </a>
@@ -214,7 +205,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
         <p className='mb-1'>Already have an account?</p>
         <button
           type='button'
-          className='bg-white w-full h-7 rounded-md border border-orange-400 hover:bg-orange-400 md:h-10'
+          className='bg-white w-full h-7  rounded-md border border-orange-400 hover:bg-orange-400 md:h-10 '
           onClick={handleAction}
         >
           Log In

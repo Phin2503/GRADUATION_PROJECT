@@ -12,10 +12,10 @@ interface Props {
 }
 
 export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
-  const [fullName, setFullname] = useState('')
-  const [phoneNumber, setPhonenumber] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [gender, setGender] = useState('')
-  const [dateOfBirth, setDob] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
@@ -23,19 +23,17 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   const registerMutation = useMutation({
     mutationFn: (body: RegisterRequest) => registerRequest(body),
     onSuccess(data) {
-      console.log(data)
-      toast.success('Registration successful! Please log in 🐷')
+      toast.success('Đăng ký thành công! Vui lòng đăng nhập 🐷')
       setTimeout(() => {
         handleExitForm()
         localStorage.setItem('accessToken', data.data.access_token)
         if (data.data.refresh_token) {
           localStorage.setItem('refreshToken', data.data.refresh_token)
         }
-      }, 1000)
+      }, 5000)
     },
     onError(error) {
-      console.log(error)
-      const errorMessage = (error as any).response?.data?.message || 'Registration failed. Please try again!'
+      const errorMessage = (error as any).response?.data?.message || 'Đăng ký không thành công. Vui lòng thử lại!'
       toast.error(errorMessage)
     }
   })
@@ -45,7 +43,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
     const convertedDate = new Date(dateOfBirth)
     if (convertedDate > new Date()) {
-      toast.error('Date of birth invalid ! try again')
+      toast.error('Ngày sinh không hợp lệ! Vui lòng thử lại.')
       return
     }
 
@@ -54,20 +52,19 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
     const safeFullName = validator.escape(validator.trim(fullName))
     const safePhoneNumber = validator.trim(phoneNumber)
-    const safePassword = password
 
     if (!phoneNumberPattern.test(safePhoneNumber)) {
-      toast.error('Invalid phone number format! Please enter a valid phone number.')
+      toast.error('Định dạng số điện thoại không hợp lệ! Vui lòng nhập lại.')
       return
     }
 
     if (!fullNamePattern.test(safeFullName)) {
-      toast.error('Invalid full name format! Please enter a valid name.')
+      toast.error('Định dạng tên đầy đủ không hợp lệ! Vui lòng nhập lại.')
       return
     }
 
-    if (safePassword !== rePassword) {
-      toast.error('Passwords do not match!')
+    if (password !== rePassword) {
+      toast.error('Mật khẩu không khớp!')
       return
     }
 
@@ -76,7 +73,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
       phoneNumber: safePhoneNumber,
       dateOfBirth: convertedDate,
       email,
-      password: safePassword,
+      password,
       reTypePassword: rePassword
     })
   }
@@ -87,39 +84,42 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   }
 
   return (
-    <div className='RegisterForm shadow-lg shadow-black m-auto w-[100%] max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[90%] flex items-center justify-center'>
+    <div className='RegisterForm shadow-lg shadow-black m-auto w-full max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[90%] flex items-center justify-center'>
       <div className='relative w-[90%] p-3'>
         <form onSubmit={handleRegister}>
           <TiDelete className='absolute right-3 top-3 text-gray-700 cursor-pointer text-2xl' onClick={handleExitForm} />
           <div className='flex justify-center'>
-            <img src='../src/assets/loginLogo.png' alt='Register Logo' className='w-[5rem] h-[5rem] ' />
+            <img src='../src/assets/loginLogo.png' alt='Logo Đăng Ký' className='w-[5rem] h-[5rem]' />
           </div>
-          <h5 className='font-medium mb-5 text-xl text-gray-600'>Register</h5>
+          <h5 className='font-medium mb-5 text-xl text-gray-600'>Đăng Ký</h5>
+
           <label htmlFor='fullname' className='block mb-1 text-left font-light'>
-            Full Name
+            Tên Đầy Đủ
           </label>
           <input
             type='text'
             className='border-gray-600 border rounded-md mb-2 p-2 w-full'
             id='fullname'
-            placeholder='Enter your full name'
+            placeholder='Nhập tên đầy đủ'
             value={fullName}
-            onChange={(e) => setFullname(e.target.value)}
+            onChange={(e) => setFullName(e.target.value)}
             required
           />
+
           <label htmlFor='phonenumber' className='block mb-1 text-left font-light'>
-            Phone Number
+            Số Điện Thoại
           </label>
           <input
             type='text'
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='phoneNumber'
-            placeholder='Enter phone number'
+            placeholder='Nhập số điện thoại'
             value={phoneNumber}
-            onChange={(e) => setPhonenumber(e.target.value)}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
-          <label className='block mb-1 text-left font-light'>Gender</label>
+
+          <label className='block mb-1 text-left font-light'>Giới Tính</label>
           <div className='flex items-center mb-3'>
             <input
               type='radio'
@@ -131,7 +131,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
               required
             />
             <label htmlFor='male' className='ml-1 font-light'>
-              Male
+              Nam
             </label>
             <input
               type='radio'
@@ -144,20 +144,22 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
               required
             />
             <label htmlFor='female' className='ml-1 font-light'>
-              Female
+              Nữ
             </label>
           </div>
+
           <label htmlFor='dob' className='block mb-1 text-left font-light'>
-            Date of Birth
+            Ngày Sinh
           </label>
           <input
             type='date'
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='dateOfBirth'
             value={dateOfBirth}
-            onChange={(e) => setDob(e.target.value)}
+            onChange={(e) => setDateOfBirth(e.target.value)}
             required
           />
+
           <label htmlFor='email' className='block mb-1 text-left font-light'>
             Email
           </label>
@@ -165,53 +167,56 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             type='email'
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='email'
-            placeholder='Enter email'
+            placeholder='Nhập email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <label htmlFor='password' className='block mb-1 text-left font-light'>
-            Password
+            Mật Khẩu
           </label>
           <input
             type='password'
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='password'
-            placeholder='Enter password'
+            placeholder='Nhập mật khẩu'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <label htmlFor='re-password' className='block mb-1 text-left font-light'>
-            Confirm Password
+            Xác Nhận Mật Khẩu
           </label>
           <input
             type='password'
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='re-password'
-            placeholder='Confirm password'
+            placeholder='Xác nhận mật khẩu'
             value={rePassword}
             onChange={(e) => setRePassword(e.target.value)}
             required
           />
+
           <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3'>
-            Register
+            Đăng Ký
           </button>
         </form>
+
         <a href='#' className='block mb-1 hover:text-orange-300'>
-          Forgot password?
+          Quên mật khẩu?
         </a>
         <hr className='bg-slate-500 h-[2px] mb-1' />
-        <p className='mb-1'>Already have an account?</p>
+        <p className='mb-1'>Bạn đã có tài khoản?</p>
         <button
           type='button'
-          className='bg-white w-full h-7  rounded-md border border-orange-400 hover:bg-orange-400 md:h-10 '
+          className='bg-white w-full h-7 rounded-md border border-orange-400 hover:bg-orange-400 md:h-10'
           onClick={handleAction}
         >
-          Log In
+          Đăng Nhập
         </button>
       </div>
-      {/* <Toaster richColors position='top-right' /> */}
     </div>
   )
 }

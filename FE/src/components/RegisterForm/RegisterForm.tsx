@@ -24,13 +24,11 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
     mutationFn: (body: RegisterRequest) => registerRequest(body),
     onSuccess(data) {
       toast.success('Đăng ký thành công! Vui lòng đăng nhập 🐷')
-      setTimeout(() => {
-        handleExitForm()
-        localStorage.setItem('accessToken', data.data.access_token)
-        if (data.data.refresh_token) {
-          localStorage.setItem('refreshToken', data.data.refresh_token)
-        }
-      }, 5000)
+      handleExitForm()
+      localStorage.setItem('accessToken', data.data.access_token)
+      if (data.data.refresh_token) {
+        localStorage.setItem('refreshToken', data.data.refresh_token)
+      }
     },
     onError(error) {
       console.log(error)

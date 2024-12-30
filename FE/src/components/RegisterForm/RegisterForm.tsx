@@ -33,6 +33,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
       }, 5000)
     },
     onError(error) {
+      console.log(error)
       const errorMessage = (error as any).response?.data?.message || 'Đăng ký không thành công. Vui lòng thử lại!'
       toast.error(errorMessage)
     }
@@ -168,9 +169,10 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             className='border-gray-600 border rounded-md mb-3 p-2 w-full'
             id='email'
             placeholder='Nhập email'
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            autoComplete='username'
           />
 
           <label htmlFor='password' className='block mb-1 text-left font-light'>

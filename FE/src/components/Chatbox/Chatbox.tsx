@@ -22,7 +22,7 @@ export default function ChatBox() {
   useEffect(() => {
     const fetchShowtimeData = async () => {
       try {
-        const response = await http.get('http://localhost:3000/api/v1/showtime')
+        const response = await http.get(`${import.meta.env.VITE_BASE_URL}/showtime`)
         const today = new Date().toISOString().split('T')[0]
 
         const upcomingShowtimes = response.data.filter((showtime: any) => {

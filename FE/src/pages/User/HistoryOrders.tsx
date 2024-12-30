@@ -59,7 +59,7 @@ export default function HistoryOrders() {
                   <TableCell>{order.theater.theater_complex.name}</TableCell>
                   <TableCell>{order.seats.join(', ')}</TableCell>
                   <TableCell>
-                    {order.foods.length > 0 ? order.foods.map((food: any) => food.name).join(', ') : 'None'}
+                    {order.foods.length > 0 ? order.foods.map((food: any) => food).join(', ') : 'None'}
                   </TableCell>
                   <TableCell className='text-right'>
                     {new Intl.NumberFormat('vi-VN', {

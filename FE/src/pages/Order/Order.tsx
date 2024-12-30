@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import CardMovieOrderPage from '@/components/Card/CardMovieOrderPage'
 import SpanMain from '@/components/Span/SpanMain'
 import { Movie } from '@/types/movie.type'
-import axiosInstance from '../../axios/axiosConfig' // Import Axios instance
+import axiosInstance from '../../axios/axiosConfig'
 import Showtime from '@/types/showtime.type'
 import InfoMovie from '@/components/InfoMovie/InfoMovie'
 import DateButtons from '@/components/OrderPage/ButtonOrderPage/DateButtons.OrderPage'

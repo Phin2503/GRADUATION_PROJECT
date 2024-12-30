@@ -105,7 +105,6 @@ export default function PickTheater({ onContinue }: Props) {
   })
 
   useEffect(() => {
-    localStorage.removeItem('orderId')
     localStorage.removeItem('countdown')
     fetchTheaterComplex()
     fetchShowtime()

@@ -8,23 +8,23 @@ interface Props {
   onSelectTheater: (theaterId: string | null) => void
 }
 
-export default function SelectButton({ showtimes, onSelectProvince, onSelectTheater }: Props) {
-  const [selectedProvince, setSelectedProvince] = useState<string | null>(null)
+export default function SelectButton({ showtimes, onSelectProvince /*onSelectTheater*/ }: Props) {
+  const [_, setSelectedProvince] = useState<string | null>(null)
 
-  const isAllProvincesSelected = selectedProvince === 'all'
+  // const isAllProvincesSelected = selectedProvince === 'all'
 
-  const filteredShowtimes = isAllProvincesSelected
-    ? showtimes
-    : showtimes.filter((showtime) => showtime.theater.theater_complex.province === selectedProvince)
+  // const filteredShowtimes = isAllProvincesSelected
+  //   ? showtimes
+  //   : showtimes.filter((showtime) => showtime.theater.theater_complex.province === selectedProvince)
 
   const handleProvinceChange = (province: string | null) => {
     setSelectedProvince(province)
     onSelectProvince(province)
   }
 
-  const handleTheaterChange = (theaterId: string | null) => {
-    onSelectTheater(theaterId)
-  }
+  // const handleTheaterChange = (theaterId: string | null) => {
+  //   onSelectTheater(theaterId)
+  // }
 
   const uniqueProvinces = Array.from(new Set(showtimes.map((showtime) => showtime.theater.theater_complex.province)))
 

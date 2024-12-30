@@ -39,7 +39,14 @@ export default function ConfirmOrder() {
     navigate('/')
   }
 
-  console.log(orderRes)
+  const formatShowtime = (showtime: string) => {
+    const date = new Date(showtime)
+    return `${date.getUTCHours().toString().padStart(2, '0')}:${date.getUTCMinutes().toString().padStart(2, '0')} ${date.getUTCDate().toString().padStart(2, '0')}-${(date.getUTCMonth() + 1).toString().padStart(2, '0')}-${date.getUTCFullYear()}`
+  }
+
+  const formattedTotalPrice = orderRes.existingOrder.total_price
+    ? Math.floor(orderRes.existingOrder.total_price).toLocaleString('vi-VN')
+    : '0'
 
   return (
     <>
@@ -86,25 +93,25 @@ export default function ConfirmOrder() {
                   <label htmlFor='' className='mr-2'>
                     Showtime :
                   </label>
-                  <strong>{new Date(orderRes.existingOrder.showtime.showtime_start).toLocaleString()}</strong>
+                  <strong>{formatShowtime(orderRes.existingOrder.showtime.showtime_start)}</strong>
                 </div>
                 <div className='col-span-1'>
                   <label htmlFor='' className='mr-2'>
                     Name Movie :
                   </label>
-                  <strong>{orderRes.showtimeOfOrder.movie.title}</strong> {/* Thay đổi theo cách bạn lưu tên phim */}
+                  <strong>{orderRes.showtimeOfOrder.movie.title}</strong>
                 </div>
                 <div className='col-span-1'>
                   <label htmlFor='' className='mr-2'>
                     Foods :
                   </label>
-                  <strong> {orderRes.existingOrder.foods.map((food: any) => food.name).join(', ')}</strong>
+                  <strong>{orderRes.existingOrder.foods.map((food: any) => food).join(', ')}</strong>
                 </div>
                 <div className='col-span-1'>
                   <label htmlFor='' className='mr-2'>
                     Total Price :
                   </label>
-                  <strong>{orderRes.existingOrder.total_price} VNĐ</strong>
+                  <strong>{formattedTotalPrice} VNĐ</strong>
                 </div>
                 <div className='col-span-1 mb-2'>
                   <label htmlFor='' className='mr-2'>

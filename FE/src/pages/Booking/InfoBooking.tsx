@@ -43,7 +43,7 @@ export default function InfoBooking({
   countdown
 }: Props) {
   const navigate = useNavigate()
-  const [dataBooking, setDataBooking] = useState<any>(null)
+  const [_, setDataBooking] = useState<any>(null)
   const [seatsSelected, setSeatsSelected] = useState<string[]>(seats)
   const [timeRemaining, setTimeRemaining] = useState<number | null>(countdown || null)
 

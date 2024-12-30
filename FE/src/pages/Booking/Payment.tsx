@@ -162,9 +162,11 @@ export default function Payment({ /*onContinue */ onBack }: Props) {
     const getOrderId = localStorage.getItem('orderId')
     if (getOrderId) {
       const orderId = JSON.parse(getOrderId)
+      const foodNames = (dataBooking.foods || []).map((food) => food.name)
+
       const updatedOrder = {
         userId: userId,
-        foods: dataBooking.foods,
+        foods: foodNames,
         seats: dataBooking.seats,
         couponId: couponId,
         total_price: Number(dataBooking.totalPrice)

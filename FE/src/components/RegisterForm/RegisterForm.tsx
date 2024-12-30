@@ -54,7 +54,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
     const safeFullName = validator.escape(validator.trim(fullName))
     const safePhoneNumber = validator.trim(phoneNumber)
-    const safePassword = password
+    const safePassword = validator.trim(password)
 
     if (!phoneNumberPattern.test(safePhoneNumber)) {
       toast.error('Invalid phone number format! Please enter a valid phone number.')
@@ -75,9 +75,9 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
       fullName: safeFullName,
       phoneNumber: safePhoneNumber,
       dateOfBirth: convertedDate,
-      email,
+      email: validator.trim(email),
       password: safePassword,
-      reTypePassword: rePassword
+      reTypePassword: validator.trim(rePassword)
     })
   }
 

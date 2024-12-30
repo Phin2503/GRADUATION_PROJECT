@@ -40,7 +40,7 @@ export default function HomeContent() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/event/`)
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/event/`)
         const data: Event[] = await response.json()
         setEvents(data)
       } catch (error) {

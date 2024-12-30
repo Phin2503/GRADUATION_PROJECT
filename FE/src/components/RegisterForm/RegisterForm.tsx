@@ -30,7 +30,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
         if (data.data.refresh_token) {
           localStorage.setItem('refreshToken', data.data.refresh_token)
         }
-      }, 2000)
+      }, 1000)
     },
     onError(error: any) {
       console.log(error)

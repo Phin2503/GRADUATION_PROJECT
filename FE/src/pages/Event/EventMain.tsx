@@ -35,7 +35,7 @@ export default function EventMain() {
 
   return (
     <div>
-      <div className='w-[80%] mx-auto p-10'>
+      <div className='w-[100%] lg:w-[80%] mx-auto p-10'>
         <div className='container mx-auto px-4 py-8'>
           <h1 className='text-center text-3xl font-bold text-gray-800 mb-8'>Sự Kiện & Ưu Đãi</h1>
           {loading ? (

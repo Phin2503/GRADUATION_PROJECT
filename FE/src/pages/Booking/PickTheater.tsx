@@ -221,13 +221,13 @@ export default function PickTheater({ onContinue }: Props) {
   console.log(filteredTheaterComplexs)
   return (
     <div className='grid grid-cols-12 h-auto gap-2 w-[100%] m-auto'>
-      <div className='col-span-9 grid grid-cols-1'>
+      <div className='col-span-12 lg:col-span-9 grid grid-cols-1 '>
         {/* Select Province */}
         <div className='col-span-1 bg-[#FAF7F0] grid grid-cols-1 p-10 rounded-[0.3rem] mb-2 shadow-md'>
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Vị Trí'} text_size='text-lg' mb='mb-1' text_color='text-black' />
           </div>
-          <div className='col-span-1 grid grid-cols-8 gap-2'>
+          <div className='col-span-1 grid grid-cols-12 lg:grid-cols-8 gap-2'>
             {[...provinces].map((province) => (
               <div key={province} className='col-span-1'>
                 <ButtonProvince
@@ -245,7 +245,7 @@ export default function PickTheater({ onContinue }: Props) {
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Phim'} text_size='text-lg' mb='mb-1' text_color='text-black' />
           </div>
-          <div className='col-span-1 grid grid-cols-4 gap-4'>
+          <div className='col-span-1 grid grid-cols-2 lg:grid-cols-4 gap-4'>
             {filteredMovies.map((movie) => (
               <div key={movie.id} className='col-span-1 relative flex-col justify-center'>
                 <img
@@ -271,7 +271,7 @@ export default function PickTheater({ onContinue }: Props) {
           <div className='col-span-1 mb-3'>
             <SpanMain name={'Chọn Ngày'} text_size='text-lg' mb='mb-3' text_color='text-black' />
           </div>
-          <div className='col-span-1 grid grid-cols-8 gap-1 mb-10'>
+          <div className='col-span-1 grid lg:grid-cols-8 grid-cols-2 gap-1 mb-10'>
             {Array.from({ length: 4 }).map((_, index) => {
               const date = new Date()
               date.setDate(date.getDate() + index)
@@ -291,7 +291,7 @@ export default function PickTheater({ onContinue }: Props) {
           </div>
 
           {/* Hiển thị cụm rạp và suất chiếu */}
-          <div className='col-span-1 grid grid-cols-1'>
+          <div className='col-span-1 grid grid-cols-1 '>
             {selectedMovie && selectedProvince && filteredTheaterComplexs.length > 0 ? (
               filteredTheaterComplexs.map((theaterComplex) => (
                 <div key={theaterComplex.id} className='mb-5'>
@@ -335,7 +335,7 @@ export default function PickTheater({ onContinue }: Props) {
           </div>
         </div>
       </div>
-      <div className='col-span-3 flex-col justify-center items-center'>
+      <div className='col-span-12 flex-col justify-center items-center lg:col-span-3'>
         {bookingInfoExisting ? (
           <div className='w-[90%] mx-auto'>
             <div className='w-[100%] bg-[#FF8225] grid grid-cols-1 p-5'>

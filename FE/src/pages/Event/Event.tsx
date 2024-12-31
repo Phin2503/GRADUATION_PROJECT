@@ -34,7 +34,7 @@ export default function Event() {
   }
 
   return (
-    <div className='bg-white p-5 w-[80%] mx-auto'>
+    <div className='bg-white p-5 w-[100%] mx-auto lg:w-[80%] lg:mt-10 rounded-lg shadow-md'>
       <div className='text-center mb-6'>
         <h1 className='text-2xl font-bold text-red-600'>{eventData.title}</h1>
         <p className='text-gray-700 text-sm mt-2'>{eventData.description}</p>

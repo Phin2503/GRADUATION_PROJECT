@@ -63,13 +63,13 @@ function Carousel() {
 
   return (
     <div
-      className='max-w-[1700px] h-[500px] w-full m-auto py-2 px-4 relative group'
+      className='max-w-[1700px] h-[500px] w-full m-auto py-2 px-4 relative group min-w-[300px]'
       onMouseEnter={() => setAutoPlay(false)}
       onMouseLeave={() => setAutoPlay(true)}
     >
       <div
         style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
-        className='w-full h-full rounded-2xl bg-center bg-cover duration-500 animate__animated animate__fadeIn object-contain'
+        className='w-full h-full rounded-2xl bg-cover duration-500 animate__animated animate__fadeIn object-contain'
       ></div>
 
       <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-[-3] text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>

@@ -94,7 +94,7 @@ export default function HomeContent() {
             <SpanMain name='Góc điện ảnh' />
             <SubSpan name='Blog Điện Ảnh' />
           </div>
-          <div className='grid grid-cols-2 gap-4 w-[90%]'>
+          <div className='grid w-[90%] sm:grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2'>
             <div className='w-full overflow-hidden'>
               <NavLink to='review'>
                 <img
@@ -157,7 +157,7 @@ export default function HomeContent() {
           <div className='flex py-10 items-center'>
             <span className='border-l-[5px] border-[#FF5400] px-4 text-2xl uppercase'>Tin Khuyến mãi</span>
           </div>
-          <div className='grid grid-cols-4 gap-1'>
+          <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4'>
             {events.slice(0, 4).map((event) => (
               <div key={event.id} className='w-[90%]'>
                 <img

@@ -38,7 +38,7 @@ const DateButtons: React.FC<DateButtonsProps> = ({ onDateSelect }) => {
   }
 
   return (
-    <div className='ml-5 mb-3 col-span-1 grid grid-cols-2 md:grid-cols-2 xs:gap-2 xs:grid-cols-1 xl:grid-cols-4'>
+    <div className='ml-5 mb-3 col-span-1 gap-y-3 grid grid-cols-2 md:grid-cols-2  xs:grid-cols-2 xl:grid-cols-4'>
       {dates.map((date, index) => {
         const isToday = date.toDateString() === new Date().toDateString()
         const dayName = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'][date.getDay()]
@@ -47,7 +47,7 @@ const DateButtons: React.FC<DateButtonsProps> = ({ onDateSelect }) => {
         return (
           <button
             key={index}
-            className={`p-2 w-[5rem] text-sm rounded-[0.2rem] mr-3 ${
+            className={`p-2 w-[5rem]  inline text-sm rounded-[0.2rem] mr-3 xs:mb-10 ${
               isSelected ? 'bg-[#034EA1] text-white' : 'bg-white text-black'
             }`}
             onClick={() => handleDateClick(index)}

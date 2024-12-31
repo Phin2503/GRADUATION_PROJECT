@@ -97,7 +97,7 @@ const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selec
       Showtime2: showtime
     }
 
-    console.log('Booking Info:', bookingInfo) // Kiểm tra giá trị trước khi lưu
+    console.log('Booking Info:', bookingInfo)
     localStorage.setItem('bookingInfo', JSON.stringify(bookingInfo))
 
     navigate(`/booking/${showtime.movie.title}`)

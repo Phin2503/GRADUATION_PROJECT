@@ -10,7 +10,7 @@ export default function MenuItemDropDown({ ListMenuItem, positionRight, index }:
   return (
     <ul
       style={{ right: `${positionRight}rem` }}
-      className={`absolute  w-[10rem] h-auto hidden bg-slate-950 text-center top-[40px] rounded-[5px] group-hover:block transition-opacity duration-200 ${index ? index : ''}`}
+      className={`absolute  w-[10rem] h-auto hidden bg-slate-950 text-center top-[60px] rounded-[5px] group-hover:block transition-opacity duration-20 z-50 ${index ? index : ''}`}
     >
       {ListMenuItem.length > 0 ? (
         ListMenuItem.map((item, index) => (

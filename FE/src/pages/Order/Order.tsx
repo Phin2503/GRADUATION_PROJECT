@@ -78,7 +78,7 @@ export default function Order() {
       </div>
       <div className='grid gap-4 h-full w-[80%] mx-auto my-5 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12'>
         <div className='col-span-8 p-4'>
-          <div className='grid gap-0 grid-cols-10 w-full xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-10'>
+          <div className='grid gap-0 w-full xs:grid-cols-1 md:grid-cols-1 lg:grid-cols-10'>
             {movie && (
               <>
                 <img
@@ -112,8 +112,8 @@ export default function Order() {
             />
           </div>
         </div>
-        <div className='col-span-4 grid grid-cols-1 w-[80%] ml-10 gap-0'>
-          <div className='col-span-1 text-left mb-2'>
+        <div className='text-center hidden lg:grid lg:grid-cols-1 ml-10 gap-0 sm:hidden lg:col-span-4  lg:w-[80%]'>
+          <div className='col-span-1 text-left mb-2 '>
             <SpanMain name={'Phim Đang Chiếu'} mb='mb-5' text_size='2xl' mt='mb-3' />
           </div>
           {showingMovies.slice(0, 4).map((movie) => (

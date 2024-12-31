@@ -88,13 +88,16 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
   return (
     <div className='RegisterForm shadow-lg shadow-black m-auto w-[100%] max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[100%] flex items-center justify-center overflow-scroll'>
-      <div className='relative w-[100%] h-[80%] p-3 form-container top-5'>
+      <div className='relative w-[100%] h-[50%] p-3 form-container'>
         <form onSubmit={handleRegister}>
-          <TiDelete className='absolute right-3 top-3 text-gray-700 cursor-pointer text-2xl' onClick={handleExitForm} />
+          <TiDelete
+            className='absolute right-3 top-10 text-gray-700 cursor-pointer text-2xl'
+            onClick={handleExitForm}
+          />
           <div className='flex justify-center'>
-            <img src={logoRegister} alt='Register Logo' className='w-[5rem] h-[5rem] ' />
+            <img src={logoRegister} alt='Register Logo' className='w-[3rem] h-[3rem] ' />
           </div>
-          <h5 className='font-medium mb-5 text-xl text-gray-600'>Register</h5>
+          <h5 className='font-medium mb-2 text-xl text-gray-600'>Register</h5>
           <label htmlFor='fullname' className='block mb-1 text-left font-light'>
             Full Name
           </label>
@@ -112,7 +115,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
           </label>
           <input
             type='text'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-2 p-2 w-full'
             id='phoneNumber'
             placeholder='Enter phone number'
             value={phoneNumber}

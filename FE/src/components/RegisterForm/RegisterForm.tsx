@@ -94,32 +94,32 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
           <div className='flex justify-center'>
             <img src={logoRegister} alt='Register Logo' className='w-[5rem] h-[5rem]' />
           </div>
-          <h5 className='font-medium mb-2 text-lg text-gray-600'>Register</h5>
-          <label htmlFor='fullname' className='block mb-1 text-left font-light'>
+          <h5 className='font-medium mb-1 text-lg xs:text-md text-gray-600'>Register</h5>
+          <label htmlFor='fullname' className='block mb-1 text-left xs:text-sm font-light'>
             Full Name
           </label>
           <input
             type='text'
-            className='border-gray-600 border rounded-md mb-2 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-2 p-1 w-full'
             id='fullname'
             placeholder='Enter your full name'
             value={fullName}
             onChange={(e) => setFullname(e.target.value)}
             required
           />
-          <label htmlFor='phonenumber' className='block mb-1 text-left font-light'>
+          <label htmlFor='phonenumber' className='block xs:text-sm mb-1 text-left font-light'>
             Phone Number
           </label>
           <input
             type='text'
-            className='border-gray-600 border rounded-md mb-2 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-2 p-1 w-full'
             id='phoneNumber'
             placeholder='Enter phone number'
             value={phoneNumber}
             onChange={(e) => setPhonenumber(e.target.value)}
             required
           />
-          <label className='block mb-1 text-left font-light'>Gender</label>
+          <label className='block mb-1 text-left xs:text-sm font-light'>Gender</label>
           <div className='flex items-center mb-3'>
             <input
               type='radio'
@@ -130,7 +130,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
               onChange={(e) => setGender(e.target.value)}
               required
             />
-            <label htmlFor='male' className='ml-1 font-light'>
+            <label htmlFor='male' className=' xs:text-sm ml-1 font-light'>
               Male
             </label>
             <input
@@ -143,51 +143,51 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
               className='ml-4'
               required
             />
-            <label htmlFor='female' className='ml-1 font-light'>
+            <label htmlFor='female' className='ml-1 xs:text-sm font-light'>
               Female
             </label>
           </div>
-          <label htmlFor='dob' className='block mb-1 text-left font-light'>
+          <label htmlFor='dob' className='block mb-1 xs:text-sm text-left font-light'>
             Date of Birth
           </label>
           <input
             type='date'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-3 p-1 w-full'
             id='dateOfBirth'
             value={dateOfBirth}
             onChange={(e) => setDob(e.target.value)}
             required
           />
-          <label htmlFor='email' className='block mb-1 text-left font-light'>
+          <label htmlFor='email' className='block xs:text-sm mb-1 text-left font-light'>
             Email
           </label>
           <input
             type='email'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-3 p-1 w-full'
             id='email'
             placeholder='Enter email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <label htmlFor='password' className='block mb-1 text-left font-light'>
+          <label htmlFor='password' className='block xs:text-sm mb-1 text-left font-light'>
             Password
           </label>
           <input
             type='password'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-3 p-1 w-full'
             id='password'
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <label htmlFor='re-password' className='block mb-1 text-left font-light'>
+          <label htmlFor='re-password' className='block xs:text-sm mb-1 text-left font-light'>
             Confirm Password
           </label>
           <input
             type='password'
-            className='border-gray-600 border rounded-md mb-3 p-2 w-full'
+            className='border-gray-600 border rounded-md mb-2 p-1 w-full'
             id='re-password'
             placeholder='Confirm password'
             value={rePassword}

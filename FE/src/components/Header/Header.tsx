@@ -57,7 +57,7 @@ export default function Header() {
         <NavLink to=''>
           <img src={Logo} alt='Ticket Logo' className='w-28 md:w-48' />
         </NavLink>
-        <button className='text-white md:hidden mr-12' onClick={toggleMobileMenu}>
+        <button className='text-white md:hidden' onClick={toggleMobileMenu}>
           <FaBars className='text-xl' />
         </button>
       </div>

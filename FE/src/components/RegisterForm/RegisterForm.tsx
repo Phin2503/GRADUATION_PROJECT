@@ -45,7 +45,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
 
     const convertedDate = new Date(dateOfBirth)
     if (convertedDate > new Date()) {
-      toast.error('Date of birth invalid ! try again')
+      toast.error('Date of birth invalid! Try again')
       return
     }
 
@@ -87,17 +87,14 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
   }
 
   return (
-    <div className='RegisterForm shadow-lg shadow-black m-auto w-[100%] max-w-[400px] bg-[#f5f5f5] text-center rounded-xl h-[100%] flex items-center justify-center overflow-scroll'>
-      <div className='relative w-[100%] h-[50%] p-3 form-container'>
+    <div className='RegisterForm  shadow-lg shadow-black m-auto w-[100%] max-w-[300px] bg-[#f5f5f5] text-center rounded-xl h-[100%] flex items-center justify-center'>
+      <div className='relative w-[100%] h-[100%] p-4'>
         <form onSubmit={handleRegister}>
-          <TiDelete
-            className='absolute right-3 top-10 text-gray-700 cursor-pointer text-2xl'
-            onClick={handleExitForm}
-          />
+          <TiDelete className='absolute right-3 top-8 text-gray-700 cursor-pointer text-xl' onClick={handleExitForm} />
           <div className='flex justify-center'>
-            <img src={logoRegister} alt='Register Logo' className='w-[3rem] h-[3rem] ' />
+            <img src={logoRegister} alt='Register Logo' className='w-[5rem] h-[5rem]' />
           </div>
-          <h5 className='font-medium mb-2 text-xl text-gray-600'>Register</h5>
+          <h5 className='font-medium mb-2 text-lg text-gray-600'>Register</h5>
           <label htmlFor='fullname' className='block mb-1 text-left font-light'>
             Full Name
           </label>
@@ -197,7 +194,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setRePassword(e.target.value)}
             required
           />
-          <button type='submit' className='bg-orange-400 w-full h-10 rounded-md mb-3'>
+          <button type='submit' className='bg-orange-400 w-full h-8 rounded-md mb-3'>
             Register
           </button>
         </form>
@@ -208,13 +205,12 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
         <p className='mb-1'>Already have an account?</p>
         <button
           type='button'
-          className='bg-white w-full h-7  rounded-md border border-orange-400 hover:bg-orange-400 md:h-10 '
+          className='bg-white w-full h-7 rounded-md border border-orange-400 hover:bg-orange-400 md:h-10'
           onClick={handleAction}
         >
           Log In
         </button>
       </div>
-      {/* <Toaster richColors position='top-right' /> */}
     </div>
   )
 }

@@ -220,7 +220,7 @@ export default function InfoBooking({
             <div className='col-span-3 my-4 border-t border-[#ccc] border-dashed xl:block hidden'></div>
 
             <div className='xl:flex justify-between col-span-3'>
-              <strong>Tổng cộng</strong>
+              <strong>Tổng cộng </strong>
               <span className='inline-block font-bold text-[#f70]'>{finalAmount.toLocaleString('vi-VN')} VNĐ</span>
             </div>
           </div>

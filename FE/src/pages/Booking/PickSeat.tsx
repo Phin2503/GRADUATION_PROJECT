@@ -436,7 +436,7 @@ const PickSeat = ({ onContinue }: Props) => {
           <PuffLoader color='#fd820f' className='h-full w-full mx-auto my-36' size={150} speedMultiplier={1.5} />
         </div>
       ) : (
-        <div className='md:container w-[18rem] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>
+        <div className='md:container w-[22rem] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>
           <div className='col-span-3 lg:col-span-2 xl:order-first order-last xl:h-full h-full overflow-hidden xl:overflow-auto xl:pb-10 pb-32'>
             <div className='bg-white py-4 px-2 rounded md:mb-8 w-full'>
               <div className='md:block flex flex-wrap justify-center w-full h-full overflow-auto'>
@@ -457,7 +457,7 @@ const PickSeat = ({ onContinue }: Props) => {
             </div>
           </div>
 
-          <div className='col-span-1 lg:col-span-1 xl:pl-4 xl:order-none order-first py-4'>
+          <div className='col-span-3 lg:col-span-1 xl:pl-4 xl:order-none order-first py-4'>
             <div className='md:mb-4'>
               {dataBooking && (
                 <InfoBooking

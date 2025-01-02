@@ -208,6 +208,7 @@ export default function PickTheater({ onContinue }: Props) {
 
   const CancelOrder = () => {
     localStorage.removeItem('bookingInfo')
+    localStorage.removeItem('orderId')
     setBookingInfoExisting(undefined)
   }
 

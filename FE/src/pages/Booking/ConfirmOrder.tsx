@@ -56,7 +56,7 @@ export default function ConfirmOrder() {
         </div>
       ) : (
         <div className='w-[80%] mx-auto flex justify-center'>
-          <div className='bg-[#F4A261] w-[50%] p-10 my-10 flex-col justify-center items-center rounded-[0.3rem] shadow-2xl'>
+          <div className='bg-[#F4A261] lg:w-[50%] w-[100%] p-10 my-10 flex-col justify-center items-center rounded-[0.3rem] shadow-2xl'>
             <div className='grid grid-cols-1 gap-1'>
               <div className='flex items-center justify-center mb-2'>
                 <img src={ticketsLogo} alt='' width={100} />

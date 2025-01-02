@@ -155,21 +155,21 @@ export default function PickFood({ onContinue, onBack }: Props) {
   // console.log(dataBooking)
 
   return (
-    <div className='md:container w-[1390px] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>
-      <div className='col-span-2 xl:order-first order-last xl:h-full bg-[#D9EAFD] h-full p-2 overflow-hidden xl:overflow-auto xl:pb-10 pb-32 shadow-md'>
+    <div className='md:container w-[22rem] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>
+      <div className='col-span-1 lg:col-span-2 xl:order-first order-last xl:h-full bg-[#D9EAFD] h-full p-2 overflow-hidden xl:overflow-auto xl:pb-10 pb-32 shadow-md'>
         <SpanMain name={'Chọn Combo'} text_size='text-lg' />
         <div className='grid grid-cols-1 gap-2 mt-3'>
           {foods.map((food, index) => (
-            <div className='flex items-center justify-between' key={index}>
-              <div className='flex'>
-                <img src={food.img_url} width={200} alt={food.name} />
-                <div className='ml-3'>
+            <div className='flex flex-col sm:flex-row items-center sm:items-start justify-between' key={index}>
+              <div className='flex flex-col sm:flex-row'>
+                <img src={food.img_url} width='200' alt={food.name} className='block' />
+                <div className='mt-3 sm:mt-0 sm:ml-3'>
                   <h4>{food.name}</h4>
                   <p>{food.description}</p>
                   <strong>Giá : {food.price.toLocaleString()} VNĐ</strong>
                 </div>
               </div>
-              <div className='ml-6'>
+              <div className='mt-3 sm:mt-0'>
                 <InputGroup className='flex justify-around'>
                   <Button
                     className='bg-orange-500 h-5 w-5 rounded-2xl text-center'
@@ -197,7 +197,7 @@ export default function PickFood({ onContinue, onBack }: Props) {
         </div>
       </div>
 
-      <div className='col-span-1 xl:pl-4 xl:order-none order-first py-4'>
+      <div className='col-span-3 lg:col-span-1 xl:pl-4 xl:order-none order-first py-4'>
         <div className='md:mb-4'>
           {dataBooking && (
             <InfoBooking

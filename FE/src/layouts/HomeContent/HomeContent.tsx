@@ -165,7 +165,7 @@ export default function HomeContent() {
                   alt={event.title}
                   className='transition-transform duration-500 hover:scale-105 mb-2'
                 />
-                <NavLink to={`/${event.id}`}>{event.title}</NavLink>
+                <NavLink to={`event/${event.id}`}>{event.title}</NavLink>
               </div>
             ))}
           </div>

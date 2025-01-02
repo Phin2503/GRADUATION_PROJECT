@@ -30,6 +30,7 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
       if (storedUser) {
         const nameUser = JSON.parse(storedUser)
         onLoginSuccess(nameUser.fullName || 'Guest')
+        handleExitForm()
       } else {
         onLoginSuccess('Guest')
       }
@@ -72,7 +73,7 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
 
   const handleForgotPassword = () => {
     setIsForgotPassword(true)
-    setPassword('') // ẩn trường password
+    setPassword('')
   }
 
   return (

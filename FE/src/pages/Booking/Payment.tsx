@@ -211,8 +211,8 @@ export default function Payment({ /*onContinue */ onBack }: Props) {
   console.log(userId)
 
   return (
-    <div className='grid grid-cols-12 gap-1 w-[90%]'>
-      <div className='col-span-12 lg:col-span-8 flex-col'>
+    <div className='grid grid-cols-12 gap-1 w-[90%] mx-auto'>
+      <div className='col-span-12 lg:col-span-8 flex-col mt-3'>
         <div className='bg-[#FDF7F4] mb-2 shadow-md p-5 col-span-1'>
           <SpanMain name='Khuyến Mãi' text_size='text-base' />
           <p className='mt-2'>Mã Khuyến mãi</p>
@@ -264,7 +264,7 @@ export default function Payment({ /*onContinue */ onBack }: Props) {
           </div>
         </div>
       </div>
-      <div className='lg:col-span-4 col-span-12'>
+      <div className='lg:col-span-4 col-span-12 mt-3'>
         <InfoBooking
           countdown={countdown}
           Showtime2={dataBooking.Showtime2}

@@ -156,7 +156,7 @@ export default function PickFood({ onContinue, onBack }: Props) {
 
   return (
     <div className='md:container w-[22rem] md:mx-auto grid xl:grid-cols-3 grid-cols-1'>
-      <div className='col-span-1 lg:col-span-2 xl:order-first order-last xl:h-full bg-[#D9EAFD] h-full p-2 overflow-hidden xl:overflow-auto xl:pb-10 pb-32 shadow-md'>
+      <div className='col-span-1 mt-3 lg:col-span-2 xl:order-first order-last xl:h-full bg-[#FAF7F0] h-full p-2 overflow-hidden xl:overflow-auto xl:pb-10 pb-32 shadow-md'>
         <SpanMain name={'Chọn Combo'} text_size='text-lg' />
         <div className='grid grid-cols-1 gap-2 mt-3'>
           {foods.map((food, index) => (

@@ -12,6 +12,9 @@ import RegisterForm from '../RegisterForm/RegisterForm'
 import ListCardMenu from '../Card/ListCardMenu'
 import MenuItemDropDownUser from '../MenuItemDropDown/MenuItemDropDownUser'
 import useMovies from '../../hooks/useMovies'
+import axiosInstance from '@/axios/axiosConfig'
+import TheaterComplex from '@/types/TheaterComplex.type'
+import MenuItemDropDown2 from '../MenuItemDropDown/MenuItemDropDownCinema'
 
 export default function Header() {
   const navigate = useNavigate()
@@ -20,8 +23,19 @@ export default function Header() {
   const [showRegisterForm, setShowRegisterForm] = useState(false)
   const [userName, setUserName] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [theaterComplex, setTheaterComplex] = useState<{ id: number; name: string }[] | undefined>(undefined)
 
   console.log(showingMovies, noneShowingMovies)
+  console.log(theaterComplex)
+  const fetchCinema = async () => {
+    try {
+      const response = await axiosInstance.get('/theaterComplex')
+      const cinemasData = response.data || []
+      setTheaterComplex(cinemasData.map((cinema: TheaterComplex) => ({ id: cinema.id, name: cinema.name })))
+    } catch (error) {
+      console.error('Error fetching movies:', error)
+    }
+  }
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user')
@@ -35,6 +49,8 @@ export default function Header() {
         setShowLoginForm(false)
       }
     }
+
+    fetchCinema()
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
@@ -95,7 +111,7 @@ export default function Header() {
           <li className='flex relative items-center group py-2 md:py-4 mx-4'>
             <span className='group-hover:text-[#FF5400]'>Theater / Price</span>
             <FaChevronDown className='ml-1 hidden md:block' />
-            <MenuItemDropDown ListMenuItem={['Đà Nẵng', 'Quảng Ngãi', 'Quảng Nam']} positionRight={-1.5} />
+            <MenuItemDropDown2 ListMenuItem={theaterComplex || undefined} positionRight={-1.5} />
           </li>
 
           {/* Auth */}

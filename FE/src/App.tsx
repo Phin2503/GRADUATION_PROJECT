@@ -15,6 +15,8 @@ import NotFound from './pages/PageNotFound/NotFound'
 import Event from './pages/Event/Event'
 import EventMain from './pages/Event/EventMain'
 import Review from './pages/Review/Review'
+import Cinema from './pages/Cinema/Cinema'
+import Movie from './pages/Movie/Movie'
 
 const ProtectedRoute = () => {
   const navigate = useNavigate()
@@ -96,7 +98,9 @@ function App() {
           <Route path='/payment/confirm/order/:orderId' element={<ProtectedRoute />}>
             <Route index element={<ConfirmOrder />} />
           </Route>
-
+          <Route path='/movie'>
+            <Route index element={<Movie />} />
+          </Route>
           <Route path='/event'>
             <Route index element={<EventMain />} />
             <Route path='/event/:id' element={<Event />} />
@@ -107,6 +111,7 @@ function App() {
             <Route path='/user' element={<UserDetail />} />
             <Route path='/user/historyOrders' element={<HistoryOrders />} />
           </Route>
+          <Route path='/cinema/:id' element={<Cinema />} />
         </Route>
         <Route path='*' element={<NotFound />} /> Route cho trang 404
       </Routes>

@@ -208,8 +208,6 @@ export default function Payment({ /*onContinue */ onBack }: Props) {
     }
   }
 
-  console.log(userId)
-
   return (
     <div className='grid grid-cols-12 gap-1 w-[90%] mx-auto'>
       <div className='col-span-12 lg:col-span-8 flex-col mt-3'>

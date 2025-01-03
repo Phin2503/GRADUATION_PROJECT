@@ -82,7 +82,7 @@ export default function HomeContent() {
 
           <NavLink
             className='w-[8rem] h-[2.5rem] border-[1px] border-[#f37f1d] text-[#f37f1d] rounded-[0.2rem] mx-auto flex justify-center items-center hover:text-white hover:bg-[#f37f1d]'
-            to={''}
+            to={'/movie'}
           >
             Xem Thêm
             <MdOutlineNavigateNext className='ml-[0.2rem]' />

@@ -119,35 +119,87 @@ export default function HomeContent() {
             </div>
 
             <div className='grid grid-cols-1 gap-1 h-[90%]'>
-              {[...Array(3)].map((_, index) => (
-                <div key={index} className='flex mb-2'>
-                  <NavLink className='w-1/3 h-auto mr-2 ' to='review'>
-                    <img
-                      src='https://www.galaxycine.vn/media/2024/11/20/750_1732088886220.jpg'
-                      className='rounded-[0.3rem] transition-transform duration-700 hover:scale-105'
-                      alt=''
-                    />
-                  </NavLink>
+              <div className='flex mb-2'>
+                <NavLink className='w-1/3 h-auto mr-2 ' to='review'>
+                  <img
+                    src='https://www.galaxycine.vn/media/2024/11/20/750_1732088886220.jpg'
+                    className='rounded-[0.3rem] transition-transform duration-700 hover:scale-105'
+                    alt=''
+                  />
+                </NavLink>
 
-                  <div className='flex w-2/3'>
-                    <div>
-                      <h3 className='text-lg '>
-                        <NavLink to=''>[Review] Gladiator II: Khúc Ca Khải Hoàn Của Võ Sĩ Giác Đấu</NavLink>
-                      </h3>
-                      <div className='flex'>
-                        <button className='px-2 bg-[#1677F2] flex justify-center items-center rounded-[5px] mr-2 text-xs'>
-                          <AiOutlineLike />
-                          <span>Like</span>
-                        </button>
-                        <button className='px-2 bg-gray-300 flex justify-center items-center rounded-[5px] text-xs'>
-                          <span>42</span>
-                          <FaEye />
-                        </button>
-                      </div>
+                <div className='flex w-2/3'>
+                  <div>
+                    <h3 className='text-lg '>
+                      <NavLink to=''>[Review] Gladiator II: Khúc Ca Khải Hoàn Của Võ Sĩ Giác Đấu</NavLink>
+                    </h3>
+                    <div className='flex'>
+                      <button className='px-2 bg-[#1677F2] flex justify-center items-center rounded-[5px] mr-2 text-xs'>
+                        <AiOutlineLike />
+                        <span>Like</span>
+                      </button>
+                      <button className='px-2 bg-gray-300 flex justify-center items-center rounded-[5px] text-xs'>
+                        <span>42</span>
+                        <FaEye />
+                      </button>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
+              <div className='flex mb-2'>
+                <NavLink className='w-1/3 h-auto mr-2 ' to='review'>
+                  <img
+                    src='https://www.galaxycine.vn/media/2024/12/6/moana-2-khong-phai-la-cong-chua--moana-tro-lai-voi-vai-tro-moi-3_1733473270430.jpg'
+                    className='rounded-[0.3rem] transition-transform duration-700 hover:scale-105'
+                    alt=''
+                  />
+                </NavLink>
+
+                <div className='flex w-2/3'>
+                  <div>
+                    <h3 className='text-lg '>
+                      <NavLink to=''>[Review] Moana 2: Không Phải Là Công Chúa, Moana Trở Lại Với Vai Trò Mới?</NavLink>
+                    </h3>
+                    <div className='flex'>
+                      <button className='px-2 bg-[#1677F2] flex justify-center items-center rounded-[5px] mr-2 text-xs'>
+                        <AiOutlineLike />
+                        <span>Like</span>
+                      </button>
+                      <button className='px-2 bg-gray-300 flex justify-center items-center rounded-[5px] text-xs'>
+                        <span>42</span>
+                        <FaEye />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className='flex mb-2'>
+                <NavLink className='w-1/3 h-auto mr-2 ' to='review'>
+                  <img
+                    src='https://www.galaxycine.vn/media/2024/12/22/1135-2_1734859811267.jpg'
+                    className='rounded-[0.3rem] transition-transform duration-700 hover:scale-105'
+                    alt=''
+                  />
+                </NavLink>
+
+                <div className='flex w-2/3'>
+                  <div>
+                    <h3 className='text-lg '>
+                      <NavLink to=''>[Review] Chị Dâu: Đại Tiệc Diễn Xuất Giữa Chị Dâu - Em Chồng</NavLink>
+                    </h3>
+                    <div className='flex'>
+                      <button className='px-2 bg-[#1677F2] flex justify-center items-center rounded-[5px] mr-2 text-xs'>
+                        <AiOutlineLike />
+                        <span>Like</span>
+                      </button>
+                      <button className='px-2 bg-gray-300 flex justify-center items-center rounded-[5px] text-xs'>
+                        <span>42</span>
+                        <FaEye />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

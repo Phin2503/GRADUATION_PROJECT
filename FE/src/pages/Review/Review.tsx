@@ -51,7 +51,22 @@ export default function Review() {
           />
 
           <p className='mb-5 leading-relaxed'>
-            Câu chuyện diễn ra khi Gia Cường, cháu đích tôn của gia tộc Dương Phúc...
+            Câu chuyện diễn ra khi Gia Cường, cháu đích tôn của gia tộc Dương Phúc. Không chỉ vậy, trên teaser poster,
+            nếu quan sát kỹ có thể thấy rõ phần sàn nhà được phủ đầy máu đen. Việc sàn nhà phủ đầy máu báo hiệu cho
+            những tai hoạ sẽ ập xuống với những thành viên họ phải hứng chịu quả báo hắc ám từ linh miêu và quỷ nhập
+            tràng. “Hiện tại vẫn chưa thể chia sẻ nhiều về chi tiết của câu chuyện hay nói rõ vai trò của từng nhân vật,
+            nhưng các chi tiết và các nhân vật trong teaser poster đều là những mắt xích để tạo ra bi kịch trong gia
+            đình này và đều là thứ bắt đầu cho những tai ương xảy ra” – đạo diễn Lưu Thành Luân nói thêm. Cùng với việc
+            bật mí phần nào vai trò của từng người, đoàn phim Linh Miêu: Quỷ Nhập Tràng cho khán giả thấy được sự ngột
+            ngạt, rợn người thông qua từng cảnh phim mang đến trong đoạn teaser trailer. Không chỉ có âm thanh tựa như
+            tiếng niệm chú, các đoạn cắt cảnh liên hồi cùng hình ảnh mèo đen cũng mang đến lời cảnh báo về mức độ nặng
+            đô của phim mới đánh dấu sự trở lại của đạo diễn Lưu Thành Luân. “Phim Quỷ Cẩu là một câu chuyện dễ tiếp cận
+            với nhiều người, mức độ kinh dị của nó ở mức vừa phải vì nội dung tập trung khai thác câu chuyện về nghiệp
+            báo. Đối với Linh Miêu: Quỷ Nhập Tràng, chúng sẽ được đào sâu hơn, có nhiều tầng lớp hơn và mức độ rùng rợn
+            cũng sẽ tăng nhiều hơn để từ đó có thể làm rõ hơn về vấn đề trọng nam khinh nữ thời xưa”– đạo diễn chia sẻ.
+            Là sản phẩm tiếp theo trong chuỗi phim linh dị dân gian, cũng là bộ phim nối tiếp thành công của Quỷ Cẩu,
+            Linh Miêu: Quỷ Nhập Tràng rõ ràng đối mặt với không ít áp lực, thậm chí hoài nghi liệu có áp dụng cùng công
+            thức thành công của “đàn anh” hay không?
           </p>
 
           <img

@@ -19,11 +19,9 @@ interface GroupedShowtime {
 const ShowtimeContainer: React.FC<Props> = ({ showtimes, selectedProvince, selectedTheaterId, selectedDate }) => {
   const navigate = useNavigate() // Khai báo useNavigate
 
-  // Đặt lại thời gian của selectedDate về 00:00:00 để chỉ so sánh ngày
   const defaultDate = new Date(selectedDate)
   defaultDate.setHours(0, 0, 0, 0)
 
-  // Lọc suất chiếu theo tỉnh
   const showtimeOfProvince = showtimes.filter((showtime) => {
     return showtime.theater.theater_complex.province === selectedProvince
   })

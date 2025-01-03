@@ -84,7 +84,7 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
           <img src={loginImg} alt='Login Logo' className='w-[150px] h-[150px]' />
         </div>
         <h5 className='font-medium mb-5 text-xl text-gray-600'>
-          {isForgotPassword ? 'Send Password to Email' : 'Login'}
+          {isForgotPassword ? 'Send Password to Email' : 'Đăng Nhập'}
         </h5>
         <form onSubmit={handleSubmit}>
           <label htmlFor='email' className='block mb-1 text-left font-light'>
@@ -132,17 +132,17 @@ export default function LoginForm({ onLoginSuccess, handleExitForm }: Props) {
         </form>
         {!isForgotPassword && (
           <a href='#' className='block mb-4 hover:text-orange-300' onClick={handleForgotPassword}>
-            Forgot password?
+            Quên mật khẩu?
           </a>
         )}
         <hr className='bg-slate-500 h-[2px] mb-3' />
-        <p className='mb-2'>You don't have an account?</p>
+        <p className='mb-2'>Bạn chưa có mật khẩu?</p>
         <button
           type='button'
           className='bg-white w-full h-10 rounded-md border border-orange-400 hover:bg-orange-400'
           onClick={() => {}}
         >
-          Register
+          Đăng ký
         </button>
         {/* <Toaster richColors position='top-right' /> */}
       </div>

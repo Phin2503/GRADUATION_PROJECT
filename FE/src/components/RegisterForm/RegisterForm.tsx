@@ -94,7 +94,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
           <div className='flex justify-center'>
             <img src={logoRegister} alt='Register Logo' className='w-[5rem] h-[5rem]' />
           </div>
-          <h5 className='font-medium mb-1 text-lg xs:text-md text-gray-600'>Register</h5>
+          <h5 className='font-medium mb-1 text-lg xs:text-md text-gray-600'>Đăng Ký</h5>
           <label htmlFor='fullname' className='block mb-1 text-left xs:text-sm font-light'>
             Full Name
           </label>
@@ -119,7 +119,7 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             onChange={(e) => setPhonenumber(e.target.value)}
             required
           />
-          <label className='block mb-1 text-left xs:text-sm font-light'>Gender</label>
+          <label className='block mb-1 text-left xs:text-sm font-light'>Giới Tính</label>
           <div className='flex items-center mb-3'>
             <input
               type='radio'
@@ -195,20 +195,20 @@ export default function RegisterForm({ handleExitForm, onLoginForm }: Props) {
             required
           />
           <button type='submit' className='bg-orange-400 w-full h-8 rounded-md mb-3'>
-            Register
+            Đăng Ký
           </button>
         </form>
         <a href='#' className='block mb-1 hover:text-orange-300'>
-          Forgot password?
+          Quên mật khẩu?
         </a>
         <hr className='bg-slate-500 h-[2px] mb-1' />
-        <p className='mb-1'>Already have an account?</p>
+        <p className='mb-1'>Bạn đã có tài khoản?</p>
         <button
           type='button'
           className='bg-white w-full h-7 rounded-md border border-orange-400 hover:bg-orange-400 md:h-10'
           onClick={handleAction}
         >
-          Log In
+          Đăng Nhập
         </button>
       </div>
     </div>

@@ -88,13 +88,13 @@ export default function Header() {
           <li className='flex items-center mb-2 md:mb-0 hover:text-blue-400 mx-4'>
             <button className='h-10 px-4 py-2 bg-[#FF5400] flex items-center rounded-xl hover:text-black'>
               <NavLink className='mr-2' to='/booking'>
-                Buy ticket
+                Mua vé
               </NavLink>
               <IoTicket />
             </button>
           </li>
           <li className='flex items-center relative group py-2 md:py-4 mx-4'>
-            <span className='hover:text-[#FF5400]'>Movie</span>
+            <span className='hover:text-[#FF5400]'>Phim</span>
             <FaChevronDown className='ml-1 hidden md:block' />
             <div className='absolute hidden w-[50rem] h-auto bg-[#E5E1DA] top-14 left-[-20rem] md:right-[-24rem] group-hover:block rounded-xl text-black z-50  md:hidden'>
               <ListCardMenu movies={showingMovies} name='Phim Đang Chiếu' />
@@ -103,19 +103,19 @@ export default function Header() {
           </li>
 
           <li className='flex relative items-center group py-2 md:py-4 mx-4'>
-            <span className='group-hover:text-[#FF5400]'>Event</span>
+            <span className='group-hover:text-[#FF5400]'>Sự Kiện</span>
             <FaChevronDown className='ml-1 hidden md:block' />
-            <MenuItemDropDown ListMenuItem={['Endow']} positionRight={-3} />
+            <MenuItemDropDown ListMenuItem={['Khuyến mãi']} positionRight={-3} />
           </li>
 
           <li className='flex relative items-center group py-2 md:py-4 mx-4'>
-            <span className='group-hover:text-[#FF5400]'>Theater / Price</span>
+            <span className='group-hover:text-[#FF5400]'>Rạp / giá</span>
             <FaChevronDown className='ml-1 hidden md:block' />
             <MenuItemDropDown2 ListMenuItem={theaterComplex || undefined} positionRight={-1.5} />
           </li>
 
           {/* Auth */}
-          <li className='flex items-center py-2 md:py-4 md:ml-[18rem]'>
+          <li className='flex items-center py-2 md:py-4 md:ml-[24rem]'>
             {!userName ? (
               <>
                 <ButtonHeader name={'Login'} handleClick={handleLoginClick} />

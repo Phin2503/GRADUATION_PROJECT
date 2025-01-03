@@ -171,7 +171,6 @@ export default function PickTheater({ onContinue }: Props) {
   }
 
   const handleContinue = () => {
-    // Kiểm tra thông tin đã chọn
     if (!selectedProvince || !selectedMovie || !selectedShowtimeId) {
       toast.error('Vui lòng chọn đầy đủ thông tin: Tỉnh, Phim và Suất Chiếu!')
       return

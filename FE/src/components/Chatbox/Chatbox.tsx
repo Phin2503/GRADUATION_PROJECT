@@ -19,18 +19,20 @@ export default function ChatBox() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([])
   const chatEndRef = useRef<HTMLDivElement | null>(null)
 
+  // Chỉ fetch showtime data một lần khi component mount
   useEffect(() => {
     const fetchShowtimeData = async () => {
       try {
         const response = await http.get(`${import.meta.env.VITE_BASE_URL}/showtime`)
-        const today = new Date().toISOString().split('T')[0]
+        const today = new Date().toISOString().split('T')[0] // Lấy ngày hôm nay (YYYY-MM-DD)
 
-        const upcomingShowtimes = response.data.filter((showtime: any) => {
-          const showtimeDate = showtime.showtime_start.split('T')[0]
-          return showtimeDate >= today
+        // Lọc dữ liệu để chỉ lấy các suất chiếu của ngày hôm nay
+        const todaysShowtimes = response.data.filter((showtime: any) => {
+          const showtimeDate = showtime.showtime_start.split('T')[0] // Tách ngày từ showtime_start
+          return showtimeDate === today // So sánh với ngày hôm nay
         })
 
-        setShowtimeData(upcomingShowtimes)
+        setShowtimeData(todaysShowtimes)
       } catch (error) {
         console.error('Error fetching showtime data:', error)
       }
@@ -39,14 +41,14 @@ export default function ChatBox() {
     fetchShowtimeData()
   }, [])
 
-  console.log(showtimeData)
-
   // Hàm toggle hiển thị chatbox
   const toggleChatbox = () => {
     setChatboxVisible((prev) => !prev)
   }
 
   // Hàm gửi tin nhắn
+
+  console.log(showtimeData)
   const handleSendMessage = async () => {
     if (!message.trim()) return
 
@@ -54,17 +56,23 @@ export default function ChatBox() {
     setChatHistory((prev) => [...prev, userMessage])
 
     const dateCurrent = new Date().toLocaleString() // Định dạng ngày giờ
-    const prompt = `Bạn là một người hỗ trợ khách hàng biết thông tin suất chiếu và đặt vé.Sử dụng tiếng việt Tôi cung cấp thông tin như này ${JSON.stringify(showtimeData)}. Hãy nhớ ngày và giờ hôm nay là ${dateCurrent} và khi nào tôi hỏi thời gian bạn mới trả lời thôi. Hãy lắng nghe câu hỏi của tôi: ${message.trim()}`
+    const prompt = `Bạn là một người hỗ trợ khách hàng biết thông tin suất chiếu và đặt vé.Sử dụng tiếng việt Tôi cung cấp thông tin như này ${JSON.stringify(showtimeData)}.
+     Hãy nhớ ngày và giờ hôm nay là ${dateCurrent} và khi nào tôi hỏi thời gian bạn mới trả lời thôi. Hãy lắng nghe câu hỏi của tôi: ${message.trim()}.
+    `
 
     try {
       const chatCompletion = await groq.chat.completions.create({
         messages: [{ role: 'user', content: prompt }],
-        model: 'llama3-70b-8192',
-        temperature: 0.7,
+        model: 'llama-3.2-11b-vision-preview',
+        temperature: 1,
         max_tokens: 8192
       })
+      let responseContent = 'No response' // Default message nếu API không trả về nội dung
+      if (chatCompletion && chatCompletion.choices && chatCompletion.choices.length > 0) {
+        responseContent = chatCompletion.choices[0].message?.content || 'No response'
+      }
 
-      const responseContent = chatCompletion.choices[0]?.message?.content || 'No response'
+      // Tạo tin nhắn bot mới
       const newChatMessage: ChatMessage = {
         type: 'bot',
         content: responseContent

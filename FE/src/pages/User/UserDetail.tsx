@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { User } from '@/types/user.type'
 import { useEffect, useState } from 'react'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 
 export default function UserDetail() {
   const [userDetail, setUserDetail] = useState<User | null>(null)

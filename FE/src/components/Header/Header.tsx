@@ -115,7 +115,7 @@ export default function Header() {
           </li>
 
           {/* Auth */}
-          <li className='flex items-center py-2 md:py-4 md:ml-[24rem]'>
+          <li className='flex items-center py-2 md:py-4 md:ml-[19rem]'>
             {!userName ? (
               <>
                 <ButtonHeader name={'Login'} handleClick={handleLoginClick} />

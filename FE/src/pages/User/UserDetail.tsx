@@ -118,7 +118,7 @@ export default function UserDetail() {
         if (!response.ok) {
           const errorData = await response.json()
           console.error('Error response:', errorData)
-          throw new Error(`Failed to change password: ${errorData.message || 'Unknown error'}`)
+          throw new Error(` ${errorData.message || 'Unknown error'}`)
         }
 
         toast.success('Password changed successfully!')
@@ -126,8 +126,7 @@ export default function UserDetail() {
         setNewPassword('')
         setConfirmPassword('')
       } catch (error) {
-        console.error('Error changing password:', error)
-        toast.error(`Error changing password: ${error || 'Unknown error'}`)
+        toast.error(`${error || 'Unknown error'}`)
       }
     }
   }
@@ -201,8 +200,6 @@ export default function UserDetail() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      <Toaster position='top-right' />
     </div>
   )
 }

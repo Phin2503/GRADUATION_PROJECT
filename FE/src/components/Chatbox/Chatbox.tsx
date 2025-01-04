@@ -24,12 +24,11 @@ export default function ChatBox() {
     const fetchShowtimeData = async () => {
       try {
         const response = await http.get(`${import.meta.env.VITE_BASE_URL}/showtime`)
-        const today = new Date().toISOString().split('T')[0] // Lấy ngày hôm nay (YYYY-MM-DD)
+        const today = new Date().toISOString().split('T')[0]
 
-        // Lọc dữ liệu để chỉ lấy các suất chiếu của ngày hôm nay
         const todaysShowtimes = response.data.filter((showtime: any) => {
-          const showtimeDate = showtime.showtime_start.split('T')[0] // Tách ngày từ showtime_start
-          return showtimeDate === today // So sánh với ngày hôm nay
+          const showtimeDate = showtime.showtime_start.split('T')[0]
+          return showtimeDate === today
         })
 
         setShowtimeData(todaysShowtimes)
